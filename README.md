@@ -27,8 +27,22 @@ SigDraw是基于StdDraw魔改的产物
 #### Version 1 rev.B (2018.11.27)
 1. 添加四倍分辨率绘制支持API
 2. 添加离散化坐标API
+3. 修复BUG
 
 #### Version 1 rev.A (2018.11.23)
 1. 修改为动态类型，允许实例化
 2. 剥离Event,Swing,双缓冲部分
 3. 修改部分函数和启动流程，添加基础函数
+
+### Peformance Caution
+单线程缩放速度参考（AA指反锯齿 HR指2k分辨率缩放）
+AA_HR_UQ Offscreen FPS: 1.488316713796696
+AA_HR_Q Offscreen FPS: 10.463899546564353
+AA_HR_AUTO Offscreen FPS: 23.059185242121448
+AA_HR_SPD Offscreen FPS: 37.59398496240601
+AA_HR_BL Offscreen FPS: 23.752969121140143
+AA_UQ Offscreen FPS: 5.512679162072767
+AA_Q Offscreen FPS: 25.40220152413209
+AA_AUTO Offscreen FPS: 24.97918401332223
+AA_SPD Offscreen FPS: 44.11764705882353
+AA_BL Offscreen FPS: 37.40648379052369
