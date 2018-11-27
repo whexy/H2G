@@ -142,6 +142,9 @@ public final class SigDraw {
     // current pen radius
     public double penRadius;
 
+    public boolean highResolution = false;
+    public boolean discretization = false;
+
     // boundary of drawing canvas, 0% border
     // private static final double BORDER = 0.05;
     public static final double BORDER = 0.00;
@@ -166,6 +169,7 @@ public final class SigDraw {
         offscreen.dispose();
         return offscreenImage;
     }
+
     public void setBuffImg(BufferedImage image) {
         if (image == null)
             throw new IllegalArgumentException("image must not be null pointer");
@@ -174,12 +178,23 @@ public final class SigDraw {
         width = image.getWidth();    // can call only if image is a BufferedImage
         height = image.getHeight();
     }
+
     public static BufferedImage cloneImage(BufferedImage image) {
         ColorModel cm = image.getColorModel();
         boolean isAlphaPremultiplied = image.isAlphaPremultiplied();
         WritableRaster raster = image.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
+
+    public BufferedImage getScaledImage() {
+        if(highResolution) return getScaledImage(0.5);
+        else return getScaledImage(1.0);
+    }
+
+    public BufferedImage getScaledImage(double factor) {
+        return Scalr.resize(getBuffImg(), Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_EXACT, width*factor, height*factor, null);
+    }
+
     // singleton for callbacks: avoids generation of extra .class files
     //private static SigDraw std = new SigDraw();
 
@@ -210,6 +225,7 @@ public final class SigDraw {
             throw new IllegalArgumentException("width and height must be positive");
         width = canvasWidth;
         height = canvasHeight;
+        discreteScale();
     }
 
     // init
@@ -219,10 +235,20 @@ public final class SigDraw {
     public SigDraw(int canvasWidth, int canvasHeight) {
         init(canvasWidth, canvasHeight, null);
     }
+    public SigDraw(int canvasWidth, int canvasHeight, boolean discretization, boolean highResolution) {
+        if(highResolution) {init(canvasWidth*2, canvasHeight*2, null);}
+        else {init(canvasWidth, canvasHeight, null);}
+        useHighResolution(highResolution);
+        setScaleDiscretization(discretization);
+    }
     public SigDraw(BufferedImage image) {
         init(DEFAULT_SIZE, DEFAULT_SIZE, image);
     }
-
+    public SigDraw(BufferedImage image, int canvasHeight, boolean discretization, boolean highResolution) {
+        init(DEFAULT_SIZE, DEFAULT_SIZE, image);
+        useHighResolution(highResolution);
+        setScaleDiscretization(discretization);
+    }
     private void init(int canvasWidth, int canvasHeight, BufferedImage image) {
         if(image==null) {
             setCanvasSize(canvasWidth, canvasHeight);
@@ -327,6 +353,30 @@ public final class SigDraw {
         ymin = min - BORDER * size;
         ymax = max + BORDER * size;
     }
+    
+    public void useHighResolution(boolean status) {
+        highResolution = status;
+        discreteScale();
+    }
+
+    public void setScaleDiscretization(boolean status) {
+        discretization = status;
+        discreteScale();
+    }
+
+    private void discreteScale() {
+        if(discretization) {
+            if(highResolution) {
+                setXscale(0, width/2.0);
+                setYscale(0, height/2.0);
+            } else {
+                setXscale(0, width);
+                setYscale(0, height);
+            }
+        }
+        
+    }
+    
 
     // helper functions that scale from user coordinates to screen coordinates and back
     public double  scaleX(double x) { return width  * (x - xmin) / (xmax - xmin); }
@@ -1079,28 +1129,6 @@ public final class SigDraw {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        SigDraw StdDraw = new SigDraw();
-        StdDraw.square(0.2, 0.8, 0.1);
-        StdDraw.filledSquare(0.8, 0.8, 0.2);
-        StdDraw.circle(0.8, 0.2, 0.2);
-
-        StdDraw.setPenColor(SigDraw.BOOK_RED);
-        StdDraw.setPenRadius(0.02);
-        StdDraw.arc(0.8, 0.2, 0.1, 200, 45);
-
-        // draw a blue diamond
-        StdDraw.setPenRadius();
-        StdDraw.setPenColor(SigDraw.BOOK_BLUE);
-        double[] x = { 0.1, 0.2, 0.3, 0.2 };
-        double[] y = { 0.2, 0.3, 0.2, 0.1 };
-        StdDraw.filledPolygon(x, y);
-
-        // text
-        StdDraw.setPenColor(SigDraw.BLACK);
-        StdDraw.text(0.2, 0.5, "black text");
-        StdDraw.setPenColor(SigDraw.WHITE);
-        StdDraw.text(0.8, 0.8, "white text");
-
         SigDraw im1 = new SigDraw(1000, 1000);
         im1.setXscale(0, 500);
         im1.setYscale(0, 500);
