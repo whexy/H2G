@@ -18,6 +18,7 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.awt.image.DirectColorModel;
 import java.awt.image.WritableRaster;
 import java.awt.image.ColorModel;
@@ -142,6 +143,9 @@ public final class SigDraw {
     // current pen radius
     public double penRadius;
 
+    public boolean highResolution = false;
+    public boolean discretization = false;
+
     // boundary of drawing canvas, 0% border
     // private static final double BORDER = 0.05;
     public static final double BORDER = 0.00;
@@ -166,20 +170,43 @@ public final class SigDraw {
         offscreen.dispose();
         return offscreenImage;
     }
+
     public void setBuffImg(BufferedImage image) {
         if (image == null)
             throw new IllegalArgumentException("image must not be null pointer");
+        try {
+            offscreen.dispose();
+        } catch (Exception e) {}
         offscreenImage = image;
         offscreen = offscreenImage.createGraphics();
-        width = image.getWidth();    // can call only if image is a BufferedImage
-        height = image.getHeight();
+        setCanvasSize(image.getWidth(), image.getHeight());
     }
+
     public static BufferedImage cloneImage(BufferedImage image) {
         ColorModel cm = image.getColorModel();
         boolean isAlphaPremultiplied = image.isAlphaPremultiplied();
         WritableRaster raster = image.copyData(null);
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
+
+    public BufferedImage getScaledImage() {
+        if(highResolution) return getScaledImage(0.5, Scalr.Method.AUTOMATIC);
+        else return getScaledImage(1.0, Scalr.Method.AUTOMATIC);
+    }
+
+    public BufferedImage getScaledImage(double factor, Scalr.Method quality) {
+        return Scalr.resize(
+            this.getBuffImg(), 
+            //Scalr.Method.QUALITY,
+            //Scalr.Method.ULTRA_QUALITY,
+            //Scalr.Method.AUTOMATIC,
+            quality,
+            Scalr.Mode.FIT_EXACT,
+            (int)(width*factor), 
+            (int)(height*factor), 
+            (BufferedImageOp)(null));
+    }
+
     // singleton for callbacks: avoids generation of extra .class files
     //private static SigDraw std = new SigDraw();
 
@@ -210,6 +237,7 @@ public final class SigDraw {
             throw new IllegalArgumentException("width and height must be positive");
         width = canvasWidth;
         height = canvasHeight;
+        discreteScale();
     }
 
     // init
@@ -219,10 +247,21 @@ public final class SigDraw {
     public SigDraw(int canvasWidth, int canvasHeight) {
         init(canvasWidth, canvasHeight, null);
     }
+    public SigDraw(int canvasWidth, int canvasHeight, boolean discretization, boolean highResolution) {
+        if(highResolution) {init(canvasWidth*2, canvasHeight*2, null);}
+        else {init(canvasWidth, canvasHeight, null);}
+
+        useHighResolution(highResolution);
+        setScaleDiscretization(discretization);
+    }
     public SigDraw(BufferedImage image) {
         init(DEFAULT_SIZE, DEFAULT_SIZE, image);
     }
-
+    public SigDraw(BufferedImage image, boolean discretization, boolean highResolution) {
+        init(DEFAULT_SIZE, DEFAULT_SIZE, image);
+        useHighResolution(highResolution);
+        setScaleDiscretization(discretization);
+    }
     private void init(int canvasWidth, int canvasHeight, BufferedImage image) {
         if(image==null) {
             setCanvasSize(canvasWidth, canvasHeight);
@@ -235,12 +274,10 @@ public final class SigDraw {
         enableAntialiasing();
         setXscale();
         setYscale();
-        offscreen.setColor(DEFAULT_CLEAR_COLOR);
-        offscreen.fillRect(0, 0, width, height);
         setPenColor();
         setPenRadius();
         setFont();
-        clear();
+        if(image==null) clear();
     }
     public void enableAntialiasing() {
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
@@ -327,6 +364,30 @@ public final class SigDraw {
         ymin = min - BORDER * size;
         ymax = max + BORDER * size;
     }
+    
+    public void useHighResolution(boolean status) {
+        highResolution = status;
+        discreteScale();
+    }
+
+    public void setScaleDiscretization(boolean status) {
+        discretization = status;
+        discreteScale();
+    }
+
+    private void discreteScale() {
+        if(discretization) {
+            if(highResolution) {
+                setXscale(0, width/2.0);
+                setYscale(0, height/2.0);
+            } else {
+                setXscale(0, width);
+                setYscale(0, height);
+            }
+        }
+        
+    }
+    
 
     // helper functions that scale from user coordinates to screen coordinates and back
     public double  scaleX(double x) { return width  * (x - xmin) / (xmax - xmin); }
@@ -1079,65 +1140,79 @@ public final class SigDraw {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        SigDraw StdDraw = new SigDraw();
-        StdDraw.square(0.2, 0.8, 0.1);
-        StdDraw.filledSquare(0.8, 0.8, 0.2);
-        StdDraw.circle(0.8, 0.2, 0.2);
+        SigDraw im1 = new SigDraw(1000, 1000, true, true);
+        SigDraw im1n = new SigDraw(1000, 1000, true, true);
+        SigDraw im2 = new SigDraw(1000, 1000, true, false);
+        SigDraw im2n = new SigDraw(1000, 1000, true, false);
 
-        StdDraw.setPenColor(SigDraw.BOOK_RED);
-        StdDraw.setPenRadius(0.02);
-        StdDraw.arc(0.8, 0.2, 0.1, 200, 45);
+        im2n.disableAntialiasing();
+        im1n.disableAntialiasing();
 
-        // draw a blue diamond
-        StdDraw.setPenRadius();
-        StdDraw.setPenColor(SigDraw.BOOK_BLUE);
-        double[] x = { 0.1, 0.2, 0.3, 0.2 };
-        double[] y = { 0.2, 0.3, 0.2, 0.1 };
-        StdDraw.filledPolygon(x, y);
-
-        // text
-        StdDraw.setPenColor(SigDraw.BLACK);
-        StdDraw.text(0.2, 0.5, "black text");
-        StdDraw.setPenColor(SigDraw.WHITE);
-        StdDraw.text(0.8, 0.8, "white text");
-
-        SigDraw im1 = new SigDraw(1000, 1000);
-        im1.setXscale(0, 500);
-        im1.setYscale(0, 500);
-
-        SigDraw im2 = new SigDraw(500, 500);
-        im2.setXscale(0, 500);
-        im2.setYscale(0, 500);
-        im2.disableAntialiasing();
-
-        /*
-        SigDraw im3 = new SigDraw(500, 500);
-        im3.setXscale(0, 500);
-        im3.setYscale(0, 500);
-
-        SigDraw im4 = new SigDraw(500, 500);
-        im4.setXscale(0, 500);
-        im4.setYscale(0, 500);*/
-
-        Font a = new Font("Microsoft YaHei Light", Font.PLAIN, 200);
+        Font a = new Font("Microsoft YaHei Light", Font.PLAIN, 500);
+        Font b = new Font("Microsoft YaHei Light", Font.PLAIN, 250);
+        
         im1.setFont(a);
         im1.setPenColor(SigDraw.BLACK);
-        im1.text(250, 250, "Hello");
+        im1.text(500, 500, "Hello");
+        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY)).save("AA_HR_UQ.jpg");
+        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.QUALITY)).save("AA_HR_Q.jpg");
+        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.AUTOMATIC)).save("AA_HR_AUTO.jpg");
+        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.SPEED)).save("AA_HR_SPD.jpg");
+        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.BALANCED)).save("AA_HR_BL.jpg");
 
-        /*
-        Font b = new Font("Microsoft YaHei Light", Font.PLAIN, 100);
-        im4.disableAntialiasing();
-        im4.setFont(b);
-        im4.setPenColor(SigDraw.BLACK);
-        im4.text(250, 250, "Hello");*/
+        im2.setFont(b);
+        im2.setPenColor(SigDraw.BLACK);
+        im2.text(500, 500, "Hello");
+        new SigDraw(im2.getScaledImage(1, Scalr.Method.ULTRA_QUALITY)).save("AA_UQ.jpg");
+        new SigDraw(im2.getScaledImage(1, Scalr.Method.QUALITY)).save("AA_Q.jpg");
+        new SigDraw(im2.getScaledImage(1, Scalr.Method.AUTOMATIC)).save("AA_AUTO.jpg");
+        new SigDraw(im2.getScaledImage(1, Scalr.Method.SPEED)).save("AA_SPD.jpg");
+        new SigDraw(im2.getScaledImage(1, Scalr.Method.BALANCED)).save("AA_BL.jpg");
+        im2.save("AA.jpg");
 
-        BufferedImage scaledImage = Scalr.resize(im1.getBuffImg(), Scalr.Method.ULTRA_QUALITY, Scalr.Mode.FIT_EXACT, 500, 500, null);
-        im2.picture(250.0,250.0,scaledImage);
-        //im3.picture(250.0,250.0,im1.getBuffImg(),500.0,500.0);
-        im1.save("Test1.jpg");
-        im2.save("Test2.jpg");
-        //im3.save("Test3.jpg");
-        //im4.save("Test4.jpg");
+        im1n.setFont(a);
+        im1n.setPenColor(SigDraw.BLACK);
+        im1n.text(500, 500, "Hello");
+        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY)).save("noAA_HR_UQ.jpg");
+        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.QUALITY)).save("noAA_HR_Q.jpg");
+        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.AUTOMATIC)).save("noAA_HR_AUTO.jpg");
+        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.SPEED)).save("noAA_HR_SPD.jpg");
+        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.BALANCED)).save("noAA_HR_BL.jpg");
+
+        im2n.setFont(b);
+        im2n.setPenColor(SigDraw.BLACK);
+        im2n.text(500, 500, "Hello");
+        new SigDraw(im2n.getScaledImage(1, Scalr.Method.ULTRA_QUALITY)).save("noAA_UQ.jpg");
+        new SigDraw(im2n.getScaledImage(1, Scalr.Method.QUALITY)).save("noAA_Q.jpg");
+        new SigDraw(im2n.getScaledImage(1, Scalr.Method.AUTOMATIC)).save("noAA_AUTO.jpg");
+        new SigDraw(im2n.getScaledImage(1, Scalr.Method.SPEED)).save("noAA_SPD.jpg");
+        new SigDraw(im2n.getScaledImage(1, Scalr.Method.BALANCED)).save("noAA_BL.jpg");
+        im2.save("noAA.jpg");
+
+        //Benchmark
+        SigDraw[] list = new SigDraw[120];
+        for(int y=0;y<10;++y) {
+            long startTime = System.currentTimeMillis();
+            for(int x=0;x<30;++x) {
+                switch(y) {
+                    case 0:list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY));break;    //.save(".jpg");
+                    case 1:list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.QUALITY));break;    //.save(".jpg");
+                    case 2:list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.AUTOMATIC));break;    //.save(".jpg");
+                    case 3:list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.SPEED));break;    //.save(".jpg");
+                    case 4:list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.BALANCED));break;    //.save(".jpg");
+                    case 5:list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY));break;    //.save(".jpg");
+                    case 6:list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.QUALITY));break;    //.save(".jpg");
+                    case 7:list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.AUTOMATIC));break;    //.save(".jpg");          
+                    case 8:list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.SPEED));break;    //.save(".jpg");
+                    case 9:list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.BALANCED));break;    //.save(".jpg");
+                }
+                list[x] = new SigDraw(im1.getScaledImage());
+            }
+            long endTime = System.currentTimeMillis();
+            double fps = 30/((endTime-startTime)/1000.0);
+            String[] token = {"AA_HR_UQ ","AA_HR_Q ","AA_HR_AUTO ","AA_HR_SPD ","AA_HR_BL ","AA_UQ ","AA_Q ","AA_AUTO ","AA_SPD ","AA_BL "};
+            System.out.println(token[y]+"Offscreen FPS: "+fps);
+        }
     }
 
 }
