@@ -1,3 +1,34 @@
+# Project H2G
+This project have nothing right.  
+This project have nothing left.  
+
+## FrameCreator (Test Failed)
+基于Reference的HistogramA的单帧生成器
+
+## HistogramData
+画布的原始数据 （存放相对动态的数据）
+
+## CanvaStyle
+画布的样式（存放相对静态的数据）
+
+## BarSwaper (Incomplete)
+管理Bar的交换，生成插值图像
+
+## ThreadManager (Incomplete)
+线程管理器
+
+## CoordProjecter
+坐标转换工具
+
+### API Reference
+1. CoordProjecter(SigDraw base, SigDraw img, double xCentreOfImg, double yCentreOfImg)
+xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的坐标
+2. getX(double x) & getY(double y)
+将img上某点在img参考系下的坐标转换为在base参考系下base上的坐标
+
+## Barchart (Incomplete)
+条形图生成器抽象类
+
 ## ConfigLoader
 ConfigLoader基于Json库的辅助程序，简化了读取操作
 
@@ -28,23 +59,20 @@ SigDraw是基于StdDraw魔改的产物
 2. enableAntialiasing() 启动反锯齿(默认开启)
 3. disableAntialiasing() 关闭反锯齿
 4. getBuffImg() 获取内存中的图片(BufferedImage类型)
-5. getScaledImage() 获取缩放后的图片(默认情况下，高分辨率模式缩小一半，普通模式不缩放)(BufferedImage类型)
+5. getScaledImage() 获取缩放后的图片(BufferedImage类型)
 6. loadImage() 从本地文件载入图片(基于getImage(),同时废除该函数)
 7. setBuffImg() 重设内存缓存的图片
-8. useHighResolution() 切换高分辨率模式
-9. setScaleUnaltered() 离散化坐标系
+8. setScaleUnaltered() 离散化坐标系
 
 ##### Modified API
 1. picture() 修改为只能载入BufferedImage图像
 2. init() 修改启动流程，优化嵌套渲染的情况
 3. setCanvasSize() 修改执行流程
 
-#### Note
-在调用构造函数时启用高分辨率模式，且指定空画布尺寸，自动设置画布尺寸为输入尺寸大小的4倍。  
-但在调用构造函数时启用高分辨率模式，且传入初始图像，不会改变画布尺寸（仍等于图像尺寸）。  
-直接调用useHighResolution()函数不会改变已有画布尺寸大小。  
-
 ### Update Log
+
+#### Version 1 rev.C (2018.11.30)
+1. 移除高分辨率相关函数
 
 #### Version 1 rev.B+ (2018.11.29)
 
