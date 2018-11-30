@@ -18,6 +18,7 @@ class FrameCreator {
     int barNum;
     double rulerStep;
     int rulerGrade;
+
     public FrameCreator(CanvaStyle c, HistogramData d) {
         this.c = c;
         this.d = d;
@@ -35,12 +36,12 @@ class FrameCreator {
         rulerStep = d.rulerStep;
         rulerGrade = d.rulerGrade;
         xScale[MIN] = -barSpace;
-        xScale[MAX] = barNum*1.0;
+        xScale[MAX] = barNum * 1.0;
 
-        cBorder[LEFT] = c.xProject - coordSize[WIDTH]/2;
-        cBorder[RIGHT] = c.xProject + coordSize[WIDTH]/2;
-        cBorder[UP] = c.yProject + coordSize[HEIGHT]/2;
-        cBorder[DOWN] = c.yProject - coordSize[HEIGHT]/2;
+        cBorder[LEFT] = c.xProject - coordSize[WIDTH] / 2;
+        cBorder[RIGHT] = c.xProject + coordSize[WIDTH] / 2;
+        cBorder[UP] = c.yProject + coordSize[HEIGHT] / 2;
+        cBorder[DOWN] = c.yProject - coordSize[HEIGHT] / 2;
 
         bg = new SigDraw(bgSize[WIDTH], bgSize[HEIGHT], true);
         coord = new SigDraw(coordSize[WIDTH], coordSize[HEIGHT], false);
@@ -82,12 +83,13 @@ class FrameCreator {
             }
         }*/
     }
+
     private void plotRuler() {
         Font font = c.rulerFont; // TO BE Customized
         bg.setFont(font);
         bg.setPenColor(c.rulerColor);
-        final int x0 = cBorder[LEFT]-5 , x1 = cBorder[LEFT]+5;
-        final int x2 = cBorder[RIGHT]-5 , x3 = cBorder[RIGHT]+5;
+        final int x0 = cBorder[LEFT] - 5, x1 = cBorder[LEFT] + 5;
+        final int x2 = cBorder[RIGHT] - 5, x3 = cBorder[RIGHT] + 5;
         double[] rawY = new double[rulerGrade + 1];
         String[] markL = new String[rulerGrade + 1];
         String[] markR = new String[rulerGrade + 1];
@@ -95,30 +97,30 @@ class FrameCreator {
         for (int i = 0; i <= rulerGrade; i++) {
             rawY[i] = yValue[MIN] + i * rulerStep;
             double y = cp.getY(rawY[i]);
-            if(c.hasRuler) bg.line(x0, y, x1, y);
-            if(c.hasRightRuler) bg.line(x2, y, x3, y);
+            if (c.hasRuler) bg.line(x0, y, x1, y);
+            if (c.hasRightRuler) bg.line(x2, y, x3, y);
         }
         int len = 0;
-        if(c.hasRuler) len=formatNumber(markL, rawY);
-        if(c.hasRightRuler) len=formatNumber(markR, rawY);
-        final int xl = cBorder[LEFT]-c.rulerXoffset;
-        final int xr = cBorder[RIGHT]+c.rulerXoffset;
+        if (c.hasRuler) len = formatNumber(markL, rawY);
+        if (c.hasRightRuler) len = formatNumber(markR, rawY);
+        final int xl = cBorder[LEFT] - c.rulerXoffset;
+        final int xr = cBorder[RIGHT] + c.rulerXoffset;
         for (int i = 0; i <= rulerGrade; i++) {
-            double y = cp.getY( yValue[MIN] + i * rulerStep );
-            if(c.hasRuler) bg.text(xl, y, String.format("%" + len + "s", markL[i]));
-            if(c.hasRightRuler) bg.text(xr, y, String.format("%-" + len + "s", markR[i]));
+            double y = cp.getY(yValue[MIN] + i * rulerStep);
+            if (c.hasRuler) bg.text(xl, y, String.format("%" + len + "s", markL[i]));
+            if (c.hasRightRuler) bg.text(xr, y, String.format("%-" + len + "s", markR[i]));
         }
     }
 
     private int formatNumber(String[] mark, double[] y) { // TO BE Customized
         int decimalDigits = 0;
         String format = "%";
-        if(rulerStep<0) decimalDigits = (int)(-Math.log10(rulerStep)) + 1;
+        if (rulerStep < 0) decimalDigits = (int) (-Math.log10(rulerStep)) + 1;
         else decimalDigits = 0;
-        if(rulerStep>100000) format += ".5g";
+        if (rulerStep > 100000) format += ".5g";
         else format += "." + decimalDigits + "f";
         int n = 0;
-        for(int x=0;x<y.length;++x) {
+        for (int x = 0; x < y.length; ++x) {
             mark[x] = String.format(format, y[x]);
             if (n < mark[x].length())
                 n = mark[x].length();
@@ -133,30 +135,30 @@ class FrameCreator {
         final double y = cBorder[DOWN] - c.keysYoffset;
         for (int i = 0; i < barNum; i++) {
             if (d.keys[i].length() > 0) {
-                bg.text(cp.getX(i + barWidth/2), y, d.keys[i]);
+                bg.text(cp.getX(i + barWidth / 2), y, d.keys[i]);
             }
         }
     }
 
     private void plotBorder() {
         bg.setPenColor(c.borderColor);
-        bg.rectangle(c.xProject, c.yProject, coordSize[WIDTH]/2, coordSize[HEIGHT]/2);
+        bg.rectangle(c.xProject, c.yProject, coordSize[WIDTH] / 2, coordSize[HEIGHT] / 2);
     }
 
 
     private void plotHeader() {
         Font font = c.headerFont; // TO BE Customized
-        bg.setFont( font ); 
-        double x = c.headerXoffset + (cBorder[LEFT]+cBorder[RIGHT])/2;
+        bg.setFont(font);
+        double x = c.headerXoffset + (cBorder[LEFT] + cBorder[RIGHT]) / 2;
         double y = c.headerYoffset + cBorder[UP];
-        bg.setPenColor( c.headerColor );
-        bg.text( x, y, d.header );
+        bg.setPenColor(c.headerColor);
+        bg.text(x, y, d.header);
     }
 
     private void plotFooter() {
         Font font = c.footerFont; // TO BE Customized
         bg.setFont(font);
-        double x = c.footerXoffset + (cBorder[LEFT]+cBorder[RIGHT])/2;
+        double x = c.footerXoffset + (cBorder[LEFT] + cBorder[RIGHT]) / 2;
         double y = -c.footerYoffset + cBorder[DOWN];
         bg.setPenColor(c.footerColor);
         bg.text(x, y, d.footer);
@@ -171,11 +173,12 @@ class FrameCreator {
     private final static int WIDTH = 0;
     private final static int HEIGHT = 1;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         CanvaStyle c = new CanvaStyle();
+        c.loadConfig("HistogramSample.json");
         HistogramData d = new HistogramData();
-        d.keys = new String[]{"father","father","son"};
-        d.values = new double[]{0.0,0.0,0.0};
+        d.keys = new String[]{"father", "father", "son"};
+        d.values = new double[]{0.0, 0.0, 0.0};
         d.yValue[0] = 0;
         d.yValue[1] = 1000.0;
         d.rulerStep = 100;
