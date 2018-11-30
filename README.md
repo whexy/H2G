@@ -1,6 +1,6 @@
 # Project H2G
-This project have nothing right.  
-This project have nothing left.  
+This project has nothing right.  
+This project has nothing left.  
 
 ### TODO LIST
 | Contributor | Class Name | Content | DDL | Status |
@@ -11,7 +11,7 @@ This project have nothing left.
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Not Available |
 | Whexy | BarBasicSkin | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Working |
 
-## FrameCreator (Test Failed)
+## FrameCreator
 基于Reference的HistogramA的单帧生成器
 
 ### Update Log
