@@ -2,7 +2,7 @@ package h2g;
 
 import java.awt.image.BufferedImage;
 
-public abstract class Barchart {
+public abstract class BarGenerator {
     public static int width,height;
     public static SigDraw baseIMG;
     private boolean hasInit;
