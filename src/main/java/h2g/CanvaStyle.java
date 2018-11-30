@@ -2,7 +2,7 @@ package h2g;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.IOException;
+import java.util.Arrays;
 
 class CanvaStyle {
     // Background
@@ -50,7 +50,7 @@ class CanvaStyle {
     Color keyColor = Color.BLACK;
     Color headerColor = Color.BLACK;
     Color footerColor = Color.BLACK;
-
+    
     /**
      * Load Config from json
      *
@@ -65,11 +65,7 @@ class CanvaStyle {
             bgSize = (int[]) bgSizes;
         }
 
-        Object _bgColors = loader.get("bg.color");
-        if (_bgColors instanceof Integer) {
-            int[] bgColors = (int[]) _bgColors;
-            bgColor = new Color(bgColors[0], bgColors[1], bgColors[2]);
-        }
+        bgColor = loader.getColor("bg.Color");
 
         //Coordinate
 
@@ -87,91 +83,49 @@ class CanvaStyle {
 
         // Layout
         int _rulerXoffset = loader.getInt("rulerxoffset");
-        if (_rulerXoffset != 0) {
-            rulerXoffset = _rulerXoffset;
-        }
+        if (_rulerXoffset != 0) rulerXoffset = _rulerXoffset;
         int _keysYoffset = loader.getInt("keysyoffset");
-        if (_keysYoffset != 0) {
-            keysYoffset = _keysYoffset;
-        }
+        if (_keysYoffset != 0) keysYoffset = _keysYoffset;
         int _headerXoffset = loader.getInt("headerxoffset");
-        if (_headerXoffset != 0) {
-            headerXoffset = _headerXoffset;
-        }
+        if (_headerXoffset != 0) headerXoffset = _headerXoffset;
         int _headerYoffset = loader.getInt("headeryoffset");
-        if (_headerYoffset != 0) {
-            headerYoffset = _headerYoffset;
-        }
+        if (_headerYoffset != 0) headerYoffset = _headerYoffset;
         int _footerXoffset = loader.getInt("footerxoffset");
-        if (_footerXoffset != 0) {
-            footerXoffset = _footerXoffset;
-        }
+        if (_footerXoffset != 0) footerXoffset = _footerXoffset;
         int _footerYoffset = loader.getInt("footeryoffset");
-        if (_footerYoffset != 0) {
-            footerYoffset = _footerYoffset;
-        }
+        if (_footerYoffset != 0) footerYoffset = _footerYoffset;
 
         // Fonts
-        // Default part has been shut down by AI "WhexySTAR" automatically.
-        // **ATTENTION**: JSON file must contains Font settings ! Other wise there will be terrible error!
-        String rulerFontname = loader.getStr("rulerfont.name");
-        int rulerFontform = loader.getInt("rulerfont.form");
-        int rulerFontsize = loader.getInt("rulerfont.size");
-        rulerFont = new Font(rulerFontname, rulerFontform, rulerFontsize);
-
-        String keysFontname = loader.getStr("keysfont.name");
-        int keysFontform = loader.getInt("keysfont.form");
-        int keysFontsize = loader.getInt("keysfont.size");
-        keysFont = new Font(keysFontname, keysFontform, keysFontsize);
-
-        String headerFontname = loader.getStr("headerfont.name");
-        int headerFontform = loader.getInt("headerfont.form");
-        int headerFontsize = loader.getInt("headerfont.size");
-        headerFont = new Font(headerFontname, headerFontform, headerFontsize);
-
-        String footerFontname = loader.getStr("footerfont.name");
-        int footerFontform = loader.getInt("footerfont.form");
-        int footerFontsize = loader.getInt("footerfont.size");
-        footerFont = new Font(footerFontname, footerFontform, footerFontsize);
-
+        Font _rulerFont = loader.getFont("rulerFont");
+        if (_rulerFont != null) rulerFont = _rulerFont;
+        Font _keysFont = loader.getFont("keysFont");
+        if (_keysFont != null) keysFont = _keysFont;
+        Font _headerFont = loader.getFont("headerFont");
+        if (_headerFont != null) headerFont = _headerFont;
+        Font _footerFont = loader.getFont("footerFont");
+        if (_footerFont != null) footerFont = _footerFont;
         // Switch
-        /*isBarFilled = loader.getBool("isbarfilled");
-        hasBarFrame = loader.getBool("hasbarframe");*/
-        hasBorder = loader.getBool("hasborder");
-        hasRuler = loader.getBool("hasruler");
-        hasRightRuler = loader.getBool("hasrightruler");
-        hasHeader = loader.getBool("hasheader");
-        hasFooter = loader.getBool("hasfooter");
+        /*isBarFilled = loader.getBool("isBarFilled");
+        hasBarFrame = loader.getBool("hasBarFrame");*/
+        hasBorder = loader.getBool("hasBorder");
+        hasRuler = loader.getBool("hasRuler");
+        hasRightRuler = loader.getBool("hasRightRuler");
+        hasHeader = loader.getBool("hasHeader");
+        hasFooter = loader.getBool("hasFooter");
 
         // Color
-        Object _Colors = loader.get("borderColor");
-        if (_Colors instanceof Integer) {
-            int[] Colors = (int[]) _Colors;
-            borderColor = new Color(Colors[0], Colors[1], Colors[2]);
-        }
-
-        _Colors = loader.get("rulerColor");
-        if (_Colors instanceof Integer) {
-            int[] Colors = (int[]) _Colors;
-            rulerColor = new Color(Colors[0], Colors[1], Colors[2]);
-        }
-
-        _Colors = loader.get("headerColor");
-        if (_Colors instanceof Integer) {
-            int[] Colors = (int[]) _Colors;
-            headerColor = new Color(Colors[0], Colors[1], Colors[2]);
-        }
-
-        _Colors = loader.get("footerColor");
-        if (_Colors instanceof Integer) {
-            int[] Colors = (int[]) _Colors;
-            footerColor = new Color(Colors[0], Colors[1], Colors[2]);
-        }
-
-        _Colors = loader.get("keyColor");
-        if (_Colors instanceof Integer) {
-            int[] Colors = (int[]) _Colors;
-            keyColor = new Color(Colors[0], Colors[1], Colors[2]);
-        }
+        Color _borderColor = loader.getColor("borderColor");
+        if (_borderColor != null) borderColor = _borderColor;
+        Color _rulerColor = loader.getColor("rulerColor");
+        if (_rulerColor != null) rulerColor = _rulerColor;
+        Color _headerColor = loader.getColor("headerColor");
+        if (_headerColor != null) headerColor = _headerColor;
+        Color _footerColor = loader.getColor("footerColor");
+        if (_footerColor != null) footerColor = _footerColor;
+        Color _keyColor = loader.getColor("keyColor");
+        if (_keyColor != null) keyColor = _keyColor;
+    }
+    public void loadConfig() throws Exception {
+        loadConfig("CanvaStyle.json");
     }
 }
