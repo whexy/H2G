@@ -32,11 +32,8 @@ class CanvaStyle {
     Font footerFont = new Font("consolas", Font.BOLD, 16);
 
     // Switch
-<<<<<<< HEAD
-/*    boolean isBarFilled = true;
+/*  boolean isBarFilled = true;
     boolean hasBarFrame = true;*/
-=======
->>>>>>> origin/master
     boolean hasBorder = true;
     boolean hasRuler = true;
     boolean hasRightRuler = true;
