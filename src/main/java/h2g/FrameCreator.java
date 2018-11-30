@@ -175,7 +175,7 @@ class FrameCreator {
 
     public static void main(String[] args) throws Exception {
         CanvaStyle c = new CanvaStyle();
-        c.loadConfig("HistogramSample.json");
+        c.loadConfig();
         HistogramData d = new HistogramData();
         d.keys = new String[]{"father", "father", "son"};
         d.values = new double[]{0.0, 0.0, 0.0};

@@ -4,7 +4,7 @@
       1000,
       1000
     ],
-    "color": [
+    "Color": [
       0,
       0,
       0
@@ -23,68 +23,68 @@
   "headeryoffset": 20,
   "footerxoffset": 0,
   "footeryoffset": 50,
-  "rulerfont": {
+  "rulerFont": {
     "name": "consolas",
     "form": 0,
     "size": 12
   },
-  "keysfont": {
+  "keysFont": {
     "name": "consolas",
     "form": 0,
     "size": 12
   },
-  "headerfont": {
+  "headerFont": {
     "name": "calibri",
     "form": 0,
     "size": 20
   },
-  "footerfont": {
+  "footerFont": {
     "name": "consolas",
     "form": 1,
     "size": 16
   },
   "isbarfilled": true,
   "hasbarframe": true,
-  "barfillcolor": [
+  "barfillColor": [
     0,
     0,
     255
   ],
-  "barframecolor": [
+  "barFrameColor": [
     255,
     0,
     0
   ],
-  "hasborder": true,
-  "rulermarkcolor": [
+  "hasBorder": true,
+  "rulermarkColor": [
     200,
     200,
     0
   ],
-  "hasrightruler": true,
-  "hasheader": true,
-  "hasfooter": true,
-  "bordercolor": [
+  "hasRightruler": true,
+  "hasHeader": true,
+  "hasFooter": true,
+  "borderColor": [
     0,
     255,
     0
   ],
-  "rulercolor": [
+  "rulerColor": [
     200,
     200,
     0
   ],
-  "keycolor": [
+  "keyColor": [
     200,
     200,
     0
   ],
-  "headercolor": [
+  "headerColor": [
     100,
     100,
     100
   ],
-  "footercolor": [
+  "footerColor": [
     0,
     200,
     200

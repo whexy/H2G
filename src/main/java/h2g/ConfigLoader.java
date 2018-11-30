@@ -1,5 +1,6 @@
 package h2g;
 
+import java.awt.*;
 import java.io.*;
 import javax.json.*;
 
@@ -84,16 +85,18 @@ public class ConfigLoader {
             }*/
     }
 
-    public static void main(String[] args) {
-        try {
-            ConfigLoader cL = new ConfigLoader("facebook.json");
-            String str = cL.getStr("data.1.message");
-            int n = cL.getInt("data.0.int");
-            boolean b = cL.getBool("data.0.bool");
-            double d = cL.getDouble("data.0.double");
-            System.out.println(d);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+    Color getColor(String pattern) throws Exception {
+        if (get(pattern) == null) return null;
+        return new Color(getInt(pattern+".0"),getInt(pattern+".1"),getInt(pattern+".2"));
+    }
+
+    Font getFont(String pattern) throws Exception {
+        String rulerFontName = getStr(pattern+".name");
+        if (null == rulerFontName) return null;
+        int rulerFontForm = getInt(pattern+".form");
+        if (rulerFontForm == 0) return null;
+        int rulerFontSize = getInt(pattern+".size");
+        if (rulerFontSize == 0) return null;
+        return new Font(rulerFontName, rulerFontForm, rulerFontSize);
     }
 }

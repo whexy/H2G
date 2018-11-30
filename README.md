@@ -6,46 +6,75 @@ This project has nothing left.
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
 | Whexy | CanvasStyle | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Done |
+| Whexy | BarBasicSkin | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Done |
 | Whexy | FrameCreator | 参考网上的图片，设计函数，绘制直方图的其他要素 | N/A | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Not Available |
-| Whexy | BarBasicSkin | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Working |
+
 
 ## FrameCreator
 基于Reference的HistogramA的单帧生成器
 
 ### Update Log
+#### Version 1 rev.B+ (2018.12.1)
+
 #### Version 1 rev.B (2018.11.30)
+
 修复Bug
 #### Version 1 rev.A (2018.11.29)
 
+
+
 ## HistogramData
+
 画布的原始数据 （存放相对动态的数据）
 
+
+
 ## CanvaStyle
+
 画布的样式（存放相对静态的数据）
 
 ### Update Log
+
+#### Version 1 rev.B (2018.12.1)
+
+1. 修复颜色自定义无效的bug
+2. 代码架构优化
+3. json模板结构优化，并统一命名规范
+
 #### Version 1 rev.A (2018.11.30)
 使用json获取数据
 
 
+
 ## BarSwaper (Incomplete)
+
 管理Bar的交换，生成插值图像
 
+
+
 ## ThreadManager (Incomplete)
+
 线程管理器
 
+
+
 ## CoordProjecter
+
 坐标转换工具
 
 ### API Reference
+
 1. CoordProjecter(SigDraw base, SigDraw img, double xCentreOfImg, double yCentreOfImg)
 xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的坐标
 2. getX(double x) & getY(double y)
 将img上某点在img参考系下的坐标转换为在base参考系下base上的坐标
 
+
+
 ## BarGenerator
+
 柱状图生成器抽象类
 
 ### SubClass
@@ -59,11 +88,20 @@ xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的�
 3. void loadConfig(String filename) 载入预先配置文件
 
 ### Update Log
+
+#### Version 1 rev.B (2018.12.1)
+
+1. 增加了基本样式对json数据的支持
+2. 修改了部分抽象类的定义以支持json读取
+
 #### Version 1 rev.A (2018.11.30)
 1. 定义抽象类
 2. 完成基本样式(BarBasicSkin)的编写
 
+
+
 ## ConfigLoader
+
 ConfigLoader基于Json库的辅助程序，简化了读取操作
 
 ### API Reference
@@ -78,13 +116,24 @@ ConfigLoader基于Json库的辅助程序，简化了读取操作
 | Token | Map的Key | JsonObject |
 
 #### Example
-ConfigLoader cL = new ConfigLoader("facebook.json");  
+ConfigLoader cL = new ConfigLoader("facebook.json"); 
+
 String str = cL.getStr("data.1.message");  
 
+Color color = cL.getColor("bar.color1");
+
 ### Update Log
+
+#### Version 1 rev.B (2018.12.1)
+
+增加了获取两种特殊类的方法
+
 #### Version 1 rev.A (2018.11.28)
 
+
+
 ## SigDraw
+
 SigDraw是基于StdDraw魔改的产物
 
 ### API Reference
@@ -126,7 +175,10 @@ SigDraw是基于StdDraw魔改的产物
 2. 剥离Event,Swing,双缓冲部分
 3. 修改部分函数和启动流程，添加基础函数
 
+
+
 ### Peformance Caution
+
 单线程缩放速度参考(Core i7 3630QM)  
 
 （AA: 反锯齿 HR: 2k分辨率缩放）  
