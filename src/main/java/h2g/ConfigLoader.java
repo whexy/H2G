@@ -1,3 +1,5 @@
+package h2g;
+
 import java.io.*;
 import javax.json.*;
 public class ConfigLoader {

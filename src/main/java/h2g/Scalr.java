@@ -1,3 +1,5 @@
+package h2g;
+
 /**   
  * Copyright 2011 The Buzz Media, LLC
  * 

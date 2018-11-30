@@ -1,3 +1,5 @@
+package h2g;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -133,7 +135,6 @@ public final class SigDraw {
     // current pen radius
     public double penRadius;
 
-    public boolean highResolution = false;
     public boolean unaltered = false;
 
     // boundary of drawing canvas, 0% border
@@ -180,9 +181,8 @@ public final class SigDraw {
         return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
     }
 
-    public BufferedImage getScaledImage() {
-        if (highResolution) return getScaledImage(0.5, Scalr.Method.AUTOMATIC);
-        else return getScaledImage(1.0, Scalr.Method.AUTOMATIC);
+    public BufferedImage getScaledImage(double factor) {
+        return getScaledImage(factor, Scalr.Method.AUTOMATIC);
     }
 
     /**
@@ -235,9 +235,9 @@ public final class SigDraw {
             throw new IllegalArgumentException("width and height must be positive");
         width = canvasWidth;
         height = canvasHeight;
-        discreteScale();
+        setScaleUnaltered();
     }
-
+    
     // init
     public SigDraw() {
         init(DEFAULT_SIZE, DEFAULT_SIZE, null);
@@ -247,14 +247,8 @@ public final class SigDraw {
         init(canvasWidth, canvasHeight, null);
     }
 
-    public SigDraw(int canvasWidth, int canvasHeight, boolean unaltered, boolean highResolution) {
-        if (highResolution) {
-            init(canvasWidth * 2, canvasHeight * 2, null);
-        } else {
-            init(canvasWidth, canvasHeight, null);
-        }
-
-        useHighResolution(highResolution);
+    public SigDraw(int canvasWidth, int canvasHeight, boolean unaltered) {
+        init(canvasWidth, canvasHeight, null);
         setScaleUnaltered(unaltered);
     }
 
@@ -262,9 +256,8 @@ public final class SigDraw {
         init(DEFAULT_SIZE, DEFAULT_SIZE, image);
     }
 
-    public SigDraw(BufferedImage image, boolean unaltered, boolean highResolution) {
+    public SigDraw(BufferedImage image, boolean unaltered) {
         init(DEFAULT_SIZE, DEFAULT_SIZE, image);
-        useHighResolution(highResolution);
         setScaleUnaltered(unaltered);
     }
 
@@ -372,27 +365,15 @@ public final class SigDraw {
         ymax = max + BORDER * size;
     }
 
-    public void useHighResolution(boolean status) {
-        highResolution = status;
-        discreteScale();
+    public void setScaleUnaltered() {
+        if (unaltered) {
+            setXscale(0, width);
+            setYscale(0, height);
+        }
     }
-
     public void setScaleUnaltered(boolean status) {
         unaltered = status;
-        discreteScale();
-    }
-
-    private void discreteScale() {
-        if (unaltered) {
-            if (highResolution) {
-                setXscale(0, width / 2.0);
-                setYscale(0, height / 2.0);
-            } else {
-                setXscale(0, width);
-                setYscale(0, height);
-            }
-        }
-
+        setScaleUnaltered();
     }
 
 
@@ -1158,99 +1139,7 @@ public final class SigDraw {
      * @param args the command-line arguments
      */
     public static void main(String[] args) {
-        SigDraw im1 = new SigDraw(2000, 1000, true, true);
-        SigDraw im1n = new SigDraw(2000, 1000, true, true);
-        SigDraw im2 = new SigDraw(2000, 1000, true, false);
-        SigDraw im2n = new SigDraw(2000, 1000, true, false);
-
-        im2n.disableAntialiasing();
-        im1n.disableAntialiasing();
-
-        Font a = new Font("Microsoft YaHei Light", Font.PLAIN, 500);
-        Font b = new Font("Microsoft YaHei Light", Font.PLAIN, 250);
-
-        im1.setFont(a);
-        im1.setPenColor(SigDraw.BLACK);
-        im1.text(1000, 500, "Hello World");
-        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY)).save("AA_HR_UQ.jpg");
-        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.QUALITY)).save("AA_HR_Q.jpg");
-        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.AUTOMATIC)).save("AA_HR_AUTO.jpg");
-        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.SPEED)).save("AA_HR_SPD.jpg");
-        new SigDraw(im1.getScaledImage(0.5, Scalr.Method.BALANCED)).save("AA_HR_BL.jpg");
-
-        im2.setFont(b);
-        im2.setPenColor(SigDraw.BLACK);
-        im2.text(1000, 500, "Hello World");
-        new SigDraw(im2.getScaledImage(1, Scalr.Method.ULTRA_QUALITY)).save("AA_UQ.jpg");
-        new SigDraw(im2.getScaledImage(1, Scalr.Method.QUALITY)).save("AA_Q.jpg");
-        new SigDraw(im2.getScaledImage(1, Scalr.Method.AUTOMATIC)).save("AA_AUTO.jpg");
-        new SigDraw(im2.getScaledImage(1, Scalr.Method.SPEED)).save("AA_SPD.jpg");
-        new SigDraw(im2.getScaledImage(1, Scalr.Method.BALANCED)).save("AA_BL.jpg");
-        im2.save("AA.jpg");
-
-        im1n.setFont(a);
-        im1n.setPenColor(SigDraw.BLACK);
-        im1n.text(1000, 500, "Hello World");
-        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY)).save("noAA_HR_UQ.jpg");
-        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.QUALITY)).save("noAA_HR_Q.jpg");
-        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.AUTOMATIC)).save("noAA_HR_AUTO.jpg");
-        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.SPEED)).save("noAA_HR_SPD.jpg");
-        new SigDraw(im1n.getScaledImage(0.5, Scalr.Method.BALANCED)).save("noAA_HR_BL.jpg");
-
-        im2n.setFont(b);
-        im2n.setPenColor(SigDraw.BLACK);
-        im2n.text(1000, 500, "Hello World");
-        new SigDraw(im2n.getScaledImage(1, Scalr.Method.ULTRA_QUALITY)).save("noAA_UQ.jpg");
-        new SigDraw(im2n.getScaledImage(1, Scalr.Method.QUALITY)).save("noAA_Q.jpg");
-        new SigDraw(im2n.getScaledImage(1, Scalr.Method.AUTOMATIC)).save("noAA_AUTO.jpg");
-        new SigDraw(im2n.getScaledImage(1, Scalr.Method.SPEED)).save("noAA_SPD.jpg");
-        new SigDraw(im2n.getScaledImage(1, Scalr.Method.BALANCED)).save("noAA_BL.jpg");
-        im2.save("noAA.jpg");
-
-        //Benchmark
-        SigDraw[] list = new SigDraw[120];
-        for (int y = 0; y < 10; ++y) {
-            long startTime = System.currentTimeMillis();
-            for (int x = 0; x < 30; ++x) {
-                switch (y) {
-                    case 0:
-                        list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY));
-                        break;    //.save(".jpg");
-                    case 1:
-                        list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.QUALITY));
-                        break;    //.save(".jpg");
-                    case 2:
-                        list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.AUTOMATIC));
-                        break;    //.save(".jpg");
-                    case 3:
-                        list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.SPEED));
-                        break;    //.save(".jpg");
-                    case 4:
-                        list[x] = new SigDraw(im1.getScaledImage(0.5, Scalr.Method.BALANCED));
-                        break;    //.save(".jpg");
-                    case 5:
-                        list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.ULTRA_QUALITY));
-                        break;    //.save(".jpg");
-                    case 6:
-                        list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.QUALITY));
-                        break;    //.save(".jpg");
-                    case 7:
-                        list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.AUTOMATIC));
-                        break;    //.save(".jpg");
-                    case 8:
-                        list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.SPEED));
-                        break;    //.save(".jpg");
-                    case 9:
-                        list[x] = new SigDraw(im2.getScaledImage(0.5, Scalr.Method.BALANCED));
-                        break;    //.save(".jpg");
-                }
-                list[x] = new SigDraw(im1.getScaledImage());
-            }
-            long endTime = System.currentTimeMillis();
-            double fps = 30 / ((endTime - startTime) / 1000.0);
-            String[] token = {"AA_HR_UQ ", "AA_HR_Q ", "AA_HR_AUTO ", "AA_HR_SPD ", "AA_HR_BL ", "AA_UQ ", "AA_Q ", "AA_AUTO ", "AA_SPD ", "AA_BL "};
-            System.out.println(token[y] + "Offscreen FPS: " + fps);
-        }
+        
     }
 
 }
