@@ -22,7 +22,7 @@ class CanvaStyle {
     int headerXoffset = 0;
     int headerYoffset = 20;
     int footerXoffset = 0;
-    int footerYoffset = 20;
+    int footerYoffset = 50;
 
 
     // Fonts

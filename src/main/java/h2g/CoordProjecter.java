@@ -9,12 +9,12 @@ public class CoordProjecter {
         this.base = base;
         this.img = img;
         originX = (int)Math.round( base.scaleX(xCentreOfImg) - img.width/2.0 );
-        originY = (int)Math.round( base.scaleY(yCentreOfImg) + img.height/2.0 );
+        originY = (int)Math.round( base.scaleY(yCentreOfImg) - img.height/2.0 );
     }
     public double getX(double x) {
         return base.userX( img.scaleX(x) + originX );
     }
     public double getY(double y) {
-        return base.userY( img.scaleY(y) - originY );
+        return base.userY( img.scaleY(y) + originY );
     }
 }

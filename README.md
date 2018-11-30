@@ -2,8 +2,21 @@
 This project have nothing right.  
 This project have nothing left.  
 
+### TODO LIST
+| Contributor | Class Name | Content | DDL | Status |
+| --- | --- | --- | --- | --- |
+| Whexy | CanvasStyle | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Working |
+| Whexy | FrameCreator | 参考网上的图片，设计函数，绘制直方图的其他要素 | N/A | Working |
+| Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
+| Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Not Available |
+
 ## FrameCreator (Test Failed)
 基于Reference的HistogramA的单帧生成器
+
+### Update Log
+#### Version 1 rev.B (2018.11.30)
+修复Bug
+#### Version 1 rev.A (2018.11.29)
 
 ## HistogramData
 画布的原始数据 （存放相对动态的数据）
@@ -26,7 +39,7 @@ xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的�
 2. getX(double x) & getY(double y)
 将img上某点在img参考系下的坐标转换为在base参考系下base上的坐标
 
-## Barchart (Incomplete)
+## BarGenerator (Incomplete)
 条形图生成器抽象类
 
 ## ConfigLoader

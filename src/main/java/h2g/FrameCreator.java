@@ -86,47 +86,43 @@ class FrameCreator {
         Font font = c.rulerFont; // TO BE Customized
         bg.setFont(font);
         bg.setPenColor(c.rulerColor);
-        final double x0 = cBorder[LEFT]-5 , x1 = cBorder[LEFT]+5;
-        final double x2 = cBorder[RIGHT]-5 , x3 = cBorder[RIGHT]+5;
-        String[] mark = new String[rulerGrade + 1];
+        final int x0 = cBorder[LEFT]-5 , x1 = cBorder[LEFT]+5;
+        final int x2 = cBorder[RIGHT]-5 , x3 = cBorder[RIGHT]+5;
+        double[] rawY = new double[rulerGrade + 1];
+        String[] markL = new String[rulerGrade + 1];
+        String[] markR = new String[rulerGrade + 1];
 
         for (int i = 0; i <= rulerGrade; i++) {
-            double y = cp.getY( yValue[MIN] + i * rulerStep );
-            mark[i] = numberForRuler(y);
+            rawY[i] = yValue[MIN] + i * rulerStep;
+            double y = cp.getY(rawY[i]);
             if(c.hasRuler) bg.line(x0, y, x1, y);
             if(c.hasRightRuler) bg.line(x2, y, x3, y);
         }
-        int len = maxMarkLength(mark);
-        final double xl = cBorder[LEFT]-c.rulerXoffset;
-        final double xr = cBorder[RIGHT]+c.rulerXoffset;
+        int len = 0;
+        if(c.hasRuler) len=formatNumber(markL, rawY);
+        if(c.hasRightRuler) len=formatNumber(markR, rawY);
+        final int xl = cBorder[LEFT]-c.rulerXoffset;
+        final int xr = cBorder[RIGHT]+c.rulerXoffset;
         for (int i = 0; i <= rulerGrade; i++) {
             double y = cp.getY( yValue[MIN] + i * rulerStep );
-            if(c.hasRuler) bg.text(xl, y, String.format("%" + len + "s", mark[i]));
-            if(c.hasRightRuler) bg.text(xr, y, String.format("%" + len + "s", mark[i]));
+            if(c.hasRuler) bg.text(xl, y, String.format("%" + len + "s", markL[i]));
+            if(c.hasRightRuler) bg.text(xr, y, String.format("%-" + len + "s", markR[i]));
         }
     }
 
-    private String numberForRuler(double x) { // TO BE Customized
-        if (yValue[MAX] >= 5 && rulerStep > 1)
-            return "" + (int) x;
-        if (rulerStep > 0.1)
-            return String.format("%.1f", x);
-        if (rulerStep > 0.01)
-            return String.format("%.2f", x);
-        if (rulerStep > 0.001)
-            return String.format("%.3f", x);
-        if (rulerStep > 0.0001)
-            return String.format("%.4f", x);
-        if (rulerStep > 0.00001)
-            return String.format("%.5f", x);
-        return String.format("%g", x);
-    }
-
-    private int maxMarkLength(String[] sa) {
-        int n = sa[0].length();
-        for (String s : sa)
-            if (n < s.length())
-                n = s.length();
+    private int formatNumber(String[] mark, double[] y) { // TO BE Customized
+        int decimalDigits = 0;
+        String format = "%";
+        if(rulerStep<0) decimalDigits = (int)(-Math.log10(rulerStep)) + 1;
+        else decimalDigits = 0;
+        if(rulerStep>100000) format += ".5g";
+        else format += "." + decimalDigits + "f";
+        int n = 0;
+        for(int x=0;x<y.length;++x) {
+            mark[x] = String.format(format, y[x]);
+            if (n < mark[x].length())
+                n = mark[x].length();
+        }
         return n;
     }
 
@@ -136,15 +132,15 @@ class FrameCreator {
         bg.setPenColor(c.keyColor);
         final double y = cBorder[DOWN] - c.keysYoffset;
         for (int i = 0; i < barNum; i++) {
-            if (d.keys[i].length() >= 1) {
-                bg.text(i, y, d.keys[i]);
+            if (d.keys[i].length() > 0) {
+                bg.text(cp.getX(i + barWidth/2), y, d.keys[i]);
             }
         }
     }
 
     private void plotBorder() {
         bg.setPenColor(c.borderColor);
-        bg.rectangle(cBorder[LEFT], cBorder[UP], cBorder[RIGHT], cBorder[DOWN]);
+        bg.rectangle(c.xProject, c.yProject, coordSize[WIDTH]/2, coordSize[HEIGHT]/2);
     }
 
 
@@ -160,8 +156,8 @@ class FrameCreator {
     private void plotFooter() {
         Font font = c.footerFont; // TO BE Customized
         bg.setFont(font);
-        double x = c.headerXoffset + (cBorder[LEFT]+cBorder[RIGHT])/2;
-        double y = -c.headerYoffset + cBorder[DOWN];
+        double x = c.footerXoffset + (cBorder[LEFT]+cBorder[RIGHT])/2;
+        double y = -c.footerYoffset + cBorder[DOWN];
         bg.setPenColor(c.footerColor);
         bg.text(x, y, d.footer);
     }
@@ -178,10 +174,14 @@ class FrameCreator {
     public static void main(String[] args) {
         CanvaStyle c = new CanvaStyle();
         HistogramData d = new HistogramData();
+        d.keys = new String[]{"father","father","son"};
+        d.values = new double[]{0.0,0.0,0.0};
         d.yValue[0] = 0;
         d.yValue[1] = 1000.0;
-        d.rulerStep = 10;
-        d.rulerGrade = 8;
+        d.rulerStep = 100;
+        d.rulerGrade = 10;
+        d.header = "Nothing left";
+        d.footer = "Nothing right";
         FrameCreator fc = new FrameCreator(c, d);
         fc.bg.save("test.jpg");
     }
