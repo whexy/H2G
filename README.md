@@ -9,6 +9,7 @@ This project have nothing left.
 | Whexy | FrameCreator | 参考网上的图片，设计函数，绘制直方图的其他要素 | N/A | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Not Available |
+| Whexy | BarBasicSkin | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Working |
 
 ## FrameCreator (Test Failed)
 基于Reference的HistogramA的单帧生成器
@@ -39,8 +40,23 @@ xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的�
 2. getX(double x) & getY(double y)
 将img上某点在img参考系下的坐标转换为在base参考系下base上的坐标
 
-## BarGenerator (Incomplete)
-条形图生成器抽象类
+## BarGenerator
+柱状图生成器抽象类
+
+### SubClass
+| SubClass | Description |
+| --- | --- |
+| BarBasicSkin | 基本样式 |
+
+### API Reference
+1. BarGenerator(int[] barSize, double[] scale) barSize:生成图像的尺寸 scale:柱状图的最小值和最大值
+2. BufferedImage getBarchart(int frame, double val1, double val2) 生成Bar图像
+3. void loadConfig(String filename) 载入预先配置文件
+
+### Update Log
+#### Version 1 rev.A (2018.11.30)
+1. 定义抽象类
+2. 完成基本样式(BarBasicSkin)的编写
 
 ## ConfigLoader
 ConfigLoader基于Json库的辅助程序，简化了读取操作
@@ -76,6 +92,7 @@ SigDraw是基于StdDraw魔改的产物
 6. loadImage() 从本地文件载入图片(基于getImage(),同时废除该函数)
 7. setBuffImg() 重设内存缓存的图片
 8. setScaleUnaltered() 离散化坐标系
+9. getSubImage() 截取图像
 
 ##### Modified API
 1. picture() 修改为只能载入BufferedImage图像
@@ -86,6 +103,7 @@ SigDraw是基于StdDraw魔改的产物
 
 #### Version 1 rev.C (2018.11.30)
 1. 移除高分辨率相关函数
+2. 增加截取图像函数
 
 #### Version 1 rev.B+ (2018.11.29)
 
