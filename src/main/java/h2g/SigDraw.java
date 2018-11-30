@@ -185,6 +185,15 @@ public final class SigDraw {
         return getScaledImage(factor, Scalr.Method.AUTOMATIC);
     }
 
+    public BufferedImage getSubImage(double x, double y, double halfWidth, double halfHeight) {
+        if (!(halfWidth >= 0)) throw new IllegalArgumentException("half width must be nonnegative");
+        if (!(halfHeight >= 0)) throw new IllegalArgumentException("half height must be nonnegative");
+        int xs = (int) Math.round( scaleX(x) );
+        int ys = (int) Math.round( scaleY(y) );
+        int ws = (int) Math.round( factorX(2 * halfWidth) );
+        int hs = (int) Math.round( factorY(2 * halfHeight) );
+        return offscreenImage.getSubimage(xs, ys, ws, hs);
+    }
     /**
      * @param factor  The coefficient of image AREA which we would like to show.
      *                Attention, the factor is double while we show only INT scalar.
