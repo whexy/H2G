@@ -4,26 +4,17 @@
     // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "java",
-            "name": "CodeLens (Launch) - FrameCreator",
+            "name": "CodeLens (Launch) - BarLayoutDesigner",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
+            "console": "integratedTerminal",
             "stopOnEntry": false,
-            "mainClass": "h2g.FrameCreator",
+            "mainClass": "h2g.BarLayoutDesigner",
             "args": "",
             "projectName": "h2g"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - RectangleTest",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "RectangleTest",
-            "args": ""
         },
         {
             "name": "Python: Terminal (external)",

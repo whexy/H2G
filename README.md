@@ -2,6 +2,11 @@
 This project has nothing right. 
 This project has nothing left. 
 
+### Lock 
+| Class Name | Description | Status |
+| --- | --- | --- |
+| FrameCreator | 不要修改plotKeys和plotBars部分 | Locked |
+
 ### TODO LIST
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
@@ -10,7 +15,9 @@ This project has nothing left.
 | Whexy | FrameCreator | 参考网上的图片，设计函数，绘制直方图的其他要素 | N/A | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Not Available |
-
+| Whexy | SigDraw | 添加图片全局半透明函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况 | 12.5 | Working |
+| Whexy | FrameCreator | 思考旋转坐标系的方法 | 12.8 | Working |
+| Whexy | N/A | 直接提交Json生成器的代码 | N/A | Working |
 
 ## FrameCreator
 基于Reference的HistogramA的单帧生成器
@@ -48,10 +55,20 @@ This project has nothing left.
 
 
 
-## BarSwaper (Incomplete)
+## BarLayoutDesigner (Incomplete)
+生成Bar的布局
 
-管理Bar的交换，生成插值图像
+### SubClass
+| SubClass | Description |
+| --- | --- |
+| BarLayoutDesigner | (Incomplete) |
+| BarLayout | 队列化处理Bar交换事件，避免多重交换，生成Bar的横坐标 |
+| BarSwaper | 非线性平移Bar |
+| BarsLocation | 含两个BarLocation的数据结构 |
+| BarLocation | 含Bar ID,所在图层和横坐标的数据结构 |
 
+### Update Log
+#### Version 1 rev.A (2018.12.2)
 
 
 ## ThreadManager (Incomplete)
