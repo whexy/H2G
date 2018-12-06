@@ -14,7 +14,11 @@ class CanvaStyle {
     int xProject = bgSize[0] / 2;
     int yProject = bgSize[1] / 2;
     double blankRatio = 0.5;
-    /*boolean rotate = false;*/ // haven't be used now. But I should keep it.
+    boolean rotate = false;
+
+    // Bar
+    String[] barPattern = {"Default", "Blank", "Default", "Blank"};
+    double[] barWidthRatio = {0.5};
 
     // Layout
     int rulerXoffset = 20;
