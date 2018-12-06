@@ -12,8 +12,8 @@ public class BarLayoutDesigner {
         }
         BarLayout l = new BarLayout(bar);
         for(int x=0;x<200;++x) {
-            if(x%20 != (2000-x)%20) {
-                l.swapBars(500*(x/20), x%20, (2000-x)%20);
+            if(1 != 2) {
+                l.swapBars(0, x%10, 10+x%10);
             }
         }
         int[] map;
@@ -30,7 +30,7 @@ public class BarLayoutDesigner {
             System.out.println("       "+x);
             
             try {
-                Thread.sleep(20);
+                Thread.sleep(1000/60);
             } catch (Exception e) {
                 //TODO: handle exception
             }
@@ -121,7 +121,7 @@ class BarSwaper {
     int startFrame, endFrame;
     double distance, midFrame;
     BarsLocation bars;
-    public static double maxVelocity = 0.1; // Move scaled pixel per frame
+    public static double maxVelocity = 0.15; // Move scaled pixel per frame
     private double k,k1,k2,b,dFrame;
 
     private double getDisplace(int currentFrame) {

@@ -18,6 +18,7 @@ This project has nothing left.
 | Whexy | SigDraw | 添加图片全局半透明函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况 | 12.5 | Working |
 | Whexy | FrameCreator | 思考旋转坐标系的方法 | 12.8 | Working |
 | Whexy | N/A | 直接提交Json生成器的代码 | N/A | Working |
+| Whexy | SigDraw | 添加图片高斯模糊函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况 | 12.10 | Working |
 
 ## FrameCreator
 基于Reference的HistogramA的单帧生成器
@@ -55,19 +56,23 @@ This project has nothing left.
 
 
 
-## BarLayoutDesigner (Incomplete)
-生成Bar的布局
+## Interpolator (Untested)
+生成插值图像
+
+### Warning
+本类线程非安全
 
 ### SubClass
 | SubClass | Description |
 | --- | --- |
-| BarLayoutDesigner | (Incomplete) |
-| BarLayout | 队列化处理Bar交换事件，避免多重交换，生成Bar的横坐标 |
-| BarSwaper | 非线性平移Bar |
-| BarsLocation | 含两个BarLocation的数据结构 |
-| BarLocation | 含Bar ID,所在图层和横坐标的数据结构 |
+| Interpolator | 生成数值的插值，调用BarLayoutDesigner生成坐标的插值 |
+| BarLayoutDesigner | 队列化处理Bar交换事件，避免多重交换，生成Bar的横坐标 |
+| BarSwaper | 利用非线性函数计算和平移Bar的坐标以实现Bar的交换 |
+| BarSwapStatus | 含两个BarLocation和交换进度的数据结构 |
+| BarLocation | 含Bar ID,所在图层和坐标的数据结构 |
 
 ### Update Log
+#### Version 1 rev.B (2018.12.6)
 #### Version 1 rev.A (2018.12.2)
 
 
