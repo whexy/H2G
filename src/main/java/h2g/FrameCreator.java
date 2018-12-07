@@ -2,8 +2,10 @@ package h2g;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 
 class FrameCreator {
+    BarDrawingTutor b;
     CanvaStyle c;
     HistogramData d;
     SigDraw bg, coord;
@@ -19,7 +21,8 @@ class FrameCreator {
     double rulerStep;
     int rulerGrade;
 
-    public FrameCreator(CanvaStyle c, HistogramData d) {
+    public FrameCreator(BarDrawingTutor b, CanvaStyle c, HistogramData d) {
+        this.b = b;
         this.c = c;
         this.d = d;
         init();
@@ -35,8 +38,8 @@ class FrameCreator {
         barNum = d.keys.length;
         rulerStep = d.rulerStep;
         rulerGrade = d.rulerGrade;
-        xScale[MIN] = -barSpace;
-        xScale[MAX] = barNum * 1.0;
+        xScale[MIN] = -b.getPatternGap();
+        xScale[MAX] = d.visiblePattern;
 
         cBorder[LEFT] = c.xProject - coordSize[WIDTH] / 2;
         cBorder[RIGHT] = c.xProject + coordSize[WIDTH] / 2;
@@ -62,8 +65,31 @@ class FrameCreator {
         if (c.hasFooter)
             plotFooter();
     }
-
+    private void plotKeys() {
+        b.seek(0);
+        Font font = c.keysFont; // TO BE Customized
+        bg.setFont(font);
+        bg.setPenColor(c.keyColor);
+        final double y = cBorder[DOWN] - c.keysYoffset;
+        while(b.hasNext()) {
+            bg.text(cp.getX(b.getLocation()), y, d.keys[b.getBarID()]);
+            b.next();
+        }
+    }
     private void plotBars() {
+        b.seek(0);
+        while(b.hasNext()) {
+            String skin = c.barSkin[ b.getBarID() ];
+            BarGenerator barSkin = null;
+            int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
+            if(skin == "Basic") barSkin = new BarBasicSkin(barSize, yValue);
+            double x = b.getLocation();
+            double y = (yValue[MIN] + yValue[MAX])/2;
+            BufferedImage barImg = barSkin.getBarChart(b.currentFrame, b.getValue(), 0);
+            coord.picture(x, y, barImg);
+            b.next();
+        }
+        bg.picture(c.xProject, c.yProject, coord.getBuffImg());
         /*
         double[] a = d.values;
         int n = a.length;
@@ -128,17 +154,7 @@ class FrameCreator {
         return n;
     }
 
-    private void plotKeys() {
-        Font font = c.keysFont; // TO BE Customized
-        bg.setFont(font);
-        bg.setPenColor(c.keyColor);
-        final double y = cBorder[DOWN] - c.keysYoffset;
-        for (int i = 0; i < barNum; i++) {
-            if (d.keys[i].length() > 0) {
-                bg.text(cp.getX(i + barWidth / 2), y, d.keys[i]);
-            }
-        }
-    }
+    
 
     private void plotBorder() {
         bg.setPenColor(c.borderColor);

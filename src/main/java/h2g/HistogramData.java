@@ -9,6 +9,7 @@ public class HistogramData {
     // Blank size will be 1.0-sum(ratio)
     double[] values = {};
     //double[] xScale = { 0, 1.0 }; // MIN, MAX
+    int visiblePattern = 1;
     double[] yValue = {0, 1.0}; // MIN, MAX
     double rulerStep = 0.0;
     int rulerGrade = 0;

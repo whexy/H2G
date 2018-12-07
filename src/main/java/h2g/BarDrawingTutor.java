@@ -5,8 +5,9 @@ import java.util.HashMap;
 // import java.util.Random;
 import java.lang.Thread;
 public class BarDrawingTutor {
-    private final static Interpolator i = new Interpolator();
+    private Interpolator i;
     private final static HashMap<BarLocation, Double> transparency = Interpolator.bLD.transparency;
+    private final static double[] barWidth = Interpolator.validWidth;
     private Bar[] bar;
     private int arrayHead = 0, index = 0;
     public int currentFrame;
@@ -14,6 +15,9 @@ public class BarDrawingTutor {
         for(int x=0;x<b.length;++x) {
             if(b[x].bL.layer == layer) bar[arrayHead++] = b[x];
         }
+    }
+    public BarDrawingTutor(CanvaStyle c) {
+        i = new Interpolator(c);
     }
     public BarDrawingTutor(int currentFrame) {
         this.currentFrame = currentFrame;
@@ -24,7 +28,7 @@ public class BarDrawingTutor {
         putFilteredBar(BarLocation.LAYER_TOP, b);
     }
     public boolean hasNext() {
-        return index<arrayHead;
+        return index+1<arrayHead;
     }
     public void next() {
         index++;
@@ -47,10 +51,22 @@ public class BarDrawingTutor {
     public double getDeltaValue() {
         return bar[index].dVal;
     }
+    public int getTotalFrame() {
+        return Interpolator.endFrame;
+    }
+    public double getPatternGap() {
+        double[] barWidth = Interpolator.barWidthRatio;
+        return barWidth[barWidth.length-1];
+    }
+    public double getBarWidth() {
+        return barWidth[getBarID()%barWidth.length];
+    }
+    public void seek(int index) {
+        this.index = index;
+    }
 }
 class Interpolator {
     public static boolean swapping = true;
-    public static int FPS = 60;
     public static int FPD = 60; // Frames per data
     public static double[][] rawData; // rawdata[bar][data]
     public static Bar[][] bar; // data[frame][bar]
@@ -60,8 +76,12 @@ class Interpolator {
     public static int currentFrame, endFrame, barNum, dataNum;
     public static String[] barPattern = {"Default",""};
     public static double[] barWidthRatio = {0.5,-1};
+    public static double[] validWidth;
     public static double[] xScale = { 0, 1.0 };
-    public Interpolator() {
+    public Interpolator(CanvaStyle c, double[][] rawData) {
+        barPattern = c.barPattern;
+        barWidthRatio = c.barWidthRatio;
+        FPD = c.FPD;
         init();
         interpolateBarValue();
         interpolateBarLocation();
@@ -89,6 +109,12 @@ class Interpolator {
         for(x=0,i=0;x<patternNum;++x) {
             if(barPattern[x].length()!=0) {
                 availablePos[i++] = (((x==0)?0:barWidthRatio[x-1])+barWidthRatio[x])/2;
+            }
+        }
+        validWidth = new double[i];
+        for(x=0,i=0;x<patternNum;++x) {
+            if(barPattern[x].length()!=0) {
+                validWidth[i++] = barWidthRatio[x];
             }
         }
         for(x=0,i=0;x<barNum;++x,++i) {
