@@ -8,7 +8,7 @@ public class BarDrawingTutor {
     private final static Interpolator i = new Interpolator();
     private final static HashMap<BarLocation, Double> transparency = Interpolator.bLD.transparency;
     private Bar[] bar;
-    private int arrayHead = 0, position = 0;
+    private int arrayHead = 0, index = 0;
     public int currentFrame;
     private void putFilteredBar(int layer, Bar[] b) {
         for(int x=0;x<b.length;++x) {
@@ -24,22 +24,28 @@ public class BarDrawingTutor {
         putFilteredBar(BarLocation.LAYER_TOP, b);
     }
     public boolean hasNext() {
-
+        return index<arrayHead;
     }
     public void next() {
-
+        index++;
     }
     public double getLocation() {
-
+        return bar[index].bL.location;
     }
     public double getTransparency() {
-
+        if(transparency.containsKey(bar[index].bL)) {
+            return transparency.get(bar[index].bL);
+        }
+        else return 0;
     }
     public int getBarID() {
-
+        return bar[index].id;
     }
     public double getValue() {
-        
+        return bar[index].val;
+    }
+    public double getDeltaValue() {
+        return bar[index].dVal;
     }
 }
 class Interpolator {
@@ -244,6 +250,11 @@ class BarLayoutDesigner {
         bar[index] = b;
         flag[index] = null;
     }
+    private double getTransparency(double progress) {
+        if(progress<0.5) return progress*2;
+        //else return 1-(progress-0.5)*2;
+        else return 2-2*progress;
+    }
     public BarLocation[] getLayout() {
         BarLocation[] rel = new BarLocation[bar.length];
         int i = 0;
@@ -257,8 +268,8 @@ class BarLayoutDesigner {
             BarSwapStatus bS = swaper.getCurrentLocation(currentFrame);
             rel[i++] = bS.a;
             rel[i++] = bS.b;
-            transparency.put(bS.a, bS.progress);
-            transparency.put(bS.b, bS.progress);
+            transparency.put(bS.a, getTransparency(bS.progress));
+            transparency.put(bS.b, getTransparency(bS.progress));
             if(swaper.endFrame<=currentFrame || bS.progress==1) { // Free Useless Swaper
                 applyExchange(bS.a);
                 applyExchange(bS.b);
