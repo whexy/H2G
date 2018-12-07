@@ -56,14 +56,25 @@ This project has nothing left.
 
 
 
-## Interpolator (Untested)
+## BarDrawingTutor
 生成插值图像
 
-### Warning
+### Note
 本类线程非安全
 
-### SubClass
-| SubClass | Description |
+### API Reference 
+| API Name | Description |
+| --- | --- |
+| hasNext() | 判断当前帧是否还有下一个需要绘制的Bar |
+| next() | 切换到下一个需要绘制的Bar |
+| getLocation() | 获取Bar的坐标 |
+| getTransparency() | 获得Bar的透明度 |
+| getBarID() | 获得Bar的ID |
+| getValue() | 获得Bar的值 |
+
+
+### InnerClass
+| InnerClass | Description |
 | --- | --- |
 | Interpolator | 生成数值的插值，调用BarLayoutDesigner生成坐标的插值 |
 | BarLayoutDesigner | 队列化处理Bar交换事件，避免多重交换，生成Bar的横坐标 |
@@ -72,6 +83,7 @@ This project has nothing left.
 | BarLocation | 含Bar ID,所在图层和坐标的数据结构 |
 
 ### Update Log
+#### Version 1 rev.C (2018.12.7)
 #### Version 1 rev.B (2018.12.6)
 #### Version 1 rev.A (2018.12.2)
 

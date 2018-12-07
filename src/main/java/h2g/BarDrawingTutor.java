@@ -1,10 +1,48 @@
 package h2g;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 // import java.util.Random;
 import java.lang.Thread;
+public class BarDrawingTutor {
+    private final static Interpolator i = new Interpolator();
+    private final static HashMap<BarLocation, Double> transparency = Interpolator.bLD.transparency;
+    private Bar[] bar;
+    private int arrayHead = 0, position = 0;
+    public int currentFrame;
+    private void putFilteredBar(int layer, Bar[] b) {
+        for(int x=0;x<b.length;++x) {
+            if(b[x].bL.layer == layer) bar[arrayHead++] = b[x];
+        }
+    }
+    public BarDrawingTutor(int currentFrame) {
+        this.currentFrame = currentFrame;
+        Bar[] b = Interpolator.bar[currentFrame];
+        bar = new Bar[b.length];
+        putFilteredBar(BarLocation.LAYER_BOTTOM, b);
+        putFilteredBar(BarLocation.LAYER_MID, b);
+        putFilteredBar(BarLocation.LAYER_TOP, b);
+    }
+    public boolean hasNext() {
 
-public class Interpolator {
+    }
+    public void next() {
+
+    }
+    public double getLocation() {
+
+    }
+    public double getTransparency() {
+
+    }
+    public int getBarID() {
+
+    }
+    public double getValue() {
+        
+    }
+}
+class Interpolator {
     public static boolean swapping = true;
     public static int FPS = 60;
     public static int FPD = 60; // Frames per data
@@ -53,9 +91,9 @@ public class Interpolator {
         xScale[1] = Math.ceil(i*1.0/nonEmptyNum);
     }
     private void init() {
-        dataNum = rawData[0].length;
+        dataNum = rawData[0].length-1;
         barNum = rawData.length;
-        endFrame = dataNum*FPD/FPS;
+        endFrame = dataNum*FPD;
         bar = new Bar[endFrame][];
         curBar = new Bar[barNum];
         parseBarPattern();
@@ -92,15 +130,16 @@ public class Interpolator {
     private void interpolateBarValue() {
         int x,y,frame;
         double[] dVal = new double[barNum];
-        for(x=0;x<dataNum-1;++x) {
+        for(x=0;x<dataNum;++x) {
             
             for(y=0;y<barNum;++y) {
-                dVal[y] = rawData[y][x+1]-rawData[y][x]; 
+                dVal[y] = (rawData[y][x+1]-rawData[y][x])/FPD;
             }
             for(y=0;y<barNum;++y) {
                 curBar[y].dVal = dVal[curBar[y].id];
-                bar[x][y].dVal = dVal[bar[x][y].id];
+                curBar[y].val = rawData[curBar[y].id][x];
             }
+            bar[FPD*x] = deepCopyBarArray(curBar);
             for(frame=1;frame<FPD;++frame) {
                 for(y=0;y<barNum;++y) {
                     curBar[y].val += dVal[curBar[y].id];
@@ -127,7 +166,12 @@ public class Interpolator {
 
     }
     public static void main(String[] args) {
-
+        rawData = new double[3][];
+        rawData[0] = new double[]{3,4,7,8};
+        rawData[1] = new double[]{1,5,6,9};
+        rawData[2] = new double[]{2,3,4,5};
+        Interpolator i = new Interpolator();
+        System.out.println("hello");
     }
 }
 class Bar {
@@ -149,6 +193,7 @@ class Bar {
 class BarLayoutDesigner {
     ArrayList<BarSwaper> activeSwaper = new ArrayList<>();
     ArrayList<int[]> waitingQueue = new ArrayList<>();
+    HashMap<BarLocation, Double> transparency = new HashMap<>();
     BarLocation[] bar;
     int currentFrame = 0;
     BarSwaper[] flag;
@@ -212,6 +257,8 @@ class BarLayoutDesigner {
             BarSwapStatus bS = swaper.getCurrentLocation(currentFrame);
             rel[i++] = bS.a;
             rel[i++] = bS.b;
+            transparency.put(bS.a, bS.progress);
+            transparency.put(bS.b, bS.progress);
             if(swaper.endFrame<=currentFrame || bS.progress==1) { // Free Useless Swaper
                 applyExchange(bS.a);
                 applyExchange(bS.b);
