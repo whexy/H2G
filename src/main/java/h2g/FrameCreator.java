@@ -82,14 +82,12 @@ class FrameCreator {
         while(b.hasNext()) {
             b.next();
             String skin = c.barSkin[ b.getBarID() ];
-            BarGenerator barSkin = null;
             int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
-            if(skin == "Basic") barSkin = new BarBasicSkin(barSize, yValue);
+            BarGenerator barSkin = DynamicLoader.getGenerator(skin, barSize, yValue);
             double x = b.getLocation();
             double y = (yValue[MIN] + yValue[MAX])/2;
             BufferedImage barImg = barSkin.getBarChart(b.currentFrame, b.getValue(), 0);
             coord.picture(x, y, barImg);
-            
         }
         bg.picture(c.xProject, c.yProject, coord.getBuffImg());
         /*
@@ -143,7 +141,7 @@ class FrameCreator {
     private int formatNumber(String[] mark, double[] y) { // TO BE Customized
         int decimalDigits = 0;
         String format = "%";
-        if (rulerStep < 0) decimalDigits = (int) (-Math.log10(rulerStep)) + 1;
+        if (rulerStep < 1) decimalDigits = (int)(Math.ceil(-Math.log10(rulerStep)));
         else decimalDigits = 0;
         if (rulerStep > 100000) format += ".5g";
         else format += "." + decimalDigits + "f";

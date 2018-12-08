@@ -1,6 +1,6 @@
 package h2g;
 
-import javax.sound.sampled.ReverbType;
+import java.awt.image.BufferedImage;
 
 public class ThreadManager {
     
@@ -8,28 +8,32 @@ public class ThreadManager {
         CanvaStyle c = new CanvaStyle();
         HistogramData d = new HistogramData();
         double[][] rawData = new double[4][];
-        rawData[0] = new double[]{4,5,9,16,17,17};
-        rawData[1] = new double[]{3,6,8,15,17,17};
-        rawData[2] = new double[]{2,8,11,14,17,17};
-        rawData[3] = new double[]{1,7,12,13,17,17};
+        rawData[0] = new double[]{4,5,9,16,17,20,100,430,440,440,440,440,440,440};
+        rawData[1] = new double[]{3,6,8,15,17,40,200,440,440,440,440,440,440,440};
+        rawData[2] = new double[]{2,8,11,14,17,60,300,460,440,440,440,440,440,440};
+        rawData[3] = new double[]{1,7,12,13,17,80,400,450,440,440,440,440,440,440};
         d.yValue[0] = 0;
-        d.yValue[1] = 20.0;
+        d.yValue[1] = 1.0;
         d.visiblePattern = 1;
         c.FPD = 90;
-        BarDrawingTutor initB = new BarDrawingTutor(c,rawData,0.2); // For initialization
-        FrameCreator[] f = new FrameCreator[initB.getTotalFrame()];
+        RulerDrawingTutor r = new RulerDrawingTutor(d.yValue, 10);
+        BarDrawingTutor initB = new BarDrawingTutor(c,rawData,0.08); // For initialization
+        FrameCreator f;
+        long startTime = System.currentTimeMillis();
+        BufferedImage[] bf = new BufferedImage[initB.getTotalFrame()];
         for(int x=0;x<initB.getTotalFrame();++x) {
             BarDrawingTutor b = new BarDrawingTutor(x);
             d.yValue[1] = b.getMaxValue()*1.01;
-            RulerDrawingTutor r = new RulerDrawingTutor(d.yValue, 10);
+            r.setYmaxValue(d.yValue[1]);
             d.rulerGrade = r.getRulerGrade();
             d.rulerStep = r.getRulerStep();
-            f[x] = new FrameCreator(b, c, d);
-            System.out.println("Frame"+x+" has been created!");
+            f = new FrameCreator(b, c, d);
+            //bf[x] = f.bg.getBuffImg();
+            long endTime = System.currentTimeMillis();
+            System.out.printf("Average FPS: %.3f\n",x/((endTime-startTime)/1000.0));
+            //System.out.println("Frame"+x+" has been created!");
         }
-        for(int x=0;x<initB.getTotalFrame();++x) {
-            //f[x].bg.save(x+".jpg");
-        }
+        
         
         
         /*
@@ -56,11 +60,11 @@ class RulerDrawingTutor {
     double nFactor;  // ={1,2,5}
     public void selectNfactor() {
         nFactor = 1;
-        if((yValue[0]-yValue[1])/(rulerStep)<=maxRulerGrade) return;
+        if((yValue[1]-yValue[0])/(rulerStep)<=maxRulerGrade) return;
         nFactor = 2;
-        if((yValue[0]-yValue[1])/(2*rulerStep)<=maxRulerGrade) return;
+        if((yValue[1]-yValue[0])/(2*rulerStep)<=maxRulerGrade) return;
         nFactor = 5;
-        if((yValue[0]-yValue[1])/(5*rulerStep)<=maxRulerGrade) return;
+        if((yValue[1]-yValue[0])/(5*rulerStep)<=maxRulerGrade) return;
             
         rulerStep*=10;
         selectNfactor();
