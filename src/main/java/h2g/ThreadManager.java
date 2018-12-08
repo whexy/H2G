@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.lang.Thread;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -17,24 +18,24 @@ public class ThreadManager {
         CanvaStyle c = new CanvaStyle();
         HistogramData d = new HistogramData();
         double[][] rawData = new double[4][];
-        rawData[0] = new double[]{4,5,9,16,17,20,100,430,500};
-        rawData[1] = new double[]{3,6,8,15,17,40,200,440,1000};
-        rawData[2] = new double[]{2,8,11,14,17,60,300,460,800};
-        rawData[3] = new double[]{1,7,12,13,17,80,400,450,1200};
+        rawData[0] = new double[]{4,5,9,21,30,70,110,400,400,800,2000,9000};
+        rawData[1] = new double[]{3,6,10,23,50,100,200,300,400,1000,3000,8000};
+        rawData[2] = new double[]{2,7,11,22,40,90,300,350,500,1200,4000,7000};
+        rawData[3] = new double[]{1,8,12,24,60,80,100,120,600,700,5000,6000};
         d.yValue[0] = 0;
         d.yValue[1] = 1.0;
         d.visiblePattern = 1;
-        c.FPD = 90;
-        RulerDrawingTutor r = new RulerDrawingTutor(d.yValue, 10);
-        BarDrawingTutor initB = new BarDrawingTutor(c,rawData,0.08); // For initialization
+        c.FPD = 180;
+        RulerDrawingTutor r = new RulerDrawingTutor(d.yValue, 20);
+        BarDrawingTutor initB = new BarDrawingTutor(c,rawData,0.03); // For initialization
         FrameCreator f;
         Timer timer = null;
         long startTime = System.currentTimeMillis();
         //BufferedImage[] bf = new BufferedImage[initB.getTotalFrame()];
         ConcurrentLinkedQueue<BufferedImage> buffer = new ConcurrentLinkedQueue<>();
         for(int x=0;x<initB.getTotalFrame();++x) {
-            if(x>30 && timer==null) {
-                timer = new Timer();  
+            if(x>200 && timer==null) {
+                timer = new Timer();
                 timer.schedule(new ImagePlayer(buffer, c.bgSize), 0, 1000/c.FPS);
             }
             BarDrawingTutor b = new BarDrawingTutor(x);

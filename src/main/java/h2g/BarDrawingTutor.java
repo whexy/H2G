@@ -2,6 +2,7 @@ package h2g;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 // import java.util.Random;
 import java.lang.Thread;
 public class BarDrawingTutor {
@@ -219,7 +220,7 @@ class Bar {
         else return new Bar(id, val, dVal, bL.copy());
     }
 }
-class BarLayoutDesigner {
+/*class BarLayoutDesigner {
     ArrayList<BarSwaper> activeSwaper = new ArrayList<>();
     ArrayList<int[]> waitingQueue = new ArrayList<>();
     HashMap<BarLocation, Double> transparency = new HashMap<>();
@@ -266,6 +267,117 @@ class BarLayoutDesigner {
                 waitingQueue.remove(form);
                 swapBars(currentFrame, form[0], form[1]);
             }
+        }
+    }
+    private void applyExchange(BarLocation b) {
+        int index = searchBar(b.id);
+        bar[index] = b;
+        flag[index] = null;
+    }
+    private double getTransparency(double progress) {
+        if(progress<0.5) return progress*2;
+        //else return 1-(progress-0.5)*2;
+        else return 2-2*progress;
+    }
+    public BarLocation[] getLayout() {
+        BarLocation[] rel = new BarLocation[bar.length];
+        int i = 0;
+        for(int x=0;x<bar.length;++x) {
+            if(flag[x]==null) {
+                rel[i++] = bar[x];
+            }
+        }
+        for(int x=0;x<activeSwaper.size();++x) {
+            BarSwaper swaper = activeSwaper.get(x);
+            BarSwapStatus bS = swaper.getCurrentLocation(currentFrame);
+            rel[i++] = bS.a;
+            rel[i++] = bS.b;
+            transparency.put(bS.a, getTransparency(bS.progress));
+            transparency.put(bS.b, getTransparency(bS.progress));
+            if(swaper.endFrame<currentFrame || bS.progress==1) { // Free Useless Swaper
+                applyExchange(bS.a);
+                applyExchange(bS.b);
+                activeSwaper.remove(x--);
+            }
+        }
+        return rel;
+    }
+    public void nextFrame() {
+        currentFrame++;
+        checkWaitingQueue();
+    }
+}*/
+class BarLayoutDesigner {
+    ArrayList<BarSwaper> activeSwaper = new ArrayList<>();
+    HashMap< Integer ,LinkedList<int[]> > waitingQueue = new HashMap<>();
+    HashMap<BarLocation, Double> transparency = new HashMap<>();
+    BarLocation[] bar;
+    int currentFrame = 0;
+    BarSwaper[] flag;
+    public BarLayoutDesigner(BarLocation[] bar) {
+        this.bar = bar.clone();
+        flag = new BarSwaper[bar.length];
+        for(int x=0;x<bar.length;++x) {
+            waitingQueue.put(bar[x].id, new LinkedList<int[]>() );
+        }
+    }
+    public static int searchBar(BarLocation[] b, int id) {
+        for(int x=0;x<b.length;++x) {
+            if(b[x].id==id) return x;
+        }
+        return -1;
+    }
+    private int searchBar(int id) {
+        return searchBar(bar, id);
+    }
+    public void swapBars(int startFrame, int id1, int id2) {
+        int i1 = searchBar(id1);
+        int i2 = searchBar(id2);
+        if(startFrame>currentFrame) {
+            //waitingQueue.add(new int[]{id1,id2,startFrame});
+            int[] form = new int[]{id1,id2,startFrame};
+            waitingQueue.get(id1).offer(form);
+            waitingQueue.get(id2).offer(form);
+        } else if(flag[i1]!=null || flag[i2]!=null) {
+            int endFrame = 0;
+            if(flag[i1]!=null) endFrame=flag[i1].endFrame+1;
+            if(flag[i2]!=null && flag[i2].endFrame+1>endFrame) {
+                endFrame = flag[i2].endFrame+1;
+            }
+            //waitingQueue.add(new int[]{id1,id2,endFrame});
+            int[] form = new int[]{id1,id2,endFrame};
+            waitingQueue.get(id1).offer(form);
+            waitingQueue.get(id2).offer(form);
+        }
+        else {
+            BarSwapStatus bS = new BarSwapStatus( bar[i1], bar[i2] );
+            flag[i1] = new BarSwaper(bS, startFrame);
+            flag[i2] = flag[i1];
+            activeSwaper.add(flag[i1]);
+        }
+    }
+    private void checkWaitingQueue() {
+        /*for(int x=0;x<waitingQueue.size();++x) {
+            int[] form = waitingQueue.get(x);
+            if(form[2]<=currentFrame) {
+                waitingQueue.remove(form);
+                swapBars(currentFrame, form[0], form[1]);
+            }
+        }*/
+        for(int x=0;x<bar.length;++x) {
+            LinkedList<int[]> list = waitingQueue.get(bar[x].id);
+            int[] form = list.peek();
+            if(form == null) continue;
+            LinkedList<int[]> a = waitingQueue.get(form[0]);
+            LinkedList<int[]> b = waitingQueue.get(form[1]);
+            if(a.peek()!=b.peek()) continue;
+            if(form[2]>currentFrame) continue;
+            int i1 = searchBar(form[0]);
+            int i2 = searchBar(form[1]);
+            if(flag[i1]!=null || flag[i2]!=null) continue;
+            a.poll();
+            b.poll();
+            swapBars(currentFrame, form[0], form[1]);
         }
     }
     private void applyExchange(BarLocation b) {
