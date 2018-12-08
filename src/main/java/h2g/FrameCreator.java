@@ -84,6 +84,7 @@ class FrameCreator {
             String skin = c.barSkin[ b.getBarID() ];
             int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
             BarGenerator barSkin = DynamicLoader.getGenerator(skin, barSize, yValue);
+            //BarGenerator barSkin = new BarBasicSkin(barSize, yValue);
             double x = b.getLocation();
             double y = (yValue[MIN] + yValue[MAX])/2;
             BufferedImage barImg = barSkin.getBarChart(b.currentFrame, b.getValue(), 0);

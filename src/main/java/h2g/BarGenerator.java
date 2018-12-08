@@ -16,6 +16,7 @@ public abstract class BarGenerator {
     };
     public void setScale(double[] scale) {
         this.scale = scale;
+        baseIMG.setYscale(scale[0], scale[1]);
     }
     public abstract BufferedImage getBarChart(int frame, double val);
     public abstract BufferedImage getBarChart(int frame, double val1, double val2);

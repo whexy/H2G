@@ -21,6 +21,7 @@ class CanvaStyle {
     double[] barWidthRatio = {-1,-1,-1,-1,-1,-1};
     String[] barSkin = {"Basic","Basic","Basic","Basic"};
     int FPD = 60;
+    int FPS = 60;
 
     // Layout
     int rulerXoffset = 20;
