@@ -66,19 +66,21 @@ class FrameCreator {
             plotFooter();
     }
     private void plotKeys() {
-        b.seek(0);
+        
         Font font = c.keysFont; // TO BE Customized
         bg.setFont(font);
         bg.setPenColor(c.keyColor);
         final double y = cBorder[DOWN] - c.keysYoffset;
+        b.seek();
         while(b.hasNext()) {
-            bg.text(cp.getX(b.getLocation()), y, d.keys[b.getBarID()]);
             b.next();
+            bg.text(cp.getX(b.getLocation()), y, d.keys[b.getBarID()]);
         }
     }
     private void plotBars() {
-        b.seek(0);
+        b.seek();
         while(b.hasNext()) {
+            b.next();
             String skin = c.barSkin[ b.getBarID() ];
             BarGenerator barSkin = null;
             int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
@@ -87,7 +89,7 @@ class FrameCreator {
             double y = (yValue[MIN] + yValue[MAX])/2;
             BufferedImage barImg = barSkin.getBarChart(b.currentFrame, b.getValue(), 0);
             coord.picture(x, y, barImg);
-            b.next();
+            
         }
         bg.picture(c.xProject, c.yProject, coord.getBuffImg());
         /*
@@ -188,20 +190,4 @@ class FrameCreator {
     private final static int MAX = 1;
     private final static int WIDTH = 0;
     private final static int HEIGHT = 1;
-
-    public static void main(String[] args) throws Exception {
-        CanvaStyle c = new CanvaStyle();
-        c.loadConfig();
-        HistogramData d = new HistogramData();
-        d.keys = new String[]{"father", "father", "son"};
-        d.values = new double[]{0.0, 0.0, 0.0};
-        d.yValue[0] = 0;
-        d.yValue[1] = 1000.0;
-        d.rulerStep = 100;
-        d.rulerGrade = 10;
-        d.header = "Nothing left";
-        d.footer = "Nothing right";
-        FrameCreator fc = new FrameCreator(c, d);
-        fc.bg.save("test.jpg");
-    }
 }

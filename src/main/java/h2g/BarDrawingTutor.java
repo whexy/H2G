@@ -5,24 +5,33 @@ import java.util.HashMap;
 // import java.util.Random;
 import java.lang.Thread;
 public class BarDrawingTutor {
-    private Interpolator i;
-    private final static HashMap<BarLocation, Double> transparency = Interpolator.bLD.transparency;
-    private final static double[] barWidth = Interpolator.validWidth;
+    private static Interpolator i;
+    private static HashMap<BarLocation, Double> transparency;
+    private static double[] barWidth;
     private Bar[] bar;
-    private int arrayHead = 0, index = 0;
+    private int arrayHead = 0, index = -1;
+    private double maxValue;
     public int currentFrame;
     private void putFilteredBar(int layer, Bar[] b) {
         for(int x=0;x<b.length;++x) {
             if(b[x].bL.layer == layer) bar[arrayHead++] = b[x];
         }
     }
-    public BarDrawingTutor(CanvaStyle c) {
-        i = new Interpolator(c);
+    public BarDrawingTutor(CanvaStyle c, double[][] rawData, double maxVelocity) {
+        Interpolator.barPattern = c.barPattern;
+        Interpolator.barWidthRatio = c.barWidthRatio;
+        Interpolator.FPD = c.FPD;
+        Interpolator.rawData = rawData;
+        BarSwaper.maxVelocity = maxVelocity;
+        i = new Interpolator();
+        transparency = Interpolator.bLD.transparency;
+        barWidth = Interpolator.validWidth;
     }
     public BarDrawingTutor(int currentFrame) {
         this.currentFrame = currentFrame;
         Bar[] b = Interpolator.bar[currentFrame];
         bar = new Bar[b.length];
+        maxValue = b[0].val;
         putFilteredBar(BarLocation.LAYER_BOTTOM, b);
         putFilteredBar(BarLocation.LAYER_MID, b);
         putFilteredBar(BarLocation.LAYER_TOP, b);
@@ -64,6 +73,12 @@ public class BarDrawingTutor {
     public void seek(int index) {
         this.index = index;
     }
+    public double getMaxValue() {
+        return maxValue;
+    }
+    public void seek() {
+        seek(-1);
+    }
 }
 class Interpolator {
     public static boolean swapping = true;
@@ -78,10 +93,7 @@ class Interpolator {
     public static double[] barWidthRatio = {0.5,-1};
     public static double[] validWidth;
     public static double[] xScale = { 0, 1.0 };
-    public Interpolator(CanvaStyle c, double[][] rawData) {
-        barPattern = c.barPattern;
-        barWidthRatio = c.barWidthRatio;
-        FPD = c.FPD;
+    public Interpolator() {
         init();
         interpolateBarValue();
         interpolateBarLocation();
@@ -90,7 +102,7 @@ class Interpolator {
         curBL = new BarLocation[barNum];
         double unallocatedSpace = 1;
         double unallocatedBar = 0;
-        double avgWidth;
+        double avgWidth, allocatedSpace = 0;
         int patternNum = barWidthRatio.length;
         int nonEmptyNum = patternNum;
         int x,i;
@@ -106,21 +118,18 @@ class Interpolator {
             if(barPattern[x].length()==0) nonEmptyNum--;
         }
         availablePos = new double[nonEmptyNum];
+        validWidth = new double[nonEmptyNum];
         for(x=0,i=0;x<patternNum;++x) {
             if(barPattern[x].length()!=0) {
-                availablePos[i++] = (((x==0)?0:barWidthRatio[x-1])+barWidthRatio[x])/2;
+                validWidth[i] = barWidthRatio[x];
+                availablePos[i++] = allocatedSpace + barWidthRatio[x]/2;
             }
+            allocatedSpace += barWidthRatio[x];
         }
-        validWidth = new double[i];
-        for(x=0,i=0;x<patternNum;++x) {
-            if(barPattern[x].length()!=0) {
-                validWidth[i++] = barWidthRatio[x];
-            }
+        for(x=0;x<barNum;++x) {
+            curBL[x] = new BarLocation(x, x/nonEmptyNum + availablePos[x%nonEmptyNum]);
         }
-        for(x=0,i=0;x<barNum;++x,++i) {
-            curBL[x] = new BarLocation(x, i/nonEmptyNum + availablePos[i%nonEmptyNum]);
-        }
-        xScale[1] = Math.ceil(i*1.0/nonEmptyNum);
+        xScale[1] = Math.ceil(x*1.0/nonEmptyNum);
     }
     private void init() {
         dataNum = rawData[0].length-1;
@@ -144,6 +153,7 @@ class Interpolator {
     }
     private void sortAndSwapBar(Bar[] bar, int currentFrame) { // BubbleSort
         int x,y;
+        int barNum = bar.length;
         for(x=0;x<barNum-1;++x) {
             boolean flag = true;
             for(y=0;y<barNum-1-x;++y) {
@@ -159,6 +169,7 @@ class Interpolator {
             if(flag) return;
         }
     }
+    
     private void interpolateBarValue() {
         int x,y,frame;
         double[] dVal = new double[barNum];
@@ -190,20 +201,6 @@ class Interpolator {
             }
             bLD.nextFrame();
         }
-    }
-    public static void loadConfig(String filename) {
-
-    }
-    public static void loadConfig() {
-
-    }
-    public static void main(String[] args) {
-        rawData = new double[3][];
-        rawData[0] = new double[]{3,4,7,8};
-        rawData[1] = new double[]{1,5,6,9};
-        rawData[2] = new double[]{2,3,4,5};
-        Interpolator i = new Interpolator();
-        System.out.println("hello");
     }
 }
 class Bar {
@@ -296,7 +293,7 @@ class BarLayoutDesigner {
             rel[i++] = bS.b;
             transparency.put(bS.a, getTransparency(bS.progress));
             transparency.put(bS.b, getTransparency(bS.progress));
-            if(swaper.endFrame<=currentFrame || bS.progress==1) { // Free Useless Swaper
+            if(swaper.endFrame<currentFrame || bS.progress==1) { // Free Useless Swaper
                 applyExchange(bS.a);
                 applyExchange(bS.b);
                 activeSwaper.remove(x--);
@@ -313,7 +310,7 @@ class BarSwaper {
     int startFrame, endFrame;
     double distance, midFrame;
     final BarSwapStatus bars;
-    public static double maxVelocity = 0.15; // Move scaled pixel per frame
+    public static double maxVelocity = 0.02; // Move scaled pixel per frame
     private double k,k1,k2,b,dFrame;
 
     private double getDisplace(int currentFrame) {
@@ -333,7 +330,7 @@ class BarSwaper {
         this.startFrame = startFrame;
         distance = this.bars.b.location - this.bars.a.location;
         dFrame = 2*distance/maxVelocity;
-        endFrame = startFrame + (int) Math.round(dFrame);
+        endFrame = startFrame + (int) Math.floor(dFrame);
         midFrame = (startFrame+endFrame)/2.0;
         
         k1 = -maxVelocity/dFrame;

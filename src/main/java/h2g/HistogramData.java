@@ -4,7 +4,7 @@ public class HistogramData {
     String header = "";
     String footer = "";
     double minValue = 0.0;
-    String[] keys = {};
+    String[] keys = {"A1","A2","B1","B2"};
     
     // Blank size will be 1.0-sum(ratio)
     double[] values = {};

@@ -17,9 +17,9 @@ class CanvaStyle {
     boolean rotate = false;
 
     // Bar
-    String[] barPattern = {"Default", "Default", ""};
-    String[] barSkin = {"Basic","Basic"};
-    double[] barWidthRatio = {0.3,0.3,-1};
+    String[] barPattern = {"Bar1", "Bar2", "","Bar3","Bar4",""};
+    double[] barWidthRatio = {-1,-1,-1,-1,-1,-1};
+    String[] barSkin = {"Basic","Basic","Basic","Basic"};
     int FPD = 60;
 
     // Layout
