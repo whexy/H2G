@@ -19,7 +19,7 @@ public abstract class BarGenerator {
         baseIMG.setYscale(scale[0], scale[1]);
     }
     public abstract BufferedImage getBarChart(int frame, double val);
-    public abstract BufferedImage getBarChart(int frame, double val1, double val2);
+    public abstract BufferedImage getBarChart(int frame, double[] valList);
     public abstract void loadConfig(String filename) throws Exception;
     public abstract void loadConfig() throws Exception;
 }

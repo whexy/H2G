@@ -1,5 +1,5 @@
+/home/tonny/H2G/src/main/java/h2g/DynamicLoader.java
 /home/tonny/H2G/src/main/java/h2g/ThreadManager.java
-/home/tonny/H2G/src/main/java/h2g/App.java
 /home/tonny/H2G/src/main/java/h2g/BarBasicSkin.java
 /home/tonny/H2G/src/main/java/h2g/ConfigLoader.java
 /home/tonny/H2G/src/main/java/h2g/SigDraw.java
@@ -7,6 +7,7 @@
 /home/tonny/H2G/src/main/java/h2g/Scalr.java
 /home/tonny/H2G/src/main/java/h2g/CoordProjecter.java
 /home/tonny/H2G/src/main/java/h2g/BarGenerator.java
+/home/tonny/H2G/src/main/java/h2g/RulerDrawingTutor.java
 /home/tonny/H2G/src/main/java/h2g/StdDraw.java
 /home/tonny/H2G/src/main/java/h2g/BarDrawingTutor.java
 /home/tonny/H2G/src/main/java/h2g/HistogramData.java

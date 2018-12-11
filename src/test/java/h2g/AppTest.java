@@ -15,7 +15,13 @@ public class AppTest
     @Test
     public void shouldAnswerWithTrue()
     {
-        ThreadManager.main(null);
+        //ThreadManager.main(null);
+        
+        try {
+            BarBasicSkin.main(null);
+        } catch (Exception e) {
+            System.out.print(e);
+        }
         assertTrue( true );
     }
 }
