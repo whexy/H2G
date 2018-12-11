@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class BarBasicSkin extends BarGenerator {
-    private Color[] segColor = {Color.BLACK, Color.BLUE, Color.WHITE};
+    private Color[] segColor = {Color.RED, Color.YELLOW, Color.BLUE};
     private Color frameColor = Color.GREEN;
     private boolean isBarFilled = true;
 
@@ -20,31 +20,38 @@ public class BarBasicSkin extends BarGenerator {
                 '}';
     }
 
-    private boolean hasBarFrame = true;
+    private boolean hasBarFrame = false;
     private double frameSize = 0.01;
-    public BarBasicSkin(int[] barSize, double[] scale) {
-        super(barSize, scale);
+    public BarBasicSkin(int[] barSize, double[] scale, boolean rotated) {
+        super(barSize, scale, rotated);
         baseIMG = new SigDraw(barSize[WIDTH], barSize[HEIGHT], true);
-        baseIMG.setYscale(scale[MIN], scale[MAX]);
+        setScale(scale);
         baseIMG.setPenRadius(frameSize);
     }
     @Override
-    public BufferedImage getBarChart(int frame, double val) {
-        return getBarChart(frame, new double[]{val});
-    }
-    @Override
-    public BufferedImage getBarChart(int frame, double[] valList) {
+    public BufferedImage getBarChart(int frame ,String text, double... val) {
         double halfWidth = barSize[WIDTH]/2;
+        double halfHeight = barSize[HEIGHT]/2;
         double baseVal = 0;
-        for(int x=0;x<valList.length && x<segColor.length;++x) {
+        for(int x=0;x<val.length && x<segColor.length;++x) {
             baseIMG.setPenColor(segColor[x]);
-            if(isBarFilled) baseIMG.filledRectangle(halfWidth, baseVal+valList[x]/2, halfWidth, valList[x]/2);
-            else baseIMG.rectangle(halfWidth, baseVal+valList[x]/2, halfWidth, valList[x]/2);
-            baseVal += valList[x];
+            if(rotated) {
+                if(isBarFilled) baseIMG.filledRectangle(baseVal+val[x]/2, halfHeight, val[x]/2, halfHeight);
+                else baseIMG.rectangle(baseVal+val[x]/2, halfHeight, val[x]/2, halfHeight);
+            }
+            else {
+                if(isBarFilled) baseIMG.filledRectangle(halfWidth, baseVal+val[x]/2, halfWidth, val[x]/2);
+                else baseIMG.rectangle(halfWidth, baseVal+val[x]/2, halfWidth, val[x]/2);
+            }
+            baseVal += val[x];
         }       
 
         baseIMG.setPenColor(frameColor);
-        if(hasBarFrame) baseIMG.rectangle(halfWidth, (scale[MAX] + scale[MIN])/2, halfWidth, (scale[MAX] - scale[MIN])/2);
+        if(hasBarFrame) {
+            if(rotated) baseIMG.rectangle((scale[MAX] + scale[MIN])/2, halfHeight, (scale[MAX] - scale[MIN])/2, halfHeight);
+            else baseIMG.rectangle(halfWidth, (scale[MAX] + scale[MIN])/2, halfWidth, (scale[MAX] - scale[MIN])/2);
+        }
+        
         //return baseIMG.getSubImage(x, y, width, height);
         return baseIMG.getBuffImg();
     }
@@ -71,11 +78,11 @@ public class BarBasicSkin extends BarGenerator {
         loadConfig("BarBasicSkin.json");
     }
     public static void main(String[] args) throws Exception {
-        BarBasicSkin b = new BarBasicSkin(new int[]{100,1000} ,new double[]{0,10000});
-        b.loadConfig();
+        BarBasicSkin b = new BarBasicSkin(new int[]{1000,100} ,new double[]{0,10000}, true);
+        //b.loadConfig();
         System.out.println(b);
-        SigDraw s = new SigDraw( b.getBarChart(0, new double[]{800, 6000}) ,true);
+        SigDraw s = new SigDraw( b.getBarChart(0, "text", 1000, 4000, 2000) ,true);
         s.save("test1.jpg");
-        new SigDraw( s.getSubImage(50, 500, 20, 200) ).save("test2.jpg");
+        //new SigDraw( s.getSubImage(50, 500, 20, 200) ).save("test2.jpg");
     }
 }

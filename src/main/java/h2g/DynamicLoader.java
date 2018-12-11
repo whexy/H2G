@@ -14,7 +14,7 @@ public class DynamicLoader
             return rel;
         }
         else {
-            if(skinName.equals("Basic")) rel = new BarBasicSkin(barSize, scale);
+            if(skinName.equals("Basic")) rel = new BarBasicSkin(barSize, scale, false);
             buffer.put(descriptor, rel);
             return rel;
         }
