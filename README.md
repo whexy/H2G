@@ -165,6 +165,7 @@ This project has nothing left.
 ### Specification
 1. 基于BasicSkin的配色方案，直接写成Json文件并由DynamicLoader作为BarBasicSkinStyle读入，同时在DynamicLoader里写入SkinName和实例化的方法
 2. BarGenerator需要读入的静态文件需要在DynamicLoader里预读入到内存，降低IO开销
+3. 可变参数的参数数量不做要求，带动画效果的BarGenerator可以只考虑一个参数的情况
 
 ### Update Log
 #### Version 2 rev.A (2018.12.12)
