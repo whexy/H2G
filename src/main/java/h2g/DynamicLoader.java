@@ -1,22 +1,22 @@
 package h2g;
 
+import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 public class DynamicLoader 
 {
     public static HashMap<String,BarGenerator> buffer = new HashMap<>();
-    public static BarGenerator getGenerator(String skinName, int[] barSize, double[] scale) {
+    public static BarGenerator curGenerator;
+    public static void set(String skinName, int[] barSize, double[] scale) {
         String descriptor = skinName + "," + barSize[0] + "," + barSize[1];
-        BarGenerator rel = null;
         if(buffer.containsKey(descriptor)) {
-            rel = buffer.get(descriptor);
-            rel.setScale(scale);
-            return rel;
+            curGenerator = buffer.get(descriptor);
+            curGenerator.setScale(scale);
         }
         else {
-            if(skinName.equals("Basic")) rel = new BarBasicSkin(barSize, scale);
-            buffer.put(descriptor, rel);
-            return rel;
+            if(skinName.equals("Basic")) curGenerator = new BarBasicSkin(barSize, scale);
+            buffer.put(descriptor, curGenerator);
         }
     }
+    public static BufferedImage get
 }

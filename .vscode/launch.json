@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - BarBasicSkin",
+            "request": "launch",
+            "mainClass": "h2g.BarBasicSkin",
+            "projectName": "h2g"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - ThreadManager",
             "request": "launch",
             "cwd": "${workspaceFolder}",
