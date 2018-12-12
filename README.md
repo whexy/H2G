@@ -10,15 +10,18 @@ This project has nothing left.
 ### TODO LIST
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
-| Whexy | CanvasStyle | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Done |
-| Whexy | BarBasicSkin | 完成loadConfig()，从Json从读取配置文件 | 12.2 | Done |
 | Whexy | FrameCreator | 参考网上的图片，设计函数，绘制直方图的其他要素 | N/A | Working |
-| Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
-| Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Not Available |
-| Whexy | SigDraw | 添加图片全局半透明函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况 | 12.5 | Working |
-| Whexy | FrameCreator | 思考旋转坐标系的方法 | 12.8 | Working |
+| Whexy | FrameCreator | 思考旋转坐标系的方法 |  | Working |
 | Whexy | N/A | 直接提交Json生成器的代码 | N/A | Working |
-| Whexy | SigDraw | 添加图片高斯模糊函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况 | 12.10 | Working |
+| Whexy | SigDraw | 添加图片高斯模糊函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况 |  | Working |
+| Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
+| Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Working |
+
+### Milestone
+| Contributor | Class Name | Content | DoneDate | Status |
+| --- | --- | --- | --- | --- |
+| All members | N/A | 举办第一次组会 | 12.7 | Done |
+
 
 ## FrameCreator
 基于Reference的HistogramA的单帧生成器
@@ -115,6 +118,7 @@ xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的�
 | SubClass | Description |
 | --- | --- |
 | BarBasicSkin | 基本样式 |
+| BarFlatUISkin | 采用扁平化配色方案的测试样式 |
 
 ### API Reference
 1. BarGenerator(int[] barSize, double[] scale) barSize:生成图像的尺寸 scale:柱状图的最小值和最大值
@@ -122,6 +126,12 @@ xCentreOfImg & yCentreOfImg 是img的图片中心在base参考系下base上的�
 3. void loadConfig(String filename) 载入预先配置文件
 
 ### Update Log
+
+#### Version 1 rev.C (2018.12.12)
+
+1. 增加使用扁平化配色方案的BarFlatUISkin样式
+2. 通过透明化测试
+3. 修复BarBasicSkin存在的一处bug
 
 #### Version 1 rev.B (2018.12.1)
 
@@ -181,6 +191,7 @@ SigDraw是基于StdDraw魔改的产物
 7. setBuffImg() 重设内存缓存的图片
 8. setScaleUnaltered() 离散化坐标系
 9. getSubImage() 截取图像
+10. enableenableTransparent()启动全局alpha通道绘图模式
 
 ##### Modified API
 1. picture() 修改为只能载入BufferedImage图像
@@ -188,6 +199,11 @@ SigDraw是基于StdDraw魔改的产物
 3. setCanvasSize() 修改执行流程
 
 ### Update Log
+
+#### Version 2 (2018.12.12)
+
+1. 精简代码
+2. 增加全局alpha通道绘图模式开关
 
 #### Version 1 rev.C (2018.11.30)
 1. 移除高分辨率相关函数
@@ -208,39 +224,3 @@ SigDraw是基于StdDraw魔改的产物
 1. 修改为动态类型，允许实例化
 2. 剥离Event,Swing,双缓冲部分
 3. 修改部分函数和启动流程，添加基础函数
-
-
-
-### Peformance Caution
-
-单线程缩放速度参考(Core i7 3630QM)  
-
-（AA: 反锯齿 HR: 2k分辨率缩放）  
-
-| 模式 | 帧率(FPS) |
-| --- | --- |
-| AA_HR_UQ | 1.488316713796696 |
-| AA_HR_Q | 10.463899546564353 |
-| AA_HR_AUTO | 23.059185242121448 |
-| AA_HR_SPD | 37.59398496240601 |
-| AA_HR_BL | 23.752969121140143 |
-| AA_UQ | 5.512679162072767 |
-| AA_Q | 25.40220152413209 |
-| AA_AUTO | 24.97918401332223 |
-| AA_SPD | 44.11764705882353 |
-| AA_BL | 37.40648379052369 |
-
-单线程大压力缩放速度参考2(Core i7 8750H 节电模式) 
-
-| 模式               | 帧率(FPS)          |
-| ------------------ | ------------------ |
-| AA_HR_UQ | 0.7746533426291735 |
-|AA_HR_Q|4.365541327124563|
-|AA_HR_AUTO| 26.619343389529725|
-|AA_HR_SPD |29.615004935834158|
-|AA_HR_BL| 13.071895424836601|
-|AA_UQ| 2.1216407355021216|
-|AA_Q| 13.507429085997298|
-|AA_AUTO| 37.08281829419035|
-|AA_SPD| 43.10344827586207|
-|AA_BL |33.63228699551569 |
