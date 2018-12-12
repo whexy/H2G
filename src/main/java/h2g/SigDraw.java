@@ -153,6 +153,7 @@ public final class SigDraw {
         init(DEFAULT_SIZE, DEFAULT_SIZE, null);
     }
 
+    @Deprecated
     public SigDraw(int canvasWidth, int canvasHeight) {
         init(canvasWidth, canvasHeight, null);
     }
@@ -685,9 +686,9 @@ public final class SigDraw {
     }
 
     public static void main(String[] args) {
-        SigDraw im1 = new SigDraw(1000,1000);
-                //im1.enableTransparent(0.2f);
-        Font a = new Font("Microsoft YaHei Light", Font.PLAIN, 500);
+        SigDraw im1 = new SigDraw(1000,1000,true);
+        im1.enableTransparent(0.2f);
+        Font a = new Font("Microsoft YaHei Light", Font.PLAIN, 100);
         im1.setFont(a);
         im1.setPenColor(SigDraw.BLACK);
         im1.text(500, 500, "Hello");
