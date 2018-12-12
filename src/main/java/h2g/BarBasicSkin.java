@@ -2,12 +2,13 @@ package h2g;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class BarBasicSkin extends BarGenerator {
     private Color[] segColor = {Color.RED, Color.YELLOW, Color.BLUE};
     private Color frameColor = Color.GREEN;
     private boolean isBarFilled = true;
+    private boolean hasBarFrame = false;
+    private double frameSize = 0.01;
 
     @Override
     public String toString() {
@@ -19,14 +20,22 @@ public class BarBasicSkin extends BarGenerator {
                 ", frameSize=" + frameSize +
                 '}';
     }
-
-    private boolean hasBarFrame = false;
-    private double frameSize = 0.01;
-    public BarBasicSkin(int[] barSize, double[] scale, boolean rotated) {
+    
+    public BarBasicSkin(BarBasicSkinStyle barStyle, int[] barSize, double[] scale, boolean rotated) {
         super(barSize, scale, rotated);
+        if(barStyle!=null) {
+            this.segColor = barStyle.segColor;
+            this.frameColor = barStyle.frameColor;
+            this.isBarFilled = barStyle.isBarFilled;
+            this.hasBarFrame = barStyle.hasBarFrame;
+            this.frameSize = barStyle.frameSize;
+        }
         baseIMG = new SigDraw(barSize[WIDTH], barSize[HEIGHT], true);
         setScale(scale);
         baseIMG.setPenRadius(frameSize);
+    }
+    public BarBasicSkin(int[] barSize, double[] scale, boolean rotated) {
+        this(null, barSize, scale, rotated);
     }
     @Override
     public BufferedImage getBarChart(int frame ,String text, double... val) {
@@ -54,28 +63,6 @@ public class BarBasicSkin extends BarGenerator {
         
         //return baseIMG.getSubImage(x, y, width, height);
         return baseIMG.getBuffImg();
-    }
-    @Override
-    public void loadConfig(String filename) throws Exception {
-        ConfigLoader loader = new ConfigLoader(filename);
-        ArrayList<Color> segColor = new ArrayList<>();
-        for(int x=1;;++x) {
-            Color _segColor = loader.getColor("segColor"+x);
-            if (_segColor != null) segColor.add(_segColor);
-            else break;
-        }
-        if(!segColor.isEmpty()) this.segColor = (Color[])(segColor.toArray());
-
-        Color _frameColor = loader.getColor("frameColor");
-        if (_frameColor != null) frameColor = _frameColor;
-        isBarFilled = loader.getBool("isBarFilled");
-        hasBarFrame = loader.getBool("hasBarFrame");
-        double _frameSize = loader.getDouble("frameSize");
-        if (_frameSize != 0) frameSize = _frameSize;
-    }
-    @Override
-    public void loadConfig() throws Exception {
-        loadConfig("BarBasicSkin.json");
     }
     public static void main(String[] args) throws Exception {
         BarBasicSkin b = new BarBasicSkin(new int[]{1000,100} ,new double[]{0,10000}, true);

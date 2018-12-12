@@ -22,6 +22,4 @@ public abstract class BarGenerator {
         else baseIMG.setYscale(scale[0], scale[1]);
     }
     public abstract BufferedImage getBarChart(int frame ,String text, double... val);
-    public abstract void loadConfig(String filename) throws Exception;
-    public abstract void loadConfig() throws Exception;
 }
