@@ -37,7 +37,7 @@ public class BarBasicSkin extends BarGenerator {
     }
     @Override
     public BufferedImage getBarChart(int frame, double val1, double val2) {
-        double halfWidth = barSize[WIDTH]/2;
+        double halfWidth = barSize[WIDTH]/2.0;
         baseIMG.setPenColor(segColor1); 
         if(isBarFilled) baseIMG.filledRectangle(halfWidth, val1/2, halfWidth, val1/2);
         else baseIMG.rectangle(halfWidth, val1/2, halfWidth, val1/2);
