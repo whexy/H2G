@@ -85,10 +85,10 @@ class FrameCreator {
             int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
             //BarGenerator barSkin = DynamicLoader.getGenerator(skin, barSize, yValue);
             //barSkin.setScale(yValue);
-            BarGenerator barSkin = new BarBasicSkin(barSize, yValue);
+            BarGenerator barSkin = new BarBasicSkin(barSize, yValue, false);
             double x = b.getLocation();
             double y = (yValue[MIN] + yValue[MAX])/2;
-            BufferedImage barImg = barSkin.getBarChart(b.currentFrame, b.getValue(), 0);
+            BufferedImage barImg = barSkin.getBarChart(b.currentFrame, "", b.getValue());
             coord.picture(x, y, barImg);
         }
         bg.picture(c.xProject, c.yProject, coord.getBuffImg());

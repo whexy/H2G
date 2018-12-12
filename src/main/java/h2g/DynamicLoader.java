@@ -14,8 +14,14 @@ public class DynamicLoader
             curGenerator.setScale(scale);
         }
         else {
+<<<<<<< HEAD
             if(skinName.equals("Basic")) curGenerator = new BarBasicSkin(barSize, scale);
             buffer.put(descriptor, curGenerator);
+=======
+            if(skinName.equals("Basic")) rel = new BarBasicSkin(barSize, scale, false);
+            buffer.put(descriptor, rel);
+            return rel;
+>>>>>>> 83f4e1d2a6b5e7bcb3454f7d733fce23a7e696fb
         }
     }
     public static BufferedImage get
