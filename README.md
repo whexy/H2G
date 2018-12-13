@@ -11,6 +11,7 @@ This project has nothing left.
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
 | Whexy | N/A | 修改BarFlatUI为Json | N/A | Working |
+| Whexy | N/A | 寻找字体透明化方法 | | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Working |
 
@@ -125,6 +126,8 @@ This project has nothing left.
 | ImagePlayer() | ConcurrentLinkedQueue<BufferedImage> buffer, int[] bgSize | 传入FIFO缓冲区(线程安全)，初始化播放器 |
 
 ### Update Log
+#### Version 1 rev.B (2018.12.14)
+1. 整理代码
 #### Version 1 rev.A (2018.12.8)
 1. 完成基本处理流程的设计，基本实现动画化
 
