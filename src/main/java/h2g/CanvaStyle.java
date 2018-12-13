@@ -13,15 +13,19 @@ class CanvaStyle {
     int xProject = bgSize[0] / 2;
     int yProject = bgSize[1] / 2;
     double blankRatio = 0.5;
-    boolean rotated = false;
+    boolean rotated = true;
+    double expandRatio = 1.01;
 
     // Bar
     String[] barPattern = {"Bar1", "Bar2", "","Bar3","Bar4",""};
     double[] barWidthRatio = {-1,-1,-1,-1,-1,-1};
     String[] barSkin = {"Basic","Basic1","Basic","Basic1"};
-    int FPD = 60;
+    int FPD = 360;
     int FPS = 60;
-
+    double maxVelocity = 0.02;
+    boolean isStackedBar = false;
+    int maxRulerGrade = 10;
+    
     // Layout
     int rulerXoffset = 20;
     int keysYoffset = 20;
