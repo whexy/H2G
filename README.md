@@ -10,10 +10,6 @@ This project has nothing left.
 ### TODO LIST
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
-| Whexy | FrameCreator | ~~参考网上的图片，设计函数，绘制直方图的其他要素~~ | N/A | Abort |
-| Whexy | FrameCreator | ~~思考旋转坐标系的方法~~ |  | Abort |
-| Whexy | N/A | ~~直接提交Json生成器的代码~~ | N/A | Abort |
-| Whexy | SigDraw | ~~添加图片高斯模糊函数，要求风格与StdDraw函数一致，并测试两图片叠加的情况~~ |  | Abort |
 | Whexy | N/A | 修改BarFlatUI为Json | N/A | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Working |
@@ -90,7 +86,7 @@ This project has nothing left.
 | BarLayoutDesigner | swapBars | 设置交换事件 |
 | | getTransparency | 根据交换进度计算透明度 |
 | | getLayout | 调用BarSwaper获得当前帧所有Bar的坐标 |
-| | nextFrame | 切换到下一帧 | 
+| | nextFrame | 切换到下一帧 |
 | | checkWaitingQueue | 检查等待队列并激活等待态的事件 |
 | BarSwaper | getDisplace | 计算Bar的偏移(更改插值函数同时需要调整构造器) |
 | | getProgress | 获取Bar的交换进度 |

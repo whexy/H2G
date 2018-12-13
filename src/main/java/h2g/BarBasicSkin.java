@@ -2,7 +2,6 @@ package h2g;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BarBasicSkin extends BarGenerator {
@@ -22,10 +21,10 @@ public class BarBasicSkin extends BarGenerator {
                 ", frameSize=" + frameSize +
                 '}';
     }
-    
+
     public BarBasicSkin(BarBasicSkinStyle barStyle, int[] barSize, double[] scale, boolean rotated) {
         super(barSize, scale, rotated);
-        if(barStyle!=null) {
+        if (barStyle != null) {
             this.segColor = barStyle.segColor;
             this.frameColor = barStyle.frameColor;
             this.isBarFilled = barStyle.isBarFilled;
@@ -36,9 +35,11 @@ public class BarBasicSkin extends BarGenerator {
         setScale(scale);
         baseIMG.setPenRadius(frameSize);
     }
+
     public BarBasicSkin(int[] barSize, double[] scale, boolean rotated) {
         this(null, barSize, scale, rotated);
     }
+
     @Override
     public BufferedImage getBarChart(int frame, String text, double... val) {
         double halfWidth = barSize[WIDTH] / 2.0;
@@ -66,12 +67,21 @@ public class BarBasicSkin extends BarGenerator {
         //return baseIMG.getSubImage(x, y, width, height);
         return baseIMG.getBuffImg();
     }
+
     public static void main(String[] args) throws Exception {
-        BarBasicSkin b = new BarBasicSkin(new int[]{1000, 100}, new double[]{0, 10000}, true);
-        //b.loadConfig();
+        //Flat UI test
+        BarBasicSkinStyle style = new BarBasicSkinStyle();
+        style.loadConfig("BarFlatUI.json");
+        BarBasicSkin b = new BarBasicSkin(style, new int[]{1000, 100}, new double[]{0, 7000}, true);
         System.out.println(b);
-        SigDraw s = new SigDraw(b.getBarChart(0, "text", 1000, 4000, 2000), true);
-        s.save("test1.jpg");
-        //new SigDraw( s.getSubImage(50, 500, 20, 200) ).save("test2.jpg");
+        SigDraw s = new SigDraw(b.getBarChart(0, "text", 1000, 1000, 1000, 2000, 2000), true);
+        s.save("FlatUI_test.jpg");
+        //Basic UI test
+        style = new BarBasicSkinStyle();
+        style.loadConfig("BarBasicSkin.json");
+        b = new BarBasicSkin(style, new int[]{1000, 100}, new double[]{0, 3000}, true);
+        System.out.println(b);
+        s = new SigDraw(b.getBarChart(0, "text", 1000, 1000, 1000), true);
+        s.save("BasicUI_test.jpg");
     }
 }
