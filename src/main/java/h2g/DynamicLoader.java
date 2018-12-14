@@ -5,7 +5,7 @@ public class DynamicLoader
     public static BarBasicSkinStyle Basic1 = new BarBasicSkinStyle();
     static {
         try {
-            Basic1.loadConfig();
+            Basic1.loadConfig("BarFlatUI.json");
         } catch (Exception e) {
             System.out.println(e);
         }
