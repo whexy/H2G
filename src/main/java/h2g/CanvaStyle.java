@@ -14,7 +14,7 @@ class CanvaStyle {
     int yProject = bgSize[1] / 2;
     double blankRatio = 0.5;
     boolean rotated = true;
-    double expandRatio = 1.01;
+    double expandRatio = 0.01;
 
     // Bar
     String[] barPattern = {"Bar1", "Bar2", "","Bar3","Bar4",""};
@@ -24,7 +24,9 @@ class CanvaStyle {
     int FPS = 60;
     double maxVelocity = 0.02;
     boolean isStackedBar = false;
+    boolean enableSwapping = false;
     int maxRulerGrade = 10;
+    boolean enableDynamicRuler = true;
     
     // Layout
     int rulerXoffset = 20;

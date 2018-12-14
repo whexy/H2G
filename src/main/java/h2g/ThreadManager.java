@@ -25,7 +25,10 @@ public class ThreadManager {
     public static void bufferBarDrawingTutor() {
         bDTbuffer = new BarDrawingTutor[barDrawingHelper.getTotalFrame()];
         for(int x=0;x<barDrawingHelper.getTotalFrame();++x) {
-            bDTbuffer[x] = barDrawingHelper.getTutor(x);
+            if(canvaStyle.isStackedBar && barDrawingHelper instanceof StackedBarDrawingHelper) {
+                bDTbuffer[x] = ((StackedBarDrawingHelper) barDrawingHelper).getStackedTutor(x);
+            }
+            else bDTbuffer[x] = barDrawingHelper.getTutor(x);
         }
     }
     public static BarDrawingTutor fetchBarDrawingTutor(int currentFrame) {
@@ -34,8 +37,9 @@ public class ThreadManager {
         return rel;
     }
 
-    public static void refreshRuler() {
-        histogramData.yValue[1] = barDrawingTutor.getMaxValue()*canvaStyle.expandRatio;
+    public static void refreshRuler(double maxValue) {
+        maxValue += Math.abs(maxValue*canvaStyle.expandRatio);
+        histogramData.yValue[1] = maxValue;
         rulerDrawingTutor.setYmaxValue(histogramData.yValue[1]);
         histogramData.rulerGrade = rulerDrawingTutor.getRulerGrade();
         histogramData.rulerStep = rulerDrawingTutor.getRulerStep();
@@ -47,28 +51,45 @@ public class ThreadManager {
         rawData[2] = new double[]{2,7,11,22,40,90,300,350,500,1200,4000,7000};
         rawData[3] = new double[]{1,8,12,24,60,80,100,120,600,700,5000,6000};
 
+        /*
+        rawData[0] = new double[]{1,5,10};
+        rawData[1] = new double[]{2,6,20};
+        rawData[2] = new double[]{3,7,30};
+        rawData[3] = new double[]{4,8,40};*/
+
         canvaStyle = new CanvaStyle();
         histogramData = new HistogramData();
         rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
-        barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
-        long startTime = System.currentTimeMillis();
-        
+
+        if(canvaStyle.isStackedBar) barDrawingHelper = new StackedBarDrawingHelper(canvaStyle, histogramData, rawData);
+        else barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
+
+        long endTime, startTime = System.currentTimeMillis();
+        double averageFPS = 0;
         bufferBarDrawingTutor();
 
+        if(!canvaStyle.enableDynamicRuler) {
+            refreshRuler( bDTbuffer[bDTbuffer.length-1].getMaxValue() );
+        }
+
         for(int currentFrame=0;currentFrame<barDrawingHelper.getTotalFrame();++currentFrame) {
-            if(currentFrame>200 && timer==null) {
+            if(currentFrame+1>=canvaStyle.FPD && timer==null) {
                 timer = new Timer();
                 timer.schedule(new ImagePlayer(buffer, canvaStyle.bgSize), 0, 1000/canvaStyle.FPS);
             }
             barDrawingTutor = fetchBarDrawingTutor(currentFrame);
-            refreshRuler();
+            if(canvaStyle.enableDynamicRuler) refreshRuler(barDrawingTutor.getMaxValue());
             frameCreator = new FrameCreator(barDrawingTutor, canvaStyle, histogramData);
             //f.bg.save(x+".jpg");
             //bf[x] = f.bg.getBuffImg();
             buffer.offer( frameCreator.bg.getBuffImg() );
-            long endTime = System.currentTimeMillis();
-            double averageFPS = currentFrame/((endTime-startTime)/1000.0);
-            if(currentFrame%100==0) System.out.printf("Frame:%d Average FPS: %.3f\n",currentFrame,averageFPS);
+             
+            if(currentFrame%canvaStyle.FPD==0) {
+                endTime = System.currentTimeMillis();
+                averageFPS = canvaStyle.FPD/((endTime-startTime)/1000.0);
+                System.out.printf("Frame:%d Average FPS: %.3f\n",currentFrame,averageFPS);
+                startTime = System.currentTimeMillis();
+            }
         }
         
         

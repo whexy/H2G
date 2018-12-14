@@ -10,7 +10,7 @@ public class HistogramData {
     double[] values = {};
     //double[] xScale = { 0, 1.0 }; // MIN, MAX
     int visiblePattern = 1;
-    double[] yValue = {0, 1.0}; // MIN, MAX
+    double[] yValue = {-0.00001, 1.0}; // MIN, MAX
     double rulerStep = 0.0;
     int rulerGrade = 0;
 }

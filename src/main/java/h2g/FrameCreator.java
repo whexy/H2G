@@ -88,40 +88,25 @@ class FrameCreator {
         b.seek();
         while(b.hasNext()) {
             b.next();
+            int[] barSize;
+            double x,y;
             if(c.rotated) {
-                int[] barSize = new int[]{coord.width, (int)(coord.factorY(b.getBarWidth()))};
-                double y = b.getLocation();
-                double x = (yValue[MIN] + yValue[MAX])/2;
-                BufferedImage barImg = b.getBarImg(barSize, yValue, "");
-                coord.picture(x, y, barImg);
+                barSize = new int[]{coord.width, (int)(coord.factorY(b.getBarWidth()))};
+                y = b.getLocation();
+                x = (yValue[MIN] + yValue[MAX])/2;
             } else {
-                int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
-                double x = b.getLocation();
-                double y = (yValue[MIN] + yValue[MAX])/2;
-                BufferedImage barImg = b.getBarImg(barSize, yValue, "");
-                coord.picture(x, y, barImg);
+                barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
+                x = b.getLocation();
+                y = (yValue[MIN] + yValue[MAX])/2;
             }
-            
+            BufferedImage barImg = null;
+            if(c.isStackedBar && b instanceof StackedBarDrawingTutor) {
+                barImg = ((StackedBarDrawingTutor) b).getStackedBarImg(barSize, yValue, "");
+            }
+            else barImg = b.getBarImg(barSize, yValue, "");
+            coord.picture(x, y, barImg);
         }
         bg.picture(c.xProject, c.yProject, coord.getBuffImg());
-        /*
-        double[] a = d.values;
-        int n = a.length;
-        setHistogramScale(n);
-        if (f.isBarFilled) {
-            StdDraw.setPenColor(f.barFillColor);
-            for (int i = 0; i < n; i++) {
-                StdDraw.filledRectangle(i, a[i] / 2, 0.25, a[i] / 2);
-                // (x, y, halfWidth, halfHeight)
-            }
-        }
-        if (f.hasBarFrame) {
-            StdDraw.setPenColor(f.barFrameColor);
-            for (int i = 0; i < n; i++) {
-                StdDraw.rectangle(i, a[i] / 2, 0.25, a[i] / 2);
-                // (x, y, halfWidth, halfHeight)
-            }
-        }*/
     }
 
     private void plotRuler() {

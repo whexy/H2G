@@ -23,12 +23,12 @@ class Interpolator {
         Interpolator.barPattern = canvaStyle.barPattern;
         Interpolator.barWidthRatio = canvaStyle.barWidthRatio;
         Interpolator.FPD = canvaStyle.FPD;
-        Interpolator.swapping = !canvaStyle.isStackedBar;
+        Interpolator.swapping = canvaStyle.enableSwapping;
         this.rawData = rawData;
         BarSwaper.maxVelocity = canvaStyle.maxVelocity;
         init();
         interpolateBarValue();
-        if(swapping) interpolateBarLocation();
+        interpolateBarLocation();
     }
     private void parseBarPattern() {
         curBL = new BarLocation[barNum];
@@ -44,11 +44,11 @@ class Interpolator {
             else unallocatedBar++;
         }
         avgWidth = unallocatedSpace/unallocatedBar;
-        xScale[0] = -avgWidth;
         for(x=0;x<patternNum;++x) {
             if(barWidthRatio[x]<0) barWidthRatio[x] = avgWidth;
             if(barPattern[x].length()==0) nonEmptyNum--;
         }
+        xScale[0] = barWidthRatio[patternNum-1];
         availablePos = new double[nonEmptyNum];
         validWidth = new double[nonEmptyNum];
         for(x=0,i=0;x<patternNum;++x) {

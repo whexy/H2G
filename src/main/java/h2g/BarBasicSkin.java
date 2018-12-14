@@ -44,7 +44,7 @@ public class BarBasicSkin extends BarGenerator {
     public BufferedImage getBarChart(int frame, String text, double... val) {
         double halfWidth = barSize[WIDTH] / 2.0;
         double halfHeight = barSize[HEIGHT] / 2.0;
-        double baseVal = 0;
+        /*double baseVal = 0;
         for (int x = 0; x < val.length && x < segColor.length; ++x) {
             baseIMG.setPenColor(segColor[x]);
             if (rotated) {
@@ -55,6 +55,16 @@ public class BarBasicSkin extends BarGenerator {
                 else baseIMG.rectangle(halfWidth, baseVal + val[x] / 2, halfWidth, val[x] / 2);
             }
             baseVal += val[x];
+        }*/
+        for (int x = Math.min(val.length,segColor.length)-1 ; x>=0 ; --x) {
+            baseIMG.setPenColor(segColor[x]);
+            if (rotated) {
+                if (isBarFilled) baseIMG.filledRectangle(val[x] / 2, halfHeight, (val[x]-scale[0]) / 2, halfHeight);
+                else baseIMG.rectangle(val[x] / 2, halfHeight, (val[x]-scale[0]) / 2, halfHeight);
+            } else {
+                if (isBarFilled) baseIMG.filledRectangle(halfWidth, val[x] / 2, halfWidth, (val[x]-scale[0]) / 2);
+                else baseIMG.rectangle(halfWidth, val[x] / 2, halfWidth, (val[x]-scale[0]) / 2);
+            }
         }
 
         baseIMG.setPenColor(frameColor);
