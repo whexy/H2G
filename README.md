@@ -11,6 +11,7 @@ This project has nothing left.
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
 | Whexy | N/A | 修改BarFlatUI为Json | N/A | Working |
+| Whexy | N/A | 寻找字体透明化方法 | | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Working |
 
@@ -45,13 +46,15 @@ This project has nothing left.
 自动计算rulerGrade和rulerStep以指导FrameCreator绘制Ruler
 | Primary API Name | Parameter | Description |
 | --- | --- | --- |
-| RulerDrawingTutor() | double[] yValue, int maxRulerGrade | 实例化，传入比例尺和最大刻度数量 |
+| RulerDrawingTutor() | CanvaStyle canvaStyle, HistogramData histogramData | 实例化，传入比例尺和最大刻度数量 |
 | setYmaxValue() | double yMaxValue | 指定刻度的最大值 |
 | getRulerStep() | | 自适应并计算rulerStep |
 | getRulerGrade() | | 自适应并计算rulerGrade |
 
 ### Note:自适应只适应增大的情况，不适应缩小的情况
-
+### Update Log
+#### Version 1 rev.C (2018.12.14)
+1. 调整接口
 
 ## BarDrawingTutor
 指导FrameCreator绘制Bar
@@ -59,8 +62,6 @@ This project has nothing left.
 ### Primary API Reference 
 | Primary API Name | Parameter | Description |
 | --- | --- | --- |
-| BarDrawingTutor() | CanvaStyle c, double[][] rawData, double maxVelocity | 传入参数完成静态初始化(仅需初始化一次), maxVelocity:最大交换速率 |
-| | int currentFrame | 实例化并切换到指定帧 |
 | hasNext() || 判断当前帧是否还有下一个需要绘制的Bar |
 | next() || 切换到下一个需要绘制的Bar |
 | getLocation() || 获取Bar的坐标 |
@@ -70,6 +71,7 @@ This project has nothing left.
 ### InnerClass
 | InnerClass | Description |
 | --- | --- |
+| BarDrawingHelper | 用于生成特定帧的BarDrawingTutor |
 | Interpolator | 生成数值和坐标的插值，调用BarLayoutDesigner生成坐标的插值 |
 | BarLayoutDesigner | 队列化处理Bar交换事件，避免多重交换，生成Bar的横坐标 |
 | BarSwaper | 利用非线性函数计算和平移Bar的坐标以实现Bar的交换 |
@@ -79,6 +81,8 @@ This project has nothing left.
 ### InnerClass Primary API Reference
 | Class Name | API Name | Description |
 | --- | --- | --- |
+| BarDrawingHelper | BarDrawingHelper | 初始化 |
+| | getTutor | 获得特定帧的BarDrawingTutor |
 | Interplator | parseBarPattern | 解析BarPattern(在CanvaStyle里定义),分配Bar初始坐标 |
 | | interpolateBarValue | 对值插值 |
 | | interpolateBarLocation | 调用BarLocationDesigner对坐标插值 |
@@ -94,6 +98,8 @@ This project has nothing left.
 
 
 ### Update Log
+#### Version 2 rev.B (2018.12.14)
+1. 重新编写构造方法，使得调用方法更合理
 #### Version 2 rev.A (2018.12.9)
 1. 重新设计交换事件冲突处理机制
 #### Version 1 rev.C (2018.12.7)
@@ -120,6 +126,8 @@ This project has nothing left.
 | ImagePlayer() | ConcurrentLinkedQueue<BufferedImage> buffer, int[] bgSize | 传入FIFO缓冲区(线程安全)，初始化播放器 |
 
 ### Update Log
+#### Version 1 rev.B (2018.12.14)
+1. 整理代码
 #### Version 1 rev.A (2018.12.8)
 1. 完成基本处理流程的设计，基本实现动画化
 
@@ -269,7 +277,8 @@ SigDraw是基于StdDraw魔改的产物
 ## HistogramData
 ## CanvaStyle
 ### Update Log
-
+#### Version 1 rev.C (2018.12.14)
+1. 添加参数
 #### Version 1 rev.B (2018.12.1)
 
 1. 修复颜色自定义无效的bug

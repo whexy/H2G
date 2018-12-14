@@ -92,13 +92,13 @@ class FrameCreator {
                 int[] barSize = new int[]{coord.width, (int)(coord.factorY(b.getBarWidth()))};
                 double y = b.getLocation();
                 double x = (yValue[MIN] + yValue[MAX])/2;
-                BufferedImage barImg = b.getBarImg(barSize, yValue);
+                BufferedImage barImg = b.getBarImg(barSize, yValue, "");
                 coord.picture(x, y, barImg);
             } else {
                 int[] barSize = new int[]{(int)(coord.factorX(b.getBarWidth())),coord.height};
                 double x = b.getLocation();
                 double y = (yValue[MIN] + yValue[MAX])/2;
-                BufferedImage barImg = b.getBarImg(barSize, yValue);
+                BufferedImage barImg = b.getBarImg(barSize, yValue, "");
                 coord.picture(x, y, barImg);
             }
             

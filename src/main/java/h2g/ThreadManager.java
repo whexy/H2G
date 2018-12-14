@@ -12,45 +12,63 @@ import javax.swing.JLabel;
 import java.awt.Graphics2D;
 
 public class ThreadManager {
-    
+    public static CanvaStyle canvaStyle;
+    public static HistogramData histogramData;
+    public static RulerDrawingTutor rulerDrawingTutor;
+    public static BarDrawingHelper barDrawingHelper;
+    public static FrameCreator frameCreator;
+    public static BarDrawingTutor barDrawingTutor;
+    public static Timer timer = null;
+    public static ConcurrentLinkedQueue<BufferedImage> buffer = new ConcurrentLinkedQueue<>();
+
+    public static BarDrawingTutor bDTbuffer[];
+    public static void bufferBarDrawingTutor() {
+        bDTbuffer = new BarDrawingTutor[barDrawingHelper.getTotalFrame()];
+        for(int x=0;x<barDrawingHelper.getTotalFrame();++x) {
+            bDTbuffer[x] = barDrawingHelper.getTutor(x);
+        }
+    }
+    public static BarDrawingTutor fetchBarDrawingTutor(int currentFrame) {
+        BarDrawingTutor rel = bDTbuffer[currentFrame];
+        bDTbuffer[currentFrame] = null;
+        return rel;
+    }
+
+    public static void refreshRuler() {
+        histogramData.yValue[1] = barDrawingTutor.getMaxValue()*canvaStyle.expandRatio;
+        rulerDrawingTutor.setYmaxValue(histogramData.yValue[1]);
+        histogramData.rulerGrade = rulerDrawingTutor.getRulerGrade();
+        histogramData.rulerStep = rulerDrawingTutor.getRulerStep();
+    }
     public static void main(String[] args) {
-        CanvaStyle c = new CanvaStyle();
-        HistogramData d = new HistogramData();
         double[][] rawData = new double[4][];
         rawData[0] = new double[]{4,5,9,21,30,70,110,400,400,800,2000,9000};
         rawData[1] = new double[]{3,6,10,23,50,100,200,300,400,1000,3000,8000};
         rawData[2] = new double[]{2,7,11,22,40,90,300,350,500,1200,4000,7000};
         rawData[3] = new double[]{1,8,12,24,60,80,100,120,600,700,5000,6000};
-        d.yValue[0] = 0;
-        d.yValue[1] = 1.0;
-        d.visiblePattern = 1;
-        c.FPD = 360;// 180
-        c.FPS = 60;
-        c.rotated = true;
-        RulerDrawingTutor r = new RulerDrawingTutor(d.yValue, 20);
-        BarDrawingTutor initB = new BarDrawingTutor(c,rawData,0.02); // For initialization
-        FrameCreator f;
-        Timer timer = null;
+
+        canvaStyle = new CanvaStyle();
+        histogramData = new HistogramData();
+        rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
+        barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
         long startTime = System.currentTimeMillis();
-        //BufferedImage[] bf = new BufferedImage[initB.getTotalFrame()];
-        ConcurrentLinkedQueue<BufferedImage> buffer = new ConcurrentLinkedQueue<>();
-        for(int x=0;x<initB.getTotalFrame();++x) {
-            if(x>200 && timer==null) {
+        
+        bufferBarDrawingTutor();
+
+        for(int currentFrame=0;currentFrame<barDrawingHelper.getTotalFrame();++currentFrame) {
+            if(currentFrame>200 && timer==null) {
                 timer = new Timer();
-                timer.schedule(new ImagePlayer(buffer, c.bgSize), 0, 1000/c.FPS);
+                timer.schedule(new ImagePlayer(buffer, canvaStyle.bgSize), 0, 1000/canvaStyle.FPS);
             }
-            BarDrawingTutor b = new BarDrawingTutor(x);
-            d.yValue[1] = b.getMaxValue()*1.01;
-            r.setYmaxValue(d.yValue[1]);
-            d.rulerGrade = r.getRulerGrade();
-            d.rulerStep = r.getRulerStep();
-            f = new FrameCreator(b, c, d);
+            barDrawingTutor = fetchBarDrawingTutor(currentFrame);
+            refreshRuler();
+            frameCreator = new FrameCreator(barDrawingTutor, canvaStyle, histogramData);
             //f.bg.save(x+".jpg");
             //bf[x] = f.bg.getBuffImg();
-            buffer.offer(f.bg.getBuffImg());
+            buffer.offer( frameCreator.bg.getBuffImg() );
             long endTime = System.currentTimeMillis();
-            System.out.printf("Frame:%d Average FPS: %.3f\n",x,x/((endTime-startTime)/1000.0));
-            //System.out.println("Frame"+x+" has been created!");
+            double averageFPS = currentFrame/((endTime-startTime)/1000.0);
+            if(currentFrame%100==0) System.out.printf("Frame:%d Average FPS: %.3f\n",currentFrame,averageFPS);
         }
         
         
@@ -104,8 +122,8 @@ class ImagePlayer extends TimerTask {
     @Override
     public void run() {
         if(buffer.isEmpty()) {
-            onscreen.dispose();
-            this.cancel();
+            // onscreen.dispose();
+            // this.cancel();
             return;
         }
         show(buffer.poll());
