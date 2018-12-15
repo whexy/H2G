@@ -1,6 +1,8 @@
 package h2g;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -21,7 +23,7 @@ public class ThreadManager {
     public static Timer timer = null;
     public static ConcurrentLinkedQueue<BufferedImage> buffer = new ConcurrentLinkedQueue<>();
 
-    public static BarDrawingTutor bDTbuffer[];
+    public static BarDrawingTutor[] bDTbuffer;
     public static void bufferBarDrawingTutor() {
         bDTbuffer = new BarDrawingTutor[barDrawingHelper.getTotalFrame()];
         for(int x=0;x<barDrawingHelper.getTotalFrame();++x) {
@@ -44,28 +46,19 @@ public class ThreadManager {
         histogramData.rulerGrade = rulerDrawingTutor.getRulerGrade();
         histogramData.rulerStep = rulerDrawingTutor.getRulerStep();
     }
-    public static void main(String[] args) {
-        double[][] rawData = new double[4][];
-        rawData[0] = new double[]{4,5,9,21,30,70,110,400,400,800,2000,9000};
-        rawData[1] = new double[]{3,6,10,23,50,100,200,300,400,1000,3000,8000};
-        rawData[2] = new double[]{2,7,11,22,40,90,300,350,500,1200,4000,7000};
-        rawData[3] = new double[]{1,8,12,24,60,80,100,120,600,700,5000,6000};
-
-        /*
-        rawData[0] = new double[]{1,5,10};
-        rawData[1] = new double[]{2,6,20};
-        rawData[2] = new double[]{3,7,30};
-        rawData[3] = new double[]{4,8,40};*/
-
+    public static void main(String[] args) throws Exception {
+        DataLoader dataLoader = new DataLoader();
+        double[][] rawData = dataLoader.loadConfig();
         canvaStyle = new CanvaStyle();
+        canvaStyle.loadConfig();
         histogramData = new HistogramData();
+        histogramData.loadConfig();
         rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
-
-        if(canvaStyle.isStackedBar) barDrawingHelper = new StackedBarDrawingHelper(canvaStyle, histogramData, rawData);
-        else barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
-
-        long endTime, startTime = System.currentTimeMillis();
-        double averageFPS = 0;
+        barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
+        long startTime = System.currentTimeMillis();
+        long endTime;
+        double averageFPS;
+        
         bufferBarDrawingTutor();
 
         if(!canvaStyle.enableDynamicRuler) {

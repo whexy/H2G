@@ -82,9 +82,9 @@ public class BarBasicSkin extends BarGenerator {
         //Flat UI test
         BarBasicSkinStyle style = new BarBasicSkinStyle();
         style.loadConfig("BarFlatUI.json");
-        BarBasicSkin b = new BarBasicSkin(style, new int[]{1000, 100}, new double[]{0, 7000}, true);
+        BarBasicSkin b = new BarBasicSkin(style, new int[]{1000, 100}, new double[]{0, 8000}, true);
         System.out.println(b);
-        SigDraw s = new SigDraw(b.getBarChart(0, "text", 1000, 1000, 1000, 2000, 2000), true);
+        SigDraw s = new SigDraw(b.getBarChart(0, "text", 1000, 2000, 1000, 2000, 2000), true);
         s.save("FlatUI_test.jpg");
         //Basic UI test
         style = new BarBasicSkinStyle();
