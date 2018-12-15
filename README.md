@@ -215,6 +215,10 @@ Color color = cL.getColor("bar.color1");
 
 ### Update Log
 
+#### Version 2 (2018.12.15)
+
+增加了获取两种基本类的方法
+
 #### Version 1 rev.B (2018.12.1)
 
 增加了获取两种特殊类的方法
@@ -274,7 +278,14 @@ SigDraw是基于StdDraw魔改的产物
 2. 剥离Event,Swing,双缓冲部分
 3. 修改部分函数和启动流程，添加基础函数
 
-## HistogramData
+## HistogramData & Data
+
+两个主管数据的结构，面向DDL的产物。
+
+HistogramData负责对数据的样式进行手动适应，现已支持json。
+
+Data负责数据的调入。
+
 ## CanvaStyle
 ### Update Log
 #### Version 1 rev.C (2018.12.14)

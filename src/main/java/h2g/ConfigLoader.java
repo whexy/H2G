@@ -19,7 +19,8 @@ public class ConfigLoader {
             } else if (o instanceof JsonObject) {
                 o = (Object) (((JsonObject) o).get((Object) token));
             } else {
-                throw new Exception("Path is not valid!");
+                return null;
+                //throw new Exception("Path is not valid!");
             }
         }
         return o;
@@ -104,4 +105,28 @@ public class ConfigLoader {
         if (rulerFontSize == 0) return null;
         return new Font(rulerFontName, rulerFontForm, rulerFontSize);
     }
+
+    double[] getDoubleArray(String pattern) throws Exception {
+        Object _jsa = get(pattern);
+        if (_jsa == null) {
+            return null;
+        }
+        JsonArray jsa = (JsonArray) _jsa;
+        double[] a = new double[jsa.size()];
+        for (int i = 0; i < jsa.size(); i++)
+            a[i] = jsa.getJsonNumber(i).doubleValue();
+        return a;
+    }
+
+    String[] getStringArray(String pattern) throws Exception {
+        Object _jsa = get(pattern);
+        if (_jsa == null) {
+            return null;
+        }
+        JsonArray jsa = (JsonArray) _jsa;
+        String[] a = new String[jsa.size()];
+        for (int i = 0; i < jsa.size(); i++) a[i] = String.valueOf(jsa.getJsonString(i));
+        return a;
+    }
+
 }

@@ -1,6 +1,8 @@
 package h2g;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -40,15 +42,13 @@ public class ThreadManager {
         histogramData.rulerGrade = rulerDrawingTutor.getRulerGrade();
         histogramData.rulerStep = rulerDrawingTutor.getRulerStep();
     }
-    public static void main(String[] args) {
-        double[][] rawData = new double[4][];
-        rawData[0] = new double[]{4,5,9,21,30,70,110,400,400,800,2000,9000};
-        rawData[1] = new double[]{3,6,10,23,50,100,200,300,400,1000,3000,8000};
-        rawData[2] = new double[]{2,7,11,22,40,90,300,350,500,1200,4000,7000};
-        rawData[3] = new double[]{1,8,12,24,60,80,100,120,600,700,5000,6000};
-
+    public static void main(String[] args) throws Exception {
+        DataLoader dataLoader = new DataLoader();
+        double[][] rawData = dataLoader.loadConfig();
         canvaStyle = new CanvaStyle();
+        canvaStyle.loadConfig();
         histogramData = new HistogramData();
+        histogramData.loadConfig();
         rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
         barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
         long startTime = System.currentTimeMillis();

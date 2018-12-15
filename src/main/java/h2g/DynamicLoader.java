@@ -2,7 +2,8 @@ package h2g;
 
 public class DynamicLoader 
 {
-    public static BarBasicSkinStyle Basic1 = new BarBasicSkinStyle();
+    //TODO: MODIFY THE FUNCTION AND DIFFERENT STYLES
+    private static BarBasicSkinStyle Basic1 = new BarBasicSkinStyle();
     static {
         try {
             Basic1.loadConfig("BarFlatUI.json");
