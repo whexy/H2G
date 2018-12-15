@@ -47,6 +47,10 @@ class FrameCreator {
 
         bg = new SigDraw(bgSize[WIDTH], bgSize[HEIGHT], true);
         coord = new SigDraw(coordSize[WIDTH], coordSize[HEIGHT], false);
+
+        bg.enableTransparent((float)c.bgTrantransparency);
+        coord.enableTransparent((float)c.coordTrantransparency);
+
         if(c.rotated) {
             coord.setYscale(xScale[MIN], xScale[MAX]);
             coord.setXscale(yValue[MIN], yValue[MAX]);
@@ -75,13 +79,23 @@ class FrameCreator {
         Font font = c.keysFont; // TO BE Customized
         bg.setFont(font);
         bg.setPenColor(c.keyColor);
-        final double y = cBorder[DOWN] - c.keysYoffset;
-        final double x = cBorder[LEFT] - c.keysYoffset;
+        
+        
         b.seek();
         while(b.hasNext()) {
             b.next();
-            if(c.rotated) bg.text(x, cp.getY(b.getLocation()), d.keys[b.getBarID()]);
-            else bg.text(cp.getX(b.getLocation()), y, d.keys[b.getBarID()]);
+            double x,y;
+            if(b.getLocation()>d.visiblePattern) continue;
+            if(c.rotated) {
+                x = cBorder[LEFT] - c.keysYoffset;
+                y = cp.getY(b.getLocation());
+                
+            }
+            else {
+                y = cBorder[DOWN] - c.keysYoffset;
+                x = cp.getX(b.getLocation());
+            }
+            bg.text(x, y, d.keys[b.getBarID()]);
         }
     }
     private void plotBars() {

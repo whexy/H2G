@@ -24,7 +24,7 @@ class BarDrawingTutor {
         if(transparency.containsKey(bar[index].bL)) {
             return transparency.get(bar[index].bL);
         }
-        else return 1;
+        else return canvaStyle.maxTrantransparency;
     }
     public BufferedImage getBarImg(int[] barSize, double[] yValue, String text) {
         String skin = canvaStyle.barSkin[ getBarID() ];
@@ -73,7 +73,7 @@ class BarDrawingHelper {
     public BarDrawingTutor getTutor(int currentFrame) {
         this.currentFrame = currentFrame;
         Bar[] bar = interpolator.bar[currentFrame];
-        Bar[] sortedBar = getSortedBar(new int[]{BarLocation.LAYER_BOTTOM, BarLocation.LAYER_MID, BarLocation.LAYER_TOP}, bar);
+        Bar[] sortedBar = getSortedBar(new int[]{BarLocation.LAYER_TOP, BarLocation.LAYER_MID, BarLocation.LAYER_BOTTOM}, bar);
         return new BarDrawingTutor(currentFrame, sortedBar, maxValue);
     }
     public int getTotalFrame() { return interpolator.endFrame; }

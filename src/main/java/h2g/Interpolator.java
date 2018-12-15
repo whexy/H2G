@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 // import java.util.Random;
 
 class Interpolator {
-    public static boolean swapping = true;
+    public static int sortMethod = 0;
     public static int FPD = 60; // Frames per data
     public double[][] rawData; // rawdata[bar][data]
     public Bar[][] bar; // data[frame][bar]
@@ -23,9 +23,11 @@ class Interpolator {
         Interpolator.barPattern = canvaStyle.barPattern;
         Interpolator.barWidthRatio = canvaStyle.barWidthRatio;
         Interpolator.FPD = canvaStyle.FPD;
-        Interpolator.swapping = canvaStyle.enableSwapping;
+        if("BubbleSort".equals(canvaStyle.sortMethod)) sortMethod = 1;
+        if("SelectionSort".equals(canvaStyle.sortMethod)) sortMethod = 2;
         this.rawData = rawData;
-        BarSwaper.maxVelocity = canvaStyle.maxVelocity;
+        BarSwaper.setMaxVelocity(canvaStyle.maxVelocity);
+        BarLayoutDesigner.setTranspartency(canvaStyle.maxTrantransparency, canvaStyle.minTrantransparency);
         init();
         interpolateBarValue();
         interpolateBarLocation();
@@ -83,7 +85,7 @@ class Interpolator {
         }
         return r;
     }
-    private void sortAndSwapBar(Bar[] bar, int currentFrame) { // BubbleSort
+    private void sortAndSwapBarByBubbleSort(Bar[] bar, int currentFrame) {
         int x,y;
         int barNum = bar.length;
         for(x=0;x<barNum-1;++x) {
@@ -99,6 +101,21 @@ class Interpolator {
                 }
             }
             if(flag) return;
+        }
+    }
+    private void sortAndSwapBarBySelectionSort(Bar[] bar, int currentFrame) { 
+        int x,y;
+        int barNum = bar.length;
+        for(x=0;x<barNum-1;++x) {
+            for(y=x+1;y<barNum;++y) {
+                if(bar[x].val<bar[y].val) {
+                    Bar tmp = null;
+                    tmp = bar[x];
+                    bar[x] = bar[y];
+                    bar[y] = tmp;
+                    bLD.swapBars(currentFrame, bar[x].id, bar[y].id);
+                }
+            }
         }
     }
     
@@ -119,7 +136,8 @@ class Interpolator {
                 for(y=0;y<barNum;++y) {
                     curBar[y].val += dVal[curBar[y].id];
                 }
-                if(swapping) sortAndSwapBar(curBar, FPD*x + frame);
+                if(sortMethod == 1) sortAndSwapBarByBubbleSort(curBar, FPD*x + frame);
+                if(sortMethod == 2) sortAndSwapBarBySelectionSort(curBar, FPD*x + frame);
                 bar[FPD*x + frame] = deepCopyBarArray(curBar);
             }
         }
@@ -245,6 +263,13 @@ class BarLayoutDesigner {
     BarLocation[] bar;
     int currentFrame = 0;
     BarSwaper[] flag;
+    public static double k1, k2, b1, b2;
+    public static void setTranspartency(double max, double min) {
+        BarLayoutDesigner.b1 = max;
+        BarLayoutDesigner.b2 = -max+2*min;
+        BarLayoutDesigner.k1 = -2*(max-min);
+        BarLayoutDesigner.k2 = 2*(max-min);
+    }
     public BarLayoutDesigner(BarLocation[] bar) {
         this.bar = bar.clone();
         flag = new BarSwaper[bar.length];
@@ -317,9 +342,8 @@ class BarLayoutDesigner {
         flag[index] = null;
     }
     private double getTransparency(double progress) {
-        if(progress<0.5) return 1-progress*2;
-        //else return 1-(progress-0.5)*2;
-        else return -1+2*progress;
+        if(progress<0.5) return BarLayoutDesigner.k1*progress + BarLayoutDesigner.b1;
+        else return BarLayoutDesigner.k2*progress + BarLayoutDesigner.b2;
     }
     public BarLocation[] getLayout() {
         BarLocation[] rel = new BarLocation[bar.length];
@@ -364,6 +388,9 @@ class BarSwaper {
     private double getProgress(int currentFrame) {
         double f = currentFrame-startFrame;
         return f/dFrame;
+    }
+    public static void setMaxVelocity(double maxVelocity) {
+        BarSwaper.maxVelocity = maxVelocity;
     }
     public BarSwaper(BarSwapStatus bars, int startFrame) {
         if(bars.a.location>bars.b.location) {

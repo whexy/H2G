@@ -7,6 +7,7 @@ class CanvaStyle {
     // Background
     int[] bgSize = {1000, 1000};
     Color bgColor = Color.WHITE;
+    double bgTrantransparency = 1;
 
     // Coordinate
     int[] coordSize = {800, 800};
@@ -15,24 +16,27 @@ class CanvaStyle {
     double blankRatio = 0.5;
     boolean rotated = true;
     double expandRatio = 0.01;
+    double coordTrantransparency = 0.8;
 
     // Bar
-    String[] barPattern = {"Bar1", "Bar2", "","Bar3","Bar4",""};
-    double[] barWidthRatio = {-1,-1,-1,-1,-1,-1};
-    String[] barSkin = {"Basic","Basic1","Basic","Basic1"};
-    int FPD = 360;
+    String[] barPattern = {"Bar1", ""};
+    double[] barWidthRatio = {0.5,-1};
+    String[] barSkin = {"Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1"};
+    int FPD = 420;
     int FPS = 60;
-    double maxVelocity = 0.02;
+    double maxVelocity = 0.1;
+    double maxTrantransparency = 1;
+    double minTrantransparency = 0.2;
     boolean isStackedBar = false;
-    boolean enableSwapping = false;
     int maxRulerGrade = 10;
     boolean enableDynamicRuler = true;
-    
+    String sortMethod = "BubbleSort"; // Availble method: BubbleSort, SelectionSort
+
     // Layout
     int rulerXoffset = 20;
-    int keysYoffset = 20;
+    int keysYoffset = 50;
     int headerXoffset = 0;
-    int headerYoffset = 20;
+    int headerYoffset = 50;
     int footerXoffset = 0;
     int footerYoffset = 50;
 
