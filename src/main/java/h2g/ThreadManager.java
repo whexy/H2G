@@ -56,6 +56,8 @@ public class ThreadManager {
         rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
         barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
         long startTime = System.currentTimeMillis();
+        long endTime;
+        double averageFPS;
         
         bufferBarDrawingTutor();
 
