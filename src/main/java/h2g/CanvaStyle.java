@@ -129,6 +129,18 @@ class CanvaStyle {
         hasHeader = loader.getBool("hasHeader");
         hasFooter = loader.getBool("hasFooter");
 
+        //Bar
+        barPattern = loader.getStringArray("barPattern");
+        barWidthRatio = loader.getDoubleArray("barWidthRatio");
+        barSkin = loader.getStringArray("barSkin");
+        FPD = loader.getInt("FPD");
+        FPS = loader.getInt("FPS");
+        maxVelocity = loader.getDouble("maxVelocity");
+        isStackedBar = loader.getBool("isStackedBar");
+        enableSwapping = loader.getBool("enableSwapping");
+        maxRulerGrade = loader.getInt("maxRulerGrade");
+        enableDynamicRuler = loader.getBool("enableDynamicRuler");
+
         // Color
         Color _borderColor = loader.getColor("borderColor");
         if (_borderColor != null) borderColor = _borderColor;
@@ -142,6 +154,6 @@ class CanvaStyle {
         if (_keyColor != null) keyColor = _keyColor;
     }
     public void loadConfig() throws Exception {
-        loadConfig("CanvaStyle.json");
+        loadConfig("Data.json");
     }
 }

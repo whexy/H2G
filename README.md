@@ -23,11 +23,24 @@ This project has nothing left.
 # Data Structure
 | Path | Class Name | Description |
 | --- | --- | --- |
-| \ | HistogramData | 画布的原始数据，用于存放相对动态的数据 |
-| \ | CanvaStyle | 画布的样式，用于存放相对静态的数据 |
-| \ | BarBasicSkinStyle | |
+| \ | HistogramData | 数据模板 |
+| \ | CanvaStyle | 样式模板 |
+| \ | rawData | 数据 |
+| \ | BarBasicSkinStyle | 皮肤 |
 
 # Class
+
+## DataLoader
+负责读取data.json内的数据部分，处理为rawData移交给ThreadManager。
+
+## LegendDrawer
+负责通过data.json内的部分数据生成图例。
+| Primary API Name | Parameter | Description |
+| --- | --- | --- |
+| loadConfig() | String pattern | **必须**，导入数据并解析 |
+| getLegend() | / | 获得一张BufferImage格式的完整图例 |
+| getBarLegend() | int id | 获得持有某id的，单独bar的图例 |
+
 ## FrameCreator
 基于Reference的HistogramA的单帧生成器
 
@@ -205,6 +218,38 @@ This project has nothing left.
 
 
 
+## HistogramData & DataLoader & CanvaStyle
+
+数据相关的三个类，分别对应数据样式、数据内容、模板样式。均已通过json实现数据的调配。
+
+### Update Log
+
+#### Version 2 (2018.12.15)
+
+1. 合并所有数据相关的json为 "Data.json" 
+
+2. 对新增的参数增加json支持
+
+#### Version 1 rev.D (2018.12.15)
+
+1. 添加参数
+
+#### Version 1 rev.C (2018.12.14)
+
+1. 添加参数
+
+#### Version 1 rev.B (2018.12.1)
+
+1. 修复颜色自定义无效的bug
+2. 代码架构优化
+3. json模板结构优化，并统一命名规范
+
+#### Version 1 rev.A (2018.11.30)
+
+使用json获取CanvaStyle数据
+
+
+
 ## ConfigLoader
 
 ConfigLoader基于Json库的辅助程序，简化了读取操作
@@ -228,6 +273,10 @@ String str = cL.getStr("data.1.message");
 Color color = cL.getColor("bar.color1");
 
 ### Update Log
+
+#### Version 2 (2018.12.15)
+
+增加了获取两种基本类的方法
 
 #### Version 1 rev.B (2018.12.1)
 
@@ -287,19 +336,3 @@ SigDraw是基于StdDraw魔改的产物
 1. 修改为动态类型，允许实例化
 2. 剥离Event,Swing,双缓冲部分
 3. 修改部分函数和启动流程，添加基础函数
-
-## HistogramData
-## CanvaStyle
-### Update Log
-#### Version 1 rev.D (2018.12.15)
-1. 添加参数
-#### Version 1 rev.C (2018.12.14)
-1. 添加参数
-#### Version 1 rev.B (2018.12.1)
-
-1. 修复颜色自定义无效的bug
-2. 代码架构优化
-3. json模板结构优化，并统一命名规范
-
-#### Version 1 rev.A (2018.11.30)
-使用json获取数据
