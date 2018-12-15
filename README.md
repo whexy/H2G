@@ -23,11 +23,24 @@ This project has nothing left.
 # Data Structure
 | Path | Class Name | Description |
 | --- | --- | --- |
-| \ | HistogramData | 画布的原始数据，用于存放相对动态的数据 |
-| \ | CanvaStyle | 画布的样式，用于存放相对静态的数据 |
-| \ | BarBasicSkinStyle | |
+| \ | HistogramData | 数据模板 |
+| \ | CanvaStyle | 样式模板 |
+| \ | rawData | 数据 |
+| \ | BarBasicSkinStyle | 皮肤 |
 
 # Class
+
+## DataLoader
+负责读取data.json内的数据部分，处理为rawData移交给ThreadManager。
+
+## LegendDrawer
+负责通过data.json内的部分数据生成图例。
+| Primary API Name | Parameter | Description |
+| --- | --- | --- |
+| loadConfig() | String pattern | **必须**，导入数据并解析 |
+| getLegend() | / | 获得一张BufferImage格式的完整图例 |
+| getBarLegend() | int id | 获得持有某id的，单独bar的图例 |
+
 ## FrameCreator
 基于Reference的HistogramA的单帧生成器
 

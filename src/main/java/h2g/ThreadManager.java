@@ -23,7 +23,7 @@ public class ThreadManager {
     public static Timer timer = null;
     public static ConcurrentLinkedQueue<BufferedImage> buffer = new ConcurrentLinkedQueue<>();
 
-    public static BarDrawingTutor bDTbuffer[];
+    public static BarDrawingTutor[] bDTbuffer;
     public static void bufferBarDrawingTutor() {
         bDTbuffer = new BarDrawingTutor[barDrawingHelper.getTotalFrame()];
         for(int x=0;x<barDrawingHelper.getTotalFrame();++x) {
