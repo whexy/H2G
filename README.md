@@ -11,7 +11,7 @@ This project has nothing left.
 | Contributor | Class Name | Content | DDL | Status |
 | --- | --- | --- | --- | --- |
 | Whexy | N/A | 修改BarFlatUI为Json | N/A | Working |
-| Whexy | N/A | 寻找字体透明化方法 | | Working |
+| Whexy | N/A | 绘制图例 | | Working |
 | Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
 | Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Working |
 
@@ -32,6 +32,9 @@ This project has nothing left.
 基于Reference的HistogramA的单帧生成器
 
 ### Update Log
+#### Version 2 rev.B (2018.12.15)
+1. 接入StackedBar的绘制方法
+
 #### Version 2 rev.A (2018.12.13)
 1. 完成BarDrawingTutor接口的对接
 2. 完成坐标系旋转相关代码
@@ -68,8 +71,8 @@ This project has nothing left.
 | getBarImg() || 获得Bar的BufferedImage，已经预设好皮肤，透明度和长度 |
 其余的方法请查看源码
 
-### InnerClass
-| InnerClass | Description |
+### Related Class
+| Related Class | Description |
 | --- | --- |
 | BarDrawingHelper | 用于生成特定帧的BarDrawingTutor |
 | Interpolator | 生成数值和坐标的插值，调用BarLayoutDesigner生成坐标的插值 |
@@ -77,6 +80,8 @@ This project has nothing left.
 | BarSwaper | 利用非线性函数计算和平移Bar的坐标以实现Bar的交换 |
 | BarSwapStatus | 含两个BarLocation和交换进度的数据结构 |
 | BarLocation | 含Bar ID,所在图层和坐标的数据结构 |
+| StackedBarDrawingHelper | 为StackedBar调整的BarDrawingHelper |
+| StackedBarDrawingTutor | 为StackedBar调整的BarDrawingTutor |
 
 ### InnerClass Primary API Reference
 | Class Name | API Name | Description |
@@ -98,6 +103,10 @@ This project has nothing left.
 
 
 ### Update Log
+#### Version 2 rev.C (2018.12.15)
+1. 完成StackedBar特化BarDrawingHelper和BarDrawingTutor的编写
+2. 修复起始值不为0时出现的Bug
+3. 为Interpolator添加用于辅助绘制StackedBar的开关
 #### Version 2 rev.B (2018.12.14)
 1. 重新编写构造方法，使得调用方法更合理
 #### Version 2 rev.A (2018.12.9)
@@ -126,6 +135,8 @@ This project has nothing left.
 | ImagePlayer() | ConcurrentLinkedQueue<BufferedImage> buffer, int[] bgSize | 传入FIFO缓冲区(线程安全)，初始化播放器 |
 
 ### Update Log
+#### Version 1 rev.C (2018.12.15)
+1. 接入StackedBar的绘制方法
 #### Version 1 rev.B (2018.12.14)
 1. 整理代码
 #### Version 1 rev.A (2018.12.8)
@@ -172,6 +183,9 @@ This project has nothing left.
 3. 可变参数的参数数量不做要求，带动画效果的BarGenerator可以只考虑一个参数的情况
 
 ### Update Log
+#### Version 2 rev.B (2018.12.15)
+1. 修复起始值不为0时出现的Bug
+
 #### Version 2 rev.A (2018.12.12)
 0. 重新修订BarGenerator的设计规范
 1. 增加使用扁平化配色方案的BarFlatUISkin样式
@@ -288,6 +302,8 @@ Data负责数据的调入。
 
 ## CanvaStyle
 ### Update Log
+#### Version 1 rev.D (2018.12.15)
+1. 添加参数
 #### Version 1 rev.C (2018.12.14)
 1. 添加参数
 #### Version 1 rev.B (2018.12.1)

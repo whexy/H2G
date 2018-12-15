@@ -42,11 +42,11 @@ class BarDrawingTutor {
     public void seek() { seek(-1); }
 }
 class BarDrawingHelper {
-    private static Interpolator interpolator;
+    public static Interpolator interpolator;
     public int currentFrame;
-    private double maxValue;
-    private Bar[] getSortedBar(int[] layerOrder, Bar[] bar) {
-        double maxValue = 0;
+    public double maxValue;
+    public Bar[] getSortedBar(int[] layerOrder, Bar[] bar) {
+        double maxValue = -Double.MIN_VALUE;
         int index = 0;
         Bar[] tmp = new Bar[bar.length];
         for(int layer:layerOrder) {

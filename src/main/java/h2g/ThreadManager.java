@@ -27,7 +27,10 @@ public class ThreadManager {
     public static void bufferBarDrawingTutor() {
         bDTbuffer = new BarDrawingTutor[barDrawingHelper.getTotalFrame()];
         for(int x=0;x<barDrawingHelper.getTotalFrame();++x) {
-            bDTbuffer[x] = barDrawingHelper.getTutor(x);
+            if(canvaStyle.isStackedBar && barDrawingHelper instanceof StackedBarDrawingHelper) {
+                bDTbuffer[x] = ((StackedBarDrawingHelper) barDrawingHelper).getStackedTutor(x);
+            }
+            else bDTbuffer[x] = barDrawingHelper.getTutor(x);
         }
     }
     public static BarDrawingTutor fetchBarDrawingTutor(int currentFrame) {
@@ -36,8 +39,9 @@ public class ThreadManager {
         return rel;
     }
 
-    public static void refreshRuler() {
-        histogramData.yValue[1] = barDrawingTutor.getMaxValue()*canvaStyle.expandRatio;
+    public static void refreshRuler(double maxValue) {
+        maxValue += Math.abs(maxValue*canvaStyle.expandRatio);
+        histogramData.yValue[1] = maxValue;
         rulerDrawingTutor.setYmaxValue(histogramData.yValue[1]);
         histogramData.rulerGrade = rulerDrawingTutor.getRulerGrade();
         histogramData.rulerStep = rulerDrawingTutor.getRulerStep();
@@ -55,20 +59,28 @@ public class ThreadManager {
         
         bufferBarDrawingTutor();
 
+        if(!canvaStyle.enableDynamicRuler) {
+            refreshRuler( bDTbuffer[bDTbuffer.length-1].getMaxValue() );
+        }
+
         for(int currentFrame=0;currentFrame<barDrawingHelper.getTotalFrame();++currentFrame) {
-            if(currentFrame>200 && timer==null) {
+            if(currentFrame+1>=canvaStyle.FPD && timer==null) {
                 timer = new Timer();
                 timer.schedule(new ImagePlayer(buffer, canvaStyle.bgSize), 0, 1000/canvaStyle.FPS);
             }
             barDrawingTutor = fetchBarDrawingTutor(currentFrame);
-            refreshRuler();
+            if(canvaStyle.enableDynamicRuler) refreshRuler(barDrawingTutor.getMaxValue());
             frameCreator = new FrameCreator(barDrawingTutor, canvaStyle, histogramData);
             //f.bg.save(x+".jpg");
             //bf[x] = f.bg.getBuffImg();
             buffer.offer( frameCreator.bg.getBuffImg() );
-            long endTime = System.currentTimeMillis();
-            double averageFPS = currentFrame/((endTime-startTime)/1000.0);
-            if(currentFrame%100==0) System.out.printf("Frame:%d Average FPS: %.3f\n",currentFrame,averageFPS);
+             
+            if(currentFrame%canvaStyle.FPD==0) {
+                endTime = System.currentTimeMillis();
+                averageFPS = canvaStyle.FPD/((endTime-startTime)/1000.0);
+                System.out.printf("Frame:%d Average FPS: %.3f\n",currentFrame,averageFPS);
+                startTime = System.currentTimeMillis();
+            }
         }
         
         
