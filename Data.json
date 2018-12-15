@@ -1,53 +1,142 @@
 {
-  "bg": {"size": [1000,1000],"Color": [255,255,255]},
-  "coord": {"size": [800,800],"blankratio":0.5},
-  "rulerxoffset": 20,
-  "keysoffset": 5,
-  "headerxoffset": 0,
-  "headeryoffset": 10,
-  "footerxoffset": 0,
-  "footeryoffset": 30,
-  "rulerFont": {"name": "consolas","form": 0,"size": 12},
-  "keysFont": {"name": "consolas","form": 0,"size": 12},
-  "headerFont": {"name": "calibri","form": 0,"size": 20},
-  "footerFont": {"name": "consolas","form": 1,"size": 16},
-  "isbarfilled": true,
-  "hasbarframe": true,
-  "barfillColor": [0,0,255],
-  "barFrameColor": [255,0,0],
+  "bg": {
+    "size": [1000,1000],
+    "color": [255,255,255]
+  },
+
+  "coord": {
+    "size": [800,800],
+    "rotated": false,
+    "expandRatio": 0.01,
+    "trantransparency": 0.8,
+    "borderColor": [0,255,0],
+    "visiblePattern":10,
+    "yValue":[-0.0001,1.0]
+  },
+
+  "header": {
+    "offset": [0,10],
+    "text": "2013-2018 FORBES CHINA RICHEST TOP 10",
+    "font": {"name": "calibri","form": 0,"size": 20},
+    "color": [100,100,100]
+  },
+
+  "footer": {
+    "offset": [0,30],
+    "text": "TestFoot",
+    "font":{"name": "consolas","form": 1,"size": 16},
+    "color": [100,100,100]
+  },
+
+  "ruler": {
+    "offset": 20,
+    "font": {"name": "consolas","form": 0,"size": 12},
+    "color": [200,200,0],
+    "maxRulerGrade": 10,
+    "enableDynamicRuler": true
+  },
+
+  "key": {
+    "offset": 5,
+    "font": {"name": "consolas","form": 0,"size": 12},
+    "color": [200,200,0],
+    "markColor": [200,200,0]
+  },
+
   "hasBorder": true,
-  "rulermarkColor": [200,200,0],
   "hasRightruler": true,
   "hasHeader": true,
   "hasFooter": true,
-  "barPattern": ["Bar1","Bar2","Bar3","Bar4"],
-  "barWidthRatio": [-1,-1,-1,-1],
-  "barSkin": ["Basic","BarFlatUI","FlatUI1","FlatUI2"],
-  "FPD": 360,
-  "FPS": 60,
-  "maxVelocity": 0.02,
   "isStackedBar": false,
-  "enableSwapping": true,
-  "maxRulerGrade": 10,
-  "enableDynamicRuler": true,
-  "borderColor": [0,255,0],
-  "rulerColor": [200,200,0],
-  "keyColor": [200,200,0],
-  "headerColor": [100,100,100],
-  "footerColor": [0,200,200],
-  "header":"TestTitle",
-  "footer":"TestFoot",
-  "minValue":0.0,
-  "values":[],
-  "visiblePattern":1,
-  "yValue":[0,1.0],
-  "rulerStep":0.0,
-  "rulerGrade":0,
-  "keys":["Father","Mother","Gentle","Man"],
-  "data1":[4,5,9,21,30,70,110,400,400,800,2000,9000],
-  "data2":[3,6,10,23,50,100,200,300,400,1000,3000,8000],
-  "data3":[2,7,11,22,40,90,300,350,500,1200,4000,7000],
-  "data4":[1,8,12,24,60,80,100,120,600,700,5000,6000]
+
+  "interpolator":{
+    "FPD": 360,
+    "FPS": 60,
+    "maxVelocity": 0.02,
+    "sortMethod": "BubbleSort"
+  },
+  
+  "bar": {
+    "trantransparency": [0.5,1],
+    "barPattern": ["1",""],
+    "barWidthRatio": [-1,-1],
+
+    "0": {
+      "key":"Ma Yun",
+      "data":[433,1193.4,1357.8,1873.1,2555.3,2387.4],
+      "skin":"FlatUI1"
+    },
+    "1": {
+      "key":"Ma Huateng",
+      "data":[622,881.3,1096.2,1627.4,2581.8,2263.2],
+      "skin":"FlatUI1"
+    },
+    "2": {
+      "key":"Xu Jiayin",
+      "data":[0,361.1,541.9,650.9,2813.5,2125.2],
+      "skin":"FlatUI1"
+    },
+    "3": {
+      "key":"Wang Jianlin",
+      "data":[826,807.8,1868.5,2192.0,1668.2,1566.3],
+      "skin":"FlatUI1"
+    },
+    "4": {
+      "key":"He Xiangjian",
+      "data":[415,470,679.2,757.2,1237.9,1345.5],
+      "skin":"FlatUI1"
+    },
+    "5": {
+      "key":"Yang Huiyan",
+      "data":[439,0,0,465,1370.3,1179.9],
+      "skin":"FlatUI1"
+    },
+    "6": {
+      "key":"Wang Wei",
+      "data":[0,0,0,1228.9,1476.3,1028.1],
+      "skin":"FlatUI1"
+    },
+    "7": {
+      "key":"Li Yanhong",
+      "data":[0,0,0,1228.9,1476.3,1028.1],
+      "skin":"FlatUI1"
+    },
+    "8": {
+      "key":"Li Shufu",
+      "data":[0,0,0,0,1092.3,979.8],
+      "skin":"FlatUI1"
+    },
+    "9": {
+      "key":"Ding Lei",
+      "data":[0,0,467.1,1009.6,1118.8,931.5],
+      "skin":"FlatUI1"
+    },
+    "10": {
+      "key":"Lei Jun",
+      "data":[0,0,0,0,0,776.3],
+      "skin":"FlatUI1"
+    },
+    "11": {
+      "key":"Huang Zheng",
+      "data":[0,612,753.6,916.6,893.7,772.8],
+      "skin":"FlatUI1"
+    },
+    "12": {
+      "key":"Wang Wenying",
+      "data":[0,318.2,0,604.5,887.1,769.4],
+      "skin":"FlatUI1"
+    },
+    "13": {
+      "key":"Zhang Zhidong",
+      "data":[683,673.2,0,491.6,602.4,586.5],
+      "skin":"FlatUI1"
+    },
+    "14": {
+      "key":"Zong Qinhou",
+      "data":[665,795.6,0,0,0,0],
+      "skin":"FlatUI1"
+    }
+  }
 }
 
 

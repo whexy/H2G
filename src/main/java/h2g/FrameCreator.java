@@ -15,7 +15,6 @@ class FrameCreator {
     int[] bgSize;
     int[] coordSize;
     int[] cBorder = new int[4];
-    double barWidth, barSpace;
     int barNum;
     double rulerStep;
     int rulerGrade;
@@ -32,8 +31,6 @@ class FrameCreator {
         yValue = d.yValue;
         bgSize = c.bgSize;
         coordSize = c.coordSize;
-        barSpace = c.blankRatio;
-        barWidth = 1.0 - barSpace;
         barNum = d.keys.length;
         rulerStep = d.rulerStep;
         rulerGrade = d.rulerGrade;

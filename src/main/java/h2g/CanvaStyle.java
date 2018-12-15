@@ -13,7 +13,6 @@ class CanvaStyle {
     int[] coordSize = {800, 800};
     int xProject = bgSize[0] / 2;
     int yProject = bgSize[1] / 2;
-    double blankRatio = 0.5;
     boolean rotated = true;
     double expandRatio = 0.01;
     double coordTrantransparency = 0.8;
