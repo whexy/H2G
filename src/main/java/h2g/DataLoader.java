@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class DataLoader {
 
     private double[][] rawData;
-    String pattern = "HistogramData.json";
+    String pattern = "Data.json";
 
     public DataLoader(String pattern) {
         this.pattern = pattern;

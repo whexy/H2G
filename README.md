@@ -205,6 +205,38 @@ This project has nothing left.
 
 
 
+## HistogramData & DataLoader & CanvaStyle
+
+数据相关的三个类，分别对应数据样式、数据内容、模板样式。均已通过json实现数据的调配。
+
+### Update Log
+
+#### Version 2 (2018.12.15)
+
+1. 合并所有数据相关的json为 "Data.json" 
+
+2. 对新增的参数增加json支持
+
+#### Version 1 rev.D (2018.12.15)
+
+1. 添加参数
+
+#### Version 1 rev.C (2018.12.14)
+
+1. 添加参数
+
+#### Version 1 rev.B (2018.12.1)
+
+1. 修复颜色自定义无效的bug
+2. 代码架构优化
+3. json模板结构优化，并统一命名规范
+
+#### Version 1 rev.A (2018.11.30)
+
+使用json获取CanvaStyle数据
+
+
+
 ## ConfigLoader
 
 ConfigLoader基于Json库的辅助程序，简化了读取操作
@@ -291,26 +323,3 @@ SigDraw是基于StdDraw魔改的产物
 1. 修改为动态类型，允许实例化
 2. 剥离Event,Swing,双缓冲部分
 3. 修改部分函数和启动流程，添加基础函数
-
-## HistogramData & Data
-
-两个主管数据的结构，面向DDL的产物。
-
-HistogramData负责对数据的样式进行手动适应，现已支持json。
-
-Data负责数据的调入。
-
-## CanvaStyle
-### Update Log
-#### Version 1 rev.D (2018.12.15)
-1. 添加参数
-#### Version 1 rev.C (2018.12.14)
-1. 添加参数
-#### Version 1 rev.B (2018.12.1)
-
-1. 修复颜色自定义无效的bug
-2. 代码架构优化
-3. json模板结构优化，并统一命名规范
-
-#### Version 1 rev.A (2018.11.30)
-使用json获取数据

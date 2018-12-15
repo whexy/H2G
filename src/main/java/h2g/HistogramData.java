@@ -30,6 +30,6 @@ public class HistogramData {
     }
 
     public void loadConfig() throws Exception {
-        loadConfig("HistogramData.json");
+        loadConfig("Data.json");
     }
 }

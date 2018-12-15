@@ -125,7 +125,7 @@ public class ConfigLoader {
         }
         JsonArray jsa = (JsonArray) _jsa;
         String[] a = new String[jsa.size()];
-        for (int i = 0; i < jsa.size(); i++) a[i] = String.valueOf(jsa.getJsonString(i));
+        for (int i = 0; i < jsa.size(); i++) a[i] = jsa.getJsonString(i).getString();
         return a;
     }
 
