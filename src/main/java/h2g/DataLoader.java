@@ -13,15 +13,15 @@ public class DataLoader {
         this.pattern = pattern;
     }
 
-    public DataLoader(){
+    public DataLoader() {
 
     }
 
     double[][] loadConfig() throws Exception {
         ConfigLoader loader = new ConfigLoader(pattern);
         ArrayList<double[]> _Data = new ArrayList<>();
-        for (int x = 1; ; ++x) {
-            double[] _row = loader.getDoubleArray("data" + x);
+        for (int x = 0; ; ++x) {
+            double[] _row = loader.getDoubleArray("bar." + x + ".data");
             if (_row == null) break;
             _Data.add(_row);
         }
