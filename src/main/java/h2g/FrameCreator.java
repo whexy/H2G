@@ -45,7 +45,7 @@ class FrameCreator {
         bg = new SigDraw(bgSize[WIDTH], bgSize[HEIGHT], true);
         coord = new SigDraw(coordSize[WIDTH], coordSize[HEIGHT], false);
 
-        bg.enableTransparent((float)c.bgTrantransparency);
+        bg.enableTransparent((float)c.bgTransparency);
         coord.enableTransparent((float)c.coordTrantransparency);
 
         if(c.rotated) {
@@ -75,7 +75,7 @@ class FrameCreator {
         
         Font font = c.keysFont; // TO BE Customized
         bg.setFont(font);
-        bg.setPenColor(c.keyColor);
+        bg.setPenColor(c.keysColor);
         
         
         b.seek();

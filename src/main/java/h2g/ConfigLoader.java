@@ -30,8 +30,17 @@ public class ConfigLoader {
         Object o = get(path);
         if (o instanceof JsonString) return ((JsonString) o).getString();
         else {
-            new Exception("Failed to cast!");
             return null;
+        }
+    }
+
+    public String setStr(String init, String path) throws Exception {
+        String _O = getStr(path);
+        if (_O == null) {
+            System.out.println(path + " is not in json. Has been set to Default value " + init);
+            return init;
+        } else {
+            return _O;
         }
     }
 
@@ -39,8 +48,17 @@ public class ConfigLoader {
         Object o = get(path);
         if (o instanceof JsonNumber) return ((JsonNumber) o).intValue();
         else {
-            new Exception("Failed to cast!");
-            return 0;
+            return -404;
+        }
+    }
+
+    public int setInt(int init, String path) throws Exception {
+        int _O = getInt(path);
+        if (_O == -404) {
+            System.out.println(path + " is not in json. Has been set to Default value " + init);
+            return init;
+        } else {
+            return _O;
         }
     }
 
@@ -48,8 +66,17 @@ public class ConfigLoader {
         Object o = get(path);
         if (o instanceof JsonNumber) return ((JsonNumber) o).doubleValue();
         else {
-            new Exception("Failed to cast!");
-            return 0;
+            return -404;
+        }
+    }
+
+    public double setDouble(double init, String path) throws Exception {
+        double _O = getDouble(path);
+        if (_O == -404) {
+            System.out.println(path + " is not in json. Has been set to Default value " + init);
+            return init;
+        } else {
+            return _O;
         }
     }
 
@@ -62,13 +89,16 @@ public class ConfigLoader {
                 case FALSE:
                     return false;
                 default:
-                    new Exception("Failed to cast!");
                     return false;
             }
         } else {
-            new Exception("Failed to cast!");
             return false;
         }
+    }
+
+    public boolean setBool(boolean init, String path) throws Exception {
+        boolean _O = getBool(path);
+        return (init || _O);
     }
 
     public ConfigLoader(String fileName) throws IOException {
@@ -88,22 +118,41 @@ public class ConfigLoader {
 
     Color getColor(String pattern) throws Exception {
         if (get(pattern) == null) return null;
-        return new Color(getInt(pattern+".0"),getInt(pattern+".1"),getInt(pattern+".2"));
+        return new Color(getInt(pattern + ".0"), getInt(pattern + ".1"), getInt(pattern + ".2"));
+    }
+    
+    Color setColor(Color init,String pattern) throws Exception {
+        Color _O = getColor(pattern);
+        if (_O == null) {
+            return init;
+        } else {
+            return _O;
+        }
     }
 
+    @Deprecated
     Color getTColor(String pattern) throws Exception {
         if (get(pattern) == null) return null;
         return new Color(getInt(pattern + ".0"), getInt(pattern + ".1"), getInt(pattern + ".2"), getInt(pattern + ".3"));
     }
 
     Font getFont(String pattern) throws Exception {
-        String rulerFontName = getStr(pattern+".name");
+        String rulerFontName = getStr(pattern + ".name");
         if (null == rulerFontName) return null;
-        int rulerFontForm = getInt(pattern+".form");
+        int rulerFontForm = getInt(pattern + ".form");
         if (rulerFontForm == 0) return null;
-        int rulerFontSize = getInt(pattern+".size");
+        int rulerFontSize = getInt(pattern + ".size");
         if (rulerFontSize == 0) return null;
         return new Font(rulerFontName, rulerFontForm, rulerFontSize);
+    }
+
+    Font setFont(Font init, String pattern) throws Exception {
+        Font _O = getFont(pattern);
+        if (_O == null) {
+            return init;
+        } else {
+            return _O;
+        }
     }
 
     double[] getDoubleArray(String pattern) throws Exception {
@@ -118,6 +167,15 @@ public class ConfigLoader {
         return a;
     }
 
+    double[] setDoubleArray(double[] init,String pattern) throws Exception {
+        double[] _O = getDoubleArray(pattern);
+        if (_O == null) {
+            return init;
+        } else {
+            return _O;
+        }
+    }
+
     String[] getStringArray(String pattern) throws Exception {
         Object _jsa = get(pattern);
         if (_jsa == null) {
@@ -129,4 +187,35 @@ public class ConfigLoader {
         return a;
     }
 
+    String[] setStringArray(String[] init,String pattern) throws Exception {
+        String[] _O = getStringArray(pattern);
+        if (_O == null) {
+            return init;
+        } else {
+            return _O;
+        }
+    }
+
+    int[] getIntegerArray(String pattern) throws Exception {
+        Object _jsa = get(pattern);
+        if (_jsa == null) {
+            return null;
+        }
+        JsonArray jsa = (JsonArray) _jsa;
+        int[] a = new int[jsa.size()];
+        for (int i = 0; i < jsa.size(); i++) {
+            a[i] = jsa.getJsonNumber(i).intValue();
+        }
+        return a;
+    }
+
+    int[] setIntegerArray(int[] init,String pattern) throws Exception {
+        int[] _O = getIntegerArray(pattern);
+        if (_O == null) {
+            return init;
+        } else {
+            return _O;
+        }
+    }
+    
 }

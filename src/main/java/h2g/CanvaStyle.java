@@ -2,12 +2,13 @@ package h2g;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 
 class CanvaStyle {
     // Background
     int[] bgSize = {1000, 1000};
     Color bgColor = Color.WHITE;
-    double bgTrantransparency = 1;
+    double bgTransparency = 1;
 
     // Coordinate
     int[] coordSize = {800, 800};
@@ -19,8 +20,8 @@ class CanvaStyle {
 
     // Bar
     String[] barPattern = {"Bar1", ""};
-    double[] barWidthRatio = {0.5,-1};
-    String[] barSkin = {"Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1","Basic","Basic1"};
+    double[] barWidthRatio = {0.5, -1};
+    String[] barSkin = {"Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1", "Basic", "Basic1"};
     int FPD = 420;
     int FPS = 60;
     double maxVelocity = 0.1;
@@ -61,98 +62,92 @@ class CanvaStyle {
     Color barFrameColor = Color.BLACK;*/
     Color borderColor = Color.BLACK;
     Color rulerColor = Color.BLACK;
-    /*    Color rulerMarkColor = Color.BLACK;*/
-    Color keyColor = Color.BLACK;
+    //Color rulerMarkColor = Color.BLACK;
+    Color keysColor = Color.BLACK;
     Color headerColor = Color.BLACK;
     Color footerColor = Color.BLACK;
-    
+    ConfigLoader loader;
+
     /**
      * Load Config from json
      *
      * @param path the json file path
      */
     public void loadConfig(String path) throws Exception {
-        ConfigLoader loader = new ConfigLoader(path);
+        loader = new ConfigLoader(path);
 
-        // Background
-        Object bgSizes = loader.get("bg.size");
-        if (bgSizes instanceof Integer) {
-            bgSize = (int[]) bgSizes;
-        }
+        // Background,bg
+        bgSize = loader.setIntegerArray(bgSize, "bg.size");
+        bgColor = loader.setColor(bgColor, "bg.Color");
+        bgTransparency = loader.setDouble(bgTransparency, "bg.transparency");
 
-        bgColor = loader.getColor("bg.Color");
-
-        //Coordinate
-
-        Object _coordSize = loader.get("coord.size");
-        if (_coordSize instanceof Integer) {
-            coordSize = (int[]) _coordSize;
-        }
+        //Coordinate,coord
+        coordSize = loader.setIntegerArray(coordSize, "coord.size");
+        rotated = loader.setBool(rotated, "coord.rotated");
+        expandRatio = loader.setDouble(expandRatio, "coord.expandRatio");
+        coordTrantransparency = loader.setDouble(coordTrantransparency, "coord.transparency");
+        borderColor = loader.setColor(borderColor, "coord.borderColor");
         xProject = bgSize[0] / 2;
         yProject = bgSize[1] / 2;
-        double _blankRatio = loader.getDouble("coord.blankratio");
-        if (_blankRatio != 0) {
-            blankRatio = _blankRatio;
-        }
-        /*rotate = loader.getBool("rotate");*/
 
-        // Layout
-        int _rulerXoffset = loader.getInt("rulerxoffset");
-        if (_rulerXoffset != 0) rulerXoffset = _rulerXoffset;
-        int _keysYoffset = loader.getInt("keysyoffset");
-        if (_keysYoffset != 0) keysYoffset = _keysYoffset;
-        int _headerXoffset = loader.getInt("headerxoffset");
-        if (_headerXoffset != 0) headerXoffset = _headerXoffset;
-        int _headerYoffset = loader.getInt("headeryoffset");
-        if (_headerYoffset != 0) headerYoffset = _headerYoffset;
-        int _footerXoffset = loader.getInt("footerxoffset");
-        if (_footerXoffset != 0) footerXoffset = _footerXoffset;
-        int _footerYoffset = loader.getInt("footeryoffset");
-        if (_footerYoffset != 0) footerYoffset = _footerYoffset;
+        // Header
+        headerXoffset = loader.setInt(headerXoffset, "header.offset.0");
+        headerYoffset = loader.setInt(headerYoffset, "header.offset.1");
+        headerFont = loader.setFont(headerFont, "header.font");
+        headerColor = loader.setColor(headerColor, "header.color");
 
-        // Fonts
-        Font _rulerFont = loader.getFont("rulerFont");
-        if (_rulerFont != null) rulerFont = _rulerFont;
-        Font _keysFont = loader.getFont("keysFont");
-        if (_keysFont != null) keysFont = _keysFont;
-        Font _headerFont = loader.getFont("headerFont");
-        if (_headerFont != null) headerFont = _headerFont;
-        Font _footerFont = loader.getFont("footerFont");
-        if (_footerFont != null) footerFont = _footerFont;
-        // Switch
-        /*isBarFilled = loader.getBool("isBarFilled");
-        hasBarFrame = loader.getBool("hasBarFrame");*/
-        hasBorder = loader.getBool("hasBorder");
-        hasRuler = loader.getBool("hasRuler");
-        hasRightRuler = loader.getBool("hasRightRuler");
-        hasHeader = loader.getBool("hasHeader");
-        hasFooter = loader.getBool("hasFooter");
+        // Footer
+        footerXoffset = loader.setInt(footerXoffset, "footer.offset.0");
+        footerYoffset = loader.setInt(footerYoffset, "footer.offset.1");
+        footerFont = loader.setFont(footerFont, "footer.font");
+        footerColor = loader.setColor(footerColor, "footer.color");
 
-        //Bar
-        barPattern = loader.getStringArray("barPattern");
-        barWidthRatio = loader.getDoubleArray("barWidthRatio");
-        barSkin = loader.getStringArray("barSkin");
-        FPD = loader.getInt("FPD");
-        FPS = loader.getInt("FPS");
-        maxVelocity = loader.getDouble("maxVelocity");
-        isStackedBar = loader.getBool("isStackedBar");
-        enableSwapping = loader.getBool("enableSwapping");
-        maxRulerGrade = loader.getInt("maxRulerGrade");
-        enableDynamicRuler = loader.getBool("enableDynamicRuler");
+        // Ruler
+        rulerXoffset = loader.setInt(rulerXoffset, "ruler.offset");
+        rulerFont = loader.setFont(rulerFont, "ruler.font");
+        rulerColor = loader.setColor(rulerColor, "ruler.color");
+        maxRulerGrade = loader.setInt(maxRulerGrade, "ruler.maxRulerGrade");
+        enableDynamicRuler = loader.setBool(enableDynamicRuler, "ruler.enableDynamicRuler");
 
-        // Color
-        Color _borderColor = loader.getColor("borderColor");
-        if (_borderColor != null) borderColor = _borderColor;
-        Color _rulerColor = loader.getColor("rulerColor");
-        if (_rulerColor != null) rulerColor = _rulerColor;
-        Color _headerColor = loader.getColor("headerColor");
-        if (_headerColor != null) headerColor = _headerColor;
-        Color _footerColor = loader.getColor("footerColor");
-        if (_footerColor != null) footerColor = _footerColor;
-        Color _keyColor = loader.getColor("keyColor");
-        if (_keyColor != null) keyColor = _keyColor;
+        //Key
+        keysYoffset = loader.setInt(keysYoffset, "key.offset");
+        keysFont = loader.setFont(keysFont, "key.font");
+        keysColor = loader.setColor(keysColor, "key.color");
+        /*there should be a markColor, but it is not in key nor in the program*/
+
+        // interpolator
+        FPS = loader.setInt(FPS, "interpolator.FPS");
+        FPD = loader.setInt(FPD, "interpolator.FPD");
+        maxVelocity = loader.setDouble(maxVelocity, "interpolator.maxVelocity");
+        sortMethod = loader.setStr(sortMethod, "interpolator.sortMethod");
+
+        //bar
+        barPattern = loader.setStringArray(barPattern, "bar.barPattern");
+        barWidthRatio = loader.setDoubleArray(barWidthRatio, "bar.barWidthRatio");
+        barSkin = getBarSkin();
+        
+        //Basic_Config
+        isStackedBar = loader.setBool(isStackedBar, "isStackedBar");
+        hasRightRuler = loader.setBool(hasRightRuler, "hasRightRuler");
+        hasBorder = loader.setBool(hasBorder, "hasBorder");
+        hasHeader = loader.setBool(hasHeader, "hasHeader");
+        hasFooter = loader.setBool(hasFooter, "hasFooter");
     }
+
     public void loadConfig() throws Exception {
         loadConfig("Data.json");
+    }
+
+    private String[] getBarSkin() throws Exception {
+        ArrayList<String> barSkinList = new ArrayList<>();
+        for (int i = 0; ; i++) {
+            if (loader.get("bar." + i) == null) break;
+            barSkinList.add(loader.getStr("bar." + i + ".skin"));
+        }
+        String[] _O = new String[barSkinList.size()];
+        for (int i = 0; i < barSkinList.size(); i++) {
+            _O[i] = barSkinList.get(i);
+        }
+        return _O;
     }
 }

@@ -1,24 +1,34 @@
 # Project H2G
+
 This project has nothing right. 
 This project has nothing left. 
 
 ### Lock 
-| Class Name | Description | Status |
+| Name | Description | Status |
 | --- | --- | --- |
-| BarDrawingTutor | 这里面的代码已经快要成为意大利面了 | Locked |
+| BarDrawingTutor.java | 这里面的代码已经快要成为意大利面了 | Locked |
+| Data.json | 所有数据json全部按照Data.json书写，不再修改 | Locked |
 
 ### TODO LIST
-| Contributor | Class Name | Content | DDL | Status |
-| --- | --- | --- | --- | --- |
-| Whexy | N/A | 修改BarFlatUI为Json | N/A | Working |
-| Whexy | N/A | 绘制图例 | | Working |
-| Linyun | N/A | 搜集进度条素材，思考切割方式，编写一个继承BarGenerator的类，生成进度条图像 | N/A | Working |
-| Linyun | N/A | 编写新的CanvasStyle的Json，尝试美化界面 | N/A | Working |
+
+项目尾期，按照重要性和难易度简单区分扫尾工作：
+
+| 工作内容                                                     | 重要性 | 复杂度 |
+| ------------------------------------------------------------ | ------ | ------ |
+|显示图例，增加显示图例的开关和图例显示的的坐标、缩放因数，并完成json适配|SS|中|
+| 制作barUI的json，并且在DynamicLoader中加入对应的BarBasicSkinStyle类 | S      | 低     |
+| 寻找数据，制作data.json                                      | S      | 低     |
+| 对于TaskA,TaskB,TaskC三个任务最终确定三组json                | S      | 低     |
+| 准备答辩PPT                                                  | A      | 中     |
+| 非纯色高级skin的代码编写                                     | B      | 中高  |
+
 
 ### Milestone
-| Contributor | Class Name | Content | DoneDate | Status |
-| --- | --- | --- | --- | --- |
-| All members | N/A | 举办第一次组会 | 12.7 | Done |
+
+| Contributor | Content | DoneDate |
+| --- | --- | --- |
+| All members | 举办第一次组会 | 12.7 |
+| All members | 举办第二次组会 | 12.14 |
 
 # Data Structure
 | Path | Class Name | Description |
@@ -224,6 +234,10 @@ This project has nothing left.
 
 ### Update Log
 
+#### Version 3 (2018.12.16)
+
+json结构重大修订，并适配了新的json结构。
+
 #### Version 2 (2018.12.15)
 
 1. 合并所有数据相关的json为 "Data.json" 
@@ -256,7 +270,11 @@ ConfigLoader基于Json库的辅助程序，简化了读取操作
 
 ### API Reference
 1. ConfigLoader(String fileName) 构造器
-2. get...(String path) 读取指定位置的值
+2. get...(String path) 读取指定位置的值 
+   1. 基础类均可直接读取
+   2. 复杂类的拓展模板模仿getDoubleArray()函数
+   3. getTColor()已过时
+3. set...(Object init, String path) 读取指定位置的值，若json表中不存在这个值，将会返回指定的init，同时在控制台输出json缺省提醒。
 
 ### Syntax of path
 | 符号 | 含义 | 适用类 |
@@ -265,16 +283,13 @@ ConfigLoader基于Json库的辅助程序，简化了读取操作
 | Digit | List的下标 | JsonArray |
 | Token | Map的Key | JsonObject |
 
-#### Example
-ConfigLoader cL = new ConfigLoader("facebook.json"); 
-
-String str = cL.getStr("data.1.message");  
-
-Color color = cL.getColor("bar.color1");
-
 ### Update Log
 
-#### Version 2 (2018.12.15)
+#### Version 10 (2018.12.16)
+
+增加了对默认值的支持。从此版本开始，项目中所有json处理都由get...(String pattern)更改为set..(Object init, String pattern)。
+
+#### Version 1 rev.C (2018.12.15)
 
 增加了获取两种基本类的方法
 
