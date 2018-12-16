@@ -10,7 +10,6 @@ This project has nothing left.
 | Data.json | 所有数据json全部按照Data.json书写，不再修改 | Locked |
 
 ### TODO LIST
-
 项目尾期，按照重要性和难易度简单区分扫尾工作：
 
 | 工作内容                                                     | 重要性 | 复杂度 |
@@ -31,6 +30,7 @@ This project has nothing left.
 | All members | 举办第二次组会 | 12.14 |
 
 # Data Structure
+
 | Path | Class Name | Description |
 | --- | --- | --- |
 | \ | HistogramData | 数据模板 |
@@ -45,6 +45,7 @@ This project has nothing left.
 
 ## LegendDrawer
 负责通过data.json内的部分数据生成图例。
+
 | Primary API Name | Parameter | Description |
 | --- | --- | --- |
 | loadConfig() | String pattern | **必须**，导入数据并解析 |
@@ -57,19 +58,17 @@ This project has nothing left.
 ### Update Log
 #### Version 2 rev.B (2018.12.15)
 1. 接入StackedBar的绘制方法
-
 #### Version 2 rev.A (2018.12.13)
 1. 完成BarDrawingTutor接口的对接
 2. 完成坐标系旋转相关代码
-
 #### Version 1 rev.B+ (2018.12.1)
-
 #### Version 1 rev.B (2018.11.30)
 修复Bug
 #### Version 1 rev.A (2018.11.29)
 
 ## RulerDrawingTutor
 自动计算rulerGrade和rulerStep以指导FrameCreator绘制Ruler
+
 | Primary API Name | Parameter | Description |
 | --- | --- | --- |
 | RulerDrawingTutor() | CanvaStyle canvaStyle, HistogramData histogramData | 实例化，传入比例尺和最大刻度数量 |
@@ -86,6 +85,7 @@ This project has nothing left.
 指导FrameCreator绘制Bar
 
 ### Primary API Reference 
+
 | Primary API Name | Parameter | Description |
 | --- | --- | --- |
 | hasNext() || 判断当前帧是否还有下一个需要绘制的Bar |
@@ -95,6 +95,7 @@ This project has nothing left.
 其余的方法请查看源码
 
 ### Related Class
+
 | Related Class | Description |
 | --- | --- |
 | BarDrawingHelper | 用于生成特定帧的BarDrawingTutor |
@@ -107,6 +108,7 @@ This project has nothing left.
 | StackedBarDrawingTutor | 为StackedBar调整的BarDrawingTutor |
 
 ### InnerClass Primary API Reference
+
 | Class Name | API Name | Description |
 | --- | --- | --- |
 | BarDrawingHelper | BarDrawingHelper | 初始化 |

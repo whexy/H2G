@@ -54,7 +54,7 @@
     "FPD": 360,
     "FPS": 60,
     "maxVelocity": 0.2,
-    "sortMethod": "SelectionSort"
+    "sortMethod": "BubbleSort"
   },
   
   "bar": {
