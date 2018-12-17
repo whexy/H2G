@@ -2,29 +2,35 @@ package h2g;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class LegendDrawer {
 
     //TODO: JSON FIXING
-    final static int X = 0;
-    final static int Y = 1;
+    private final static int X = 0;
+    private final static int Y = 1;
     private String[] keys;
     private String[] skin;
     int length;
-    private int[] LegendIconSize = new int[]{500, 500};
-    private double[] LegendIconScale = new double[]{0, 500};
+    private int[] LegendIconSize = new int[]{50, 50};
+    private double[] LegendIconScale = new double[]{0, 50};
     private int maxLegendBarWidth = 0;
-    private Font font = new Font("Microsoft YaHei Light", Font.PLAIN, 500);
-    private int Height = 600;
+    private Font font = new Font("Microsoft YaHei Light", Font.PLAIN, 50);
+    private int Height = 60;
+    private ConfigLoader loader;
+    public double LegendX = 0, LegendY = 0;
 
     public void loadConfig(String pattern) throws Exception {
-        ConfigLoader loader = new ConfigLoader(pattern);
-        keys = loader.getStringArray("keys");
-        skin = loader.getStringArray("barSkin");
-        if (keys.length != skin.length) {
-            throw new Exception("Keys and Skins have different length!");
-        }
+        loader = new ConfigLoader(pattern);
+        keys = getKeys();
+        skin = getSkins();
         length = keys.length;
+        LegendIconSize = loader.setIntegerArray(LegendIconSize, "legend.icons");
+        LegendIconScale[1] = LegendIconSize[1];
+        font = loader.setFont(font, "legend.font");
+        Height = loader.setInt(Height, "legend.height");
+        LegendX = loader.setDouble(LegendX, "legend.x");
+        LegendY = loader.setDouble(LegendY, "legend.y");
         for (int i = 0; i < length; i++) {
             maxLegendBarWidth = Math.max(keys[i].length() * font.getSize(), maxLegendBarWidth);
         }
@@ -33,7 +39,7 @@ public class LegendDrawer {
     public BufferedImage getBarLegend(int id) {
         BarBasicSkin barGenerator = (BarBasicSkin) DynamicLoader.get(skin[id], LegendIconSize, LegendIconScale, false);
         assert barGenerator != null;
-        BufferedImage squareBlock = barGenerator.getBarChart(0, "", LegendIconSize[Y]);
+        BufferedImage squareBlock = barGenerator.getBarChart(0, "", Height);
         int textWidth = maxLegendBarWidth;
         int textHeight = font.getSize();
         SigDraw Legend = new SigDraw(LegendIconSize[X] + textWidth, (int) (textHeight * 1.25), true);
@@ -52,6 +58,32 @@ public class LegendDrawer {
             Legend.picture(Width * (i + 1) - Width / 2.0, element.getHeight() / 2.0, element);
         }
         return Legend.getScaledImage(1, Scalr.Method.ULTRA_QUALITY);
+    }
+
+    private String[] getKeys() throws Exception {
+        ArrayList<String> keyList = new ArrayList<>();
+        for (int i = 0; ; i++) {
+            if (loader.get("bar." + i) == null) break;
+            keyList.add(loader.getStr("bar." + i + ".key"));
+        }
+        String[] _O = new String[keyList.size()];
+        for (int i = 0; i < keyList.size(); i++) {
+            _O[i] = keyList.get(i);
+        }
+        return _O;
+    }
+
+    private String[] getSkins() throws Exception {
+        ArrayList<String> skinList = new ArrayList<>();
+        for (int i = 0; ; i++) {
+            if (loader.get("bar." + i) == null) break;
+            skinList.add(loader.getStr("bar." + i + ".skin"));
+        }
+        String[] _O = new String[skinList.size()];
+        for (int i = 0; i < skinList.size(); i++) {
+            _O[i] = skinList.get(i);
+        }
+        return _O;
     }
 
     public static void main(String[] args) throws Exception {
