@@ -22,6 +22,7 @@ public class ThreadManager {
     public static BarDrawingTutor barDrawingTutor;
     public static Timer timer = null;
     public static ConcurrentLinkedQueue<BufferedImage> buffer = new ConcurrentLinkedQueue<>();
+    public static LegendDrawer legendDrawer;
 
     public static BarDrawingTutor[] bDTbuffer;
     public static void bufferBarDrawingTutor() {
@@ -48,13 +49,16 @@ public class ThreadManager {
     }
     public static void main(String[] args) throws Exception {
         DataLoader dataLoader = new DataLoader();
-        double[][] rawData = dataLoader.loadConfig();
+        double[][] rawData = dataLoader.loadRawData();
         canvaStyle = new CanvaStyle();
         canvaStyle.loadConfig();
         histogramData = new HistogramData();
         histogramData.loadConfig();
+        histogramData.keys = dataLoader.loadKeys();
         rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
         barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
+        legendDrawer = new LegendDrawer(canvaStyle, histogramData);
+        canvaStyle.legendImg = legendDrawer.getLegend();
         long startTime = System.currentTimeMillis();
         long endTime;
         double averageFPS;

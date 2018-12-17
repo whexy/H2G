@@ -17,11 +17,12 @@ public class HistogramData {
 
     public void loadConfig(String pattern) throws Exception {
         loader = new ConfigLoader(pattern);
+        DataLoader dataLoader = new DataLoader(pattern);
         header = loader.setStr(header, "header.text");
         footer = loader.setStr(footer, "footer.text");
         visiblePattern = loader.setInt(visiblePattern, "coord.visiblePattern");
         yValue = loader.setDoubleArray(yValue, "coord.yValue");
-        keys = getKeys();
+        keys = dataLoader.loadKeys();
         /* TODO: WHAT THE FUCK IS THIS: */
         rulerStep = loader.setDouble(rulerGrade, "rulerStep");
         rulerGrade = loader.setInt(rulerGrade, "rulerGrade");
@@ -29,18 +30,5 @@ public class HistogramData {
 
     public void loadConfig() throws Exception {
         loadConfig("Data.json");
-    }
-
-    private String[] getKeys() throws Exception {
-        ArrayList<String> keyList = new ArrayList<>();
-        for (int i = 0; ; i++) {
-            if (loader.get("bar." + i) == null) break;
-            keyList.add(loader.getStr("bar." + i + ".key"));
-        }
-        String[] _O = new String[keyList.size()];
-        for (int i = 0; i < keyList.size(); i++) {
-            _O[i] = keyList.get(i);
-        }
-        return _O;
     }
 }

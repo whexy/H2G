@@ -16,7 +16,7 @@ public class DataLoader {
         loader = new ConfigLoader(pattern);
     }
 
-    double[][] loadConfig() throws Exception {
+    double[][] loadRawData() throws Exception {
         ArrayList<double[]> _Data = new ArrayList<>();
         for (int x = 0; ; ++x) {
             double[] _row = loader.getDoubleArray("bar." + x + ".data");
@@ -28,5 +28,23 @@ public class DataLoader {
             DATA[i] = _Data.get(i);
         }
         return DATA;
+    }
+    String[] loadKeys() throws Exception {
+        ArrayList<String> data = new ArrayList<>();
+        for (int x = 0; ; ++x) {
+            String row = loader.getStr("bar." + x + ".key");
+            if (row == null) break;
+            data.add(row);
+        }
+        return data.toArray(new String[ data.size() ]);
+    }
+    String[] loadSkins() throws Exception {
+        ArrayList<String> data = new ArrayList<>();
+        for (int x = 0; ; ++x) {
+            String row = loader.getStr("bar." + x + ".skin");
+            if (row == null) break;
+            data.add(row);
+        }
+        return data.toArray(new String[ data.size() ]);
     }
 }

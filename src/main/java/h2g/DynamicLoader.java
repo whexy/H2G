@@ -1,56 +1,34 @@
 package h2g;
 
+import java.util.HashMap;
+
 public class DynamicLoader {
     //TODO: MODIFY THE FUNCTION AND DIFFERENT STYLES
-    private static BarBasicSkinStyle BarFlatUI = new BarBasicSkinStyle();
-
+    private static HashMap<String,BarBasicSkinStyle> pool = new HashMap<>();
+    private static String[] resourceInPool = new String[]{
+        "FlatUI0","FlatUI1","FlatUI2","FlatUI3","FlatUI4",
+        "FlatUI5","FlatUI6","FlatUI7","FlatUI8","FlatUI9",
+        "FlatUI10","FlatUI11","FlatUI12","FlatUI13","FlatUI14",
+        "FlatUI15","FlatUI16","FlatUI17","FlatUI18","FlatUI19",
+        "BarFlatUI"
+    };
     static {
-        try {
-            BarFlatUI.loadConfig("BarFlatUI.json");
-        } catch (Exception e) {
-            System.out.println(e);
+        BarBasicSkinStyle configure;
+        for(String name:resourceInPool) {
+            try {
+                configure = new BarBasicSkinStyle();
+                configure.loadConfig(name+".json");
+                pool.put(name, configure);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
-
-    private static BarBasicSkinStyle FlatUI0 = new BarBasicSkinStyle();
-
-    static {
-        try {
-            FlatUI0.loadConfig("FlatUI0.json");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    private static BarBasicSkinStyle FlatUI1 = new BarBasicSkinStyle();
-
-    static {
-        try {
-            FlatUI1.loadConfig("FlatUI1.json");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    private static BarBasicSkinStyle FlatUI = new BarBasicSkinStyle();
-
-    public static void FlatUILoad(String pattern) {
-        try {
-            FlatUI.loadConfig(pattern + ".json");
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-
     public static BarGenerator get(String skinName, int[] barSize, double[] scale, boolean rotated) {
-        if ("Basic".equals(skinName)) return new BarBasicSkin(barSize, scale, rotated);
-        //if ("BarFlatUI".equals(skinName)) return new BarBasicSkin(BarFlatUI, barSize, scale, rotated);
-        //if ("FlatUI1".equals(skinName)) return new BarBasicSkin(FlatUI1, barSize, scale, rotated);
-        if (skinName.contains("FlatUI")) {
-            FlatUILoad(skinName);
-            return new BarBasicSkin(FlatUI, barSize, scale, rotated);
+        if (pool.containsKey(skinName)) {
+            return new BarBasicSkin(pool.get(skinName), barSize, scale, rotated);
         }
+        if ("Basic".equals(skinName)) return new BarBasicSkin(barSize, scale, rotated);
         return null;
     }
 }

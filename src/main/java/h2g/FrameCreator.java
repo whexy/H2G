@@ -70,6 +70,12 @@ class FrameCreator {
             plotHeader();
         if (c.hasFooter)
             plotFooter();
+        if (c.legendImg != null) {
+            plotLegend();
+        }
+    }
+    private void plotLegend() {
+        bg.picture(c.LegendX, c.LegendY, c.legendImg);
     }
     private void plotKeys() {
         
@@ -125,8 +131,19 @@ class FrameCreator {
         bg.setFont(font);
         bg.setPenColor(c.rulerColor);
         if(c.rotated) {
-            final int y0 = cBorder[UP] - 5, y1 = cBorder[UP] + 5;
-            final int y2 = cBorder[DOWN] - 5, y3 = cBorder[DOWN] + 5;
+            int y0,y1,y2,y3;
+            if(c.extendScaleLine) {
+                y0 = cBorder[DOWN];
+                y1 = cBorder[UP] + 5;
+                y2 = cBorder[DOWN] - 5;
+                y3 = cBorder[UP];
+            } else {
+                y0 = cBorder[UP] - 5;
+                y1 = cBorder[UP] + 5;
+                y2 = cBorder[DOWN] - 5;
+                y3 = cBorder[DOWN] + 5;
+            }
+            
             double[] rawX = new double[rulerGrade + 1];
             String[] markL = new String[rulerGrade + 1];
             String[] markR = new String[rulerGrade + 1];
@@ -148,8 +165,19 @@ class FrameCreator {
                 if (c.hasRightRuler) bg.text(x, yd, String.format("%-" + len + "s", markR[i]));
             }
         } else {
-            final int x0 = cBorder[LEFT] - 5, x1 = cBorder[LEFT] + 5;
-            final int x2 = cBorder[RIGHT] - 5, x3 = cBorder[RIGHT] + 5;
+            int x0,x1,x2,x3;
+            if(c.extendScaleLine) {
+                x0 = cBorder[LEFT] - 5;
+                x1 = cBorder[RIGHT];
+                x2 = cBorder[LEFT];
+                x3 = cBorder[RIGHT] + 5;
+            } else {
+                x0 = cBorder[LEFT] - 5;
+                x1 = cBorder[LEFT] + 5;
+                x2 = cBorder[RIGHT] - 5;
+                x3 = cBorder[RIGHT] + 5;
+            }
+            
             double[] rawY = new double[rulerGrade + 1];
             String[] markL = new String[rulerGrade + 1];
             String[] markR = new String[rulerGrade + 1];

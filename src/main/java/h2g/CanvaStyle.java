@@ -2,6 +2,7 @@ package h2g;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 class CanvaStyle {
@@ -31,6 +32,8 @@ class CanvaStyle {
     int maxRulerGrade = 10;
     boolean enableDynamicRuler = true;
     String sortMethod = "BubbleSort"; // Availble method: BubbleSort, SelectionSort
+    boolean extendScaleLine = true;
+    BufferedImage legendImg;
 
     // Layout
     int rulerXoffset = 20;
@@ -40,6 +43,16 @@ class CanvaStyle {
     int footerXoffset = 0;
     int footerYoffset = 50;
 
+    // Legend
+    int[] iconSize = new int[]{50, 50};
+    double[] iconScale = new double[]{0, 50};
+    Font legendFont = new Font("Microsoft YaHei Light", Font.PLAIN, 50);
+    Color legendColor = Color.BLACK;
+    int legendHeight = 60;
+    double LegendX = 500, LegendY = 50;
+    int legendColumnNum = 6;
+    int legendRowNum = 3;
+    double legendScaleFactor = 0.22;
 
     // Fonts
     Font rulerFont = new Font("consolas", Font.PLAIN, 12);
@@ -75,6 +88,7 @@ class CanvaStyle {
      */
     public void loadConfig(String path) throws Exception {
         loader = new ConfigLoader(path);
+        DataLoader dataLoader = new DataLoader();
 
         // Background,bg
         bgSize = loader.setIntegerArray(bgSize, "bg.size");
@@ -108,12 +122,21 @@ class CanvaStyle {
         rulerColor = loader.setColor(rulerColor, "ruler.color");
         maxRulerGrade = loader.setInt(maxRulerGrade, "ruler.maxRulerGrade");
         enableDynamicRuler = loader.setBool(enableDynamicRuler, "ruler.enableDynamicRuler");
+        extendScaleLine = loader.setBool(extendScaleLine, "ruler.extendScaleLine");
+        LegendX = loader.setDouble(LegendX, "legend.x");
+        LegendY = loader.setDouble(LegendY, "legend.y");
 
         //Key
         keysYoffset = loader.setInt(keysYoffset, "key.offset");
         keysFont = loader.setFont(keysFont, "key.font");
         keysColor = loader.setColor(keysColor, "key.color");
         /*there should be a markColor, but it is not in key nor in the program*/
+
+        // Legend
+        iconSize = loader.setIntegerArray(iconSize, "legend.icons");
+        iconScale[1] = iconSize[1];
+        legendFont = loader.setFont(legendFont, "legend.font");
+        legendHeight = loader.setInt(legendHeight, "legend.height");
 
         // interpolator
         FPS = loader.setInt(FPS, "interpolator.FPS");
@@ -124,7 +147,7 @@ class CanvaStyle {
         //bar
         barPattern = loader.setStringArray(barPattern, "bar.barPattern");
         barWidthRatio = loader.setDoubleArray(barWidthRatio, "bar.barWidthRatio");
-        barSkin = getBarSkin();
+        barSkin = dataLoader.loadSkins();
         
         //Basic_Config
         isStackedBar = loader.setBool(isStackedBar, "isStackedBar");
@@ -136,18 +159,5 @@ class CanvaStyle {
 
     public void loadConfig() throws Exception {
         loadConfig("Data.json");
-    }
-
-    private String[] getBarSkin() throws Exception {
-        ArrayList<String> barSkinList = new ArrayList<>();
-        for (int i = 0; ; i++) {
-            if (loader.get("bar." + i) == null) break;
-            barSkinList.add(loader.getStr("bar." + i + ".skin"));
-        }
-        String[] _O = new String[barSkinList.size()];
-        for (int i = 0; i < barSkinList.size(); i++) {
-            _O[i] = barSkinList.get(i);
-        }
-        return _O;
     }
 }

@@ -34,7 +34,8 @@
     "font": {"name": "consolas","form": 0,"size": 12},
     "color": [200,200,0],
     "maxRulerGrade": 10,
-    "enableDynamicRuler": true
+    "enableDynamicRuler": true,
+    "extendScaleLine": true
   },
 
   "key": {
@@ -51,7 +52,7 @@
   "isStackedBar": false,
 
   "interpolator":{
-    "FPD": 360,
+    "FPD": 60,
     "FPS": 60,
     "maxVelocity": 0.08,
     "sortMethod": "BubbleSort"
