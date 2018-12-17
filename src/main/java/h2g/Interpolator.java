@@ -91,7 +91,7 @@ class Interpolator {
         for(x=0;x<barNum-1;++x) {
             boolean flag = true;
             for(y=0;y<barNum-1-x;++y) {
-                if(bar[y].val>bar[y+1].val) {
+                if(bar[y].val<bar[y+1].val) {
                     Bar tmp = null;
                     tmp = bar[y];
                     bar[y] = bar[y+1];

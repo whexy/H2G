@@ -2,23 +2,21 @@ package h2g;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class DataLoader {
+    private String pattern = "Data.json";
+    private ConfigLoader loader;
 
-    private double[][] rawData;
-    String pattern = "Data.json";
-
-    public DataLoader(String pattern) {
+    public DataLoader(String pattern) throws IOException {
         this.pattern = pattern;
+        loader = new ConfigLoader(pattern);
     }
 
-    public DataLoader() {
-
+    public DataLoader() throws IOException {
+        loader = new ConfigLoader(pattern);
     }
 
     double[][] loadConfig() throws Exception {
-        ConfigLoader loader = new ConfigLoader(pattern);
         ArrayList<double[]> _Data = new ArrayList<>();
         for (int x = 0; ; ++x) {
             double[] _row = loader.getDoubleArray("bar." + x + ".data");
