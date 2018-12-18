@@ -17,14 +17,14 @@
 
   "header": {
     "offset": [0,10],
-    "text": "",
+    "text": "2013-2018 FORBES CHINA RICHEST TOP 10",
     "font": {"name": "calibri","form": 0,"size": 20},
     "color": [100,100,100]
   },
 
   "footer": {
     "offset": [0,30],
-    "text": "",
+    "text": "TestFoot",
     "font":{"name": "consolas","form": 1,"size": 16},
     "color": [100,100,100]
   },
@@ -34,7 +34,7 @@
     "font": {"name": "consolas","form": 0,"size": 12},
     "color": [200,200,0],
     "maxRulerGrade": 10,
-    "enableDynamicRuler": false
+    "enableDynamicRuler": true
   },
 
   "key": {
@@ -54,7 +54,7 @@
     "FPD": 360,
     "FPS": 60,
     "maxVelocity": 0.08,
-    "sortMethod": ""
+    "sortMethod": "SelectionSort"
   },
   
   "legend":{
@@ -67,56 +67,56 @@
 	"trantransparency": [0.5,1],
     "barPattern": ["1",""],
     "barWidthRatio": [-1,-1],
-	"StackedBarTitle":["Agriculture","Forestry","Grassland","Fishery"],
+	
 	"0": {
       "key":"Beijing",
       "data":[145.2,52.2,122.7,9.2],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "1": {
       "key":"Tianjin",
       "data":[244.3,8.4,140,9,89],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "2": {
       "key":"Hebei",
       "data":[3459.4,132.3,1939.2,211],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "3": {
       "key":"Shanghai",
       "data":[148.5,0.3,0.7,0.2],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "4": {
       "key":"Neimenggu",
       "data":[1415.1,98.6,1202.9,33],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "5": {
       "key":"LIaoling",
       "data":[1859.5,143.7,1575.7,639.6],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "6": {
       "key":"Jilin",
       "data":[1232,107.2,1252.8,43],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "7": {
       "key":"Heilongjiang",
       "data":[2873.9,2119.9,1854.8,43],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "8": {
       "key":"Guangdong",
       "data":[3134.4,314,7,1221.8,1195.6],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     },
     "9": {
       "key":"Jiangsu",
       "data":[3714.6,129.3,1331.5,1621.9],
-      "skin":"BarFlatUI"
+      "skin":"FlatUI1"
     }
   }
 }
