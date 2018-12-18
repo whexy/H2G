@@ -23,9 +23,6 @@ public class HistogramData {
         visiblePattern = loader.setInt(visiblePattern, "coord.visiblePattern");
         yValue = loader.setDoubleArray(yValue, "coord.yValue");
         keys = dataLoader.loadKeys();
-        /* TODO: WHAT THE FUCK IS THIS: */
-        rulerStep = loader.setDouble(rulerGrade, "rulerStep");
-        rulerGrade = loader.setInt(rulerGrade, "rulerGrade");
     }
 
     public void loadConfig() throws Exception {
