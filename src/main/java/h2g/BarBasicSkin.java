@@ -56,15 +56,20 @@ public class BarBasicSkin extends BarGenerator {
             }
             baseVal += val[x];
         }*/
+        double baseVal = 0;
+        for (int x = Math.min(val.length,segColor.length)-1 ; x>=0 ; --x) {
+            baseVal += val[x];
+        }
         for (int x = Math.min(val.length,segColor.length)-1 ; x>=0 ; --x) {
             baseIMG.setPenColor(segColor[x]);
             if (rotated) {
-                if (isBarFilled) baseIMG.filledRectangle(val[x] / 2, halfHeight, (val[x]-scale[0]) / 2, halfHeight);
-                else baseIMG.rectangle(val[x] / 2, halfHeight, (val[x]-scale[0]) / 2, halfHeight);
+                if (isBarFilled) baseIMG.filledRectangle((baseVal-scale[0])/2, halfHeight, (baseVal-scale[0])/2, halfHeight);
+                else baseIMG.rectangle((baseVal-scale[0])/2, halfHeight, (baseVal-scale[0])/2, halfHeight);
             } else {
-                if (isBarFilled) baseIMG.filledRectangle(halfWidth, val[x] / 2, halfWidth, (val[x]-scale[0]) / 2);
-                else baseIMG.rectangle(halfWidth, val[x] / 2, halfWidth, (val[x]-scale[0]) / 2);
+                if (isBarFilled) baseIMG.filledRectangle(halfWidth, (baseVal-scale[0])/2, halfWidth, (baseVal-scale[0])/2);
+                else baseIMG.rectangle(halfWidth, (baseVal-scale[0])/2, halfWidth, (baseVal-scale[0])/2);
             }
+            baseVal -= val[x];
         }
 
         baseIMG.setPenColor(frameColor);

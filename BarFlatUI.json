@@ -35,7 +35,9 @@
 ],
 "segColor18": [189, 195, 199
 ],
-"segColor19": [127, 140, 141],  
+"segColor19": [127, 140, 141],
+"segColor20": [192, 57, 43],
+"segColor21": [236, 240, 241],  
 "frameColor": [0,255,0],
 "isBarFilled": true,
 "hasBarFrame": false,

@@ -56,7 +56,10 @@ public class ThreadManager {
         histogramData.loadConfig();
         histogramData.keys = dataLoader.loadKeys();
         rulerDrawingTutor = new RulerDrawingTutor(canvaStyle, histogramData);
-        barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
+        
+        if(canvaStyle.isStackedBar) barDrawingHelper = new StackedBarDrawingHelper(canvaStyle, histogramData, rawData);
+        else barDrawingHelper = new BarDrawingHelper(canvaStyle, rawData);
+
         legendDrawer = new LegendDrawer(canvaStyle, histogramData);
         canvaStyle.legendImg = legendDrawer.getLegend();
         long startTime = System.currentTimeMillis();
@@ -75,7 +78,9 @@ public class ThreadManager {
                 timer.schedule(new ImagePlayer(buffer, canvaStyle.bgSize), 0, 1000/canvaStyle.FPS);
             }
             barDrawingTutor = fetchBarDrawingTutor(currentFrame);
-            if(canvaStyle.enableDynamicRuler) refreshRuler(barDrawingTutor.getMaxValue());
+            if(canvaStyle.enableDynamicRuler) {
+                refreshRuler(barDrawingTutor.getMaxValue());
+            }
             frameCreator = new FrameCreator(barDrawingTutor, canvaStyle, histogramData);
             //f.bg.save(x+".jpg");
             //bf[x] = f.bg.getBuffImg();
