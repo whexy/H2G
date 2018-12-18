@@ -1,6 +1,7 @@
 package h2g;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
@@ -10,6 +11,9 @@ public class BarBasicSkin extends BarGenerator {
     private boolean isBarFilled = true;
     private boolean hasBarFrame = false;
     private double frameSize = 0.01;
+    private Color fontColor = Color.BLACK;
+    private int textOffset = 50;
+    private Font textFont = null;
 
     @Override
     public String toString() {
@@ -30,6 +34,11 @@ public class BarBasicSkin extends BarGenerator {
             this.isBarFilled = barStyle.isBarFilled;
             this.hasBarFrame = barStyle.hasBarFrame;
             this.frameSize = barStyle.frameSize;
+            this.textFont = barStyle.textFont;
+            this.textOffset = barStyle.textOffset;
+            this.fontColor = barStyle.fontColor;
+        } else {
+            this.textFont = new Font("Microsoft YaHei Light", 1, 15);
         }
         baseIMG = new SigDraw(barSize[WIDTH], barSize[HEIGHT], true);
         setScale(scale);
@@ -56,10 +65,11 @@ public class BarBasicSkin extends BarGenerator {
             }
             baseVal += val[x];
         }*/
-        double baseVal = 0;
+        double baseVal = 0, totalVal;
         for (int x = Math.min(val.length,segColor.length)-1 ; x>=0 ; --x) {
             baseVal += val[x];
         }
+        totalVal = baseVal;
         for (int x = Math.min(val.length,segColor.length)-1 ; x>=0 ; --x) {
             baseIMG.setPenColor(segColor[x]);
             if (rotated) {
@@ -71,7 +81,17 @@ public class BarBasicSkin extends BarGenerator {
             }
             baseVal -= val[x];
         }
-
+        if(text!=null) {
+            baseVal = totalVal;
+            baseIMG.setPenColor(fontColor);
+            if(rotated) {
+                baseVal += (scale[1]-scale[0])*textOffset/barSize[WIDTH];
+                baseIMG.text(baseVal, halfHeight, text);
+            } else {
+                baseVal += (scale[1]-scale[0])*textOffset/barSize[HEIGHT];
+                baseIMG.text(halfWidth, baseVal, text);
+            }
+        }
         baseIMG.setPenColor(frameColor);
         if (hasBarFrame) {
             if (rotated)

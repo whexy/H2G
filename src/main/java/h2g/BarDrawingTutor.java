@@ -1,6 +1,7 @@
 package h2g;
 
 import java.util.HashMap;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 class BarDrawingTutor {
@@ -27,11 +28,13 @@ class BarDrawingTutor {
         else return canvaStyle.maxTrantransparency;
     }
     public BufferedImage getBarImg(int[] barSize, double[] yValue, String text) {
-        String skin = canvaStyle.barSkin[ getBarID() ];
+        String skin = getBarSkin();
         BarGenerator barSkin = DynamicLoader.get(skin, barSize, yValue, canvaStyle.rotated);
         barSkin.baseIMG.enableTransparent((float)getTransparency());
         return barSkin.getBarChart(currentFrame, text, getValue());
     }
+    public String getBarSkin() {return canvaStyle.barSkin[ getBarID() ];}
+    public Color getTextColor() {return DynamicLoader.getFontColor(getBarSkin());}
     public int getBarID() { return bar[index].id; }
     public double getValue() { return bar[index].val; }
     public double getDeltaValue() { return bar[index].dVal; }

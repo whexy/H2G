@@ -98,6 +98,7 @@ class FrameCreator {
                 y = cBorder[DOWN] - c.keysYoffset;
                 x = cp.getX(b.getLocation());
             }
+            bg.setPenColor(b.getTextColor());
             bg.text(x, y, d.keys[b.getBarID()]);
         }
     }
@@ -117,10 +118,13 @@ class FrameCreator {
                 y = (yValue[MIN] + yValue[MAX])/2;
             }
             BufferedImage barImg = null;
+            String[] barText = new String[1];
+            formatNumber(barText, new double[]{b.getValue()} );
+
             if(c.isStackedBar && b instanceof StackedBarDrawingTutor) {
-                barImg = ((StackedBarDrawingTutor) b).getStackedBarImg(barSize, yValue, "");
+                barImg = ((StackedBarDrawingTutor) b).getStackedBarImg(barSize, yValue, barText[0] );
             }
-            else barImg = b.getBarImg(barSize, yValue, "");
+            else barImg = b.getBarImg(barSize, yValue, barText[0]);
             coord.picture(x, y, barImg);
         }
         bg.picture(c.xProject, c.yProject, coord.getBuffImg());
