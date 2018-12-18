@@ -137,6 +137,10 @@ class CanvaStyle {
         iconScale[1] = iconSize[1];
         legendFont = loader.setFont(legendFont, "legend.font");
         legendHeight = loader.setInt(legendHeight, "legend.height");
+        legendColor = loader.setColor(legendColor, "legend.color");
+        legendScaleFactor = loader.setDouble(legendScaleFactor, "legend.factor");
+        legendColumnNum = loader.setInt(legendColumnNum, "legend.column");
+        legendRowNum = loader.setInt(legendRowNum, "legend.row");
 
         // interpolator
         FPS = loader.setInt(FPS, "interpolator.FPS");

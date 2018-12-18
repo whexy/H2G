@@ -5,23 +5,23 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class LegendDrawer {
-
-    //TODO: JSON FIXING
     private final static int X = 0;
     private final static int Y = 1;
     private String[] keys;
     private String[] skin;
-    int elementNum;
-    private int[] iconSize = new int[]{50, 50};
+    private int elementNum;
+    private int[] iconSize;
     private double[] iconScale = new double[]{0, 50};
     private int maxLegendBarWidth = 0;
     private Font font;
     private int Height = 60;
     private CanvaStyle canvaStyle;
     private boolean rotated;
+    private boolean isStackedBar = false;
 
     public LegendDrawer(CanvaStyle canvaStyle, HistogramData histogramData) throws Exception {
         this.canvaStyle = canvaStyle;
+        isStackedBar = canvaStyle.isStackedBar;
         rotated = canvaStyle.rotated;
         keys = histogramData.keys;
         skin = canvaStyle.barSkin;
@@ -39,7 +39,17 @@ public class LegendDrawer {
     public BufferedImage getBarLegend(int id) {
         BarGenerator barGenerator = DynamicLoader.get(skin[id], iconSize, iconScale, rotated);
         assert barGenerator != null;
-        BufferedImage squareBlock = barGenerator.getBarChart(0, "", Height);
+        BufferedImage squareBlock;
+        if (!isStackedBar) {
+            squareBlock = barGenerator.getBarChart(0, "", Height);
+        } else {
+            double[] para = new double[id+1];
+            for (int i = 0; i < id+1; i++) {
+                para[i] = 0;
+            }
+            para[id] = Height;
+            squareBlock = barGenerator.getBarChart(0, "", para);
+        }
         int textWidth = maxLegendBarWidth;
         int textHeight = font.getSize();
         SigDraw Legend = new SigDraw(iconSize[X] + textWidth, (int) (textHeight * 1.25), true);
@@ -62,13 +72,12 @@ public class LegendDrawer {
                 Legend.picture(Width*(column+1) - Width/2.0, Height*(row+1) - Height/2.0, element);
             }
         }
-        return Legend.getScaledImage(canvaStyle.legendScaleFactor, Scalr.Method.ULTRA_QUALITY);
+        BufferedImage _O = Legend.getScaledImage(canvaStyle.legendScaleFactor, Scalr.Method.ULTRA_QUALITY);
+        new SigDraw(_O, true).save("LegendText.jpg");
+        return _O;
     }
 
     public static void main(String[] args) throws Exception {
-        /*LegendDrawer drawer = new LegendDrawer();
-        drawer.loadConfig("Data.json");
-        BufferedImage Legend = drawer.getLegend();
-        new SigDraw(Legend, true).save("Legend.jpg");*/
+
     }
 }
