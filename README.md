@@ -1,5 +1,6 @@
 # Project H2G
 
+大一的时候和Tony(Tonney)瞎搞的Java期末作业。主要用途是根据给定数据集S(a,t)，生成一个随着t时刻的变化，a排名变化的动画。
 This project has nothing right. 
 This project has nothing left. 
 
